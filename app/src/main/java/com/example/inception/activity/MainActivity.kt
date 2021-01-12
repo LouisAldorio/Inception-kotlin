@@ -1,10 +1,14 @@
-package com.example.inception
+package com.example.inception.activity
 
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Typeface
 import android.os.Bundle
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.example.inception.R
+import com.example.inception.adaptor.RegistrationPagerAdaptor
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -16,9 +20,9 @@ class MainActivity : AppCompatActivity() {
 
         TabLayoutMediator(tab_layout,myPager){tab,pos ->
             when(pos) {
-                0 -> tab.setText("Register")
+                0 -> tab.setText("REGISTER")
                 1 -> {
-                    tab.setText("Login")
+                    tab.setText("LOGIN")
                 }
             }
         }.attach()
