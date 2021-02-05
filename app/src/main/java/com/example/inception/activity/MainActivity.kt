@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewpager2.widget.ViewPager2
 import com.example.inception.R
 import com.example.inception.adaptor.RegistrationPagerAdaptor
 import com.google.android.material.tabs.TabLayoutMediator
@@ -19,7 +20,8 @@ class MainActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        myPager.adapter = RegistrationPagerAdaptor(this)
+        val mAdapter = RegistrationPagerAdaptor(this)
+        myPager.adapter = mAdapter
 
         TabLayoutMediator(tab_layout,myPager){tab,pos ->
             when(pos) {
@@ -29,5 +31,32 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.attach()
+
+//        myPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+//            override fun onPageSelected(position: Int) {
+//                Log.d("Masuk", "Masuk onPageSelected pak eko")
+//                super.onPageSelected(position)
+//                val view = mAdapter.getViewAtPosition(position) ?: return
+//                updatePagerHeightForChild(view, myPager)
+//            }
+//
+//            fun updatePagerHeightForChild(view: View, pager: ViewPager2) {
+//                Log.d("Masuk", "Masuk updatePagerHeightForChild pak eko")
+//                view.post {
+//                    val wMeasureSpec =
+//                        View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
+//                    val hMeasureSpec =
+//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
+//                    view.measure(wMeasureSpec, hMeasureSpec)
+//
+//                    if (pager.layoutParams.height != view.measuredHeight) {
+//                        pager.layoutParams = (pager.layoutParams)
+//                            .also { lp ->
+//                                lp.height = view.measuredHeight
+//                            }
+//                    }
+//                }
+//            }
+//        })
     }
 }

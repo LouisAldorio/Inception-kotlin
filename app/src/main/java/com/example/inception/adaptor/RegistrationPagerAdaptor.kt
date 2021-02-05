@@ -17,5 +17,5 @@ class RegistrationPagerAdaptor(activity: AppCompatActivity): FragmentStateAdapte
         return pages[position]
     }
 
-
+    fun getViewAtPosition(position: Int) = pages[position].view
 }

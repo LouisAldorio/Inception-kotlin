@@ -4,88 +4,85 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/colortransparent"
     tools:context=".fragment.login">
 
     <!-- TODO: Update blank fragment layout -->
-    <LinearLayout
-        android:orientation="vertical"
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
-        <ScrollView
+        <LinearLayout
+            android:padding="40dp"
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <LinearLayout
-                android:padding="40dp"
-                android:orientation="vertical"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <com.google.android.material.textfield.TextInputLayout
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:theme="@style/MyEditTextTheme"
+                app:startIconDrawable="@drawable/ic_baseline_person_24"
+                android:hint="Username">
+                <EditText
+                    android:id="@+id/username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:theme="@style/MyEditTextTheme"
-                    app:startIconDrawable="@drawable/ic_baseline_person_24"
-                    android:hint="Username">
-                    <EditText
-                        android:id="@+id/username"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:theme="@style/MyEditTextTheme" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:theme="@style/MyEditTextTheme" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
 
-                <com.google.android.material.textfield.TextInputLayout
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:theme="@style/MyEditTextTheme"
+                app:startIconDrawable="@drawable/ic_baseline_lock_24"
+                android:hint="Password">
+                <EditText
+                    android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:theme="@style/MyEditTextTheme"
-                    app:startIconDrawable="@drawable/ic_baseline_lock_24"
-                    android:hint="Password">
-                    <EditText
-                        android:id="@+id/password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:theme="@style/MyEditTextTheme" />
-                </com.google.android.material.textfield.TextInputLayout>
+                    android:theme="@style/MyEditTextTheme" />
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-                <RelativeLayout
-                    android:id="@+id/register"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:clickable="true"
-                    android:background="@drawable/ripple_effect">
+            <RelativeLayout
+                android:id="@+id/register"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:clickable="true"
+                android:background="@drawable/ripple_effect">
 
-                    <LinearLayout
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_centerInParent="true"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_edit"/>
+
+                    <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_centerInParent="true"
-                        android:gravity="center_vertical">
+                        android:layout_marginLeft="8dp"
+                        android:textSize="16dp"
+                        android:text="LOGIN"
+                        android:textStyle="bold"
+                        android:textColor="@color/black"/>
 
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@drawable/ic_edit"/>
+                </LinearLayout>
+            </RelativeLayout>
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:textSize="16dp"
-                            android:text="LOGIN"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"/>
+        </LinearLayout>
+    </ScrollView>
 
-                    </LinearLayout>
-                </RelativeLayout>
 
-            </LinearLayout>
-        </ScrollView>
-
-    </LinearLayout>
 
 </FrameLayout>
