@@ -31,32 +31,5 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }.attach()
-
-//        myPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-//            override fun onPageSelected(position: Int) {
-//                Log.d("Masuk", "Masuk onPageSelected pak eko")
-//                super.onPageSelected(position)
-//                val view = mAdapter.getViewAtPosition(position) ?: return
-//                updatePagerHeightForChild(view, myPager)
-//            }
-//
-//            fun updatePagerHeightForChild(view: View, pager: ViewPager2) {
-//                Log.d("Masuk", "Masuk updatePagerHeightForChild pak eko")
-//                view.post {
-//                    val wMeasureSpec =
-//                        View.MeasureSpec.makeMeasureSpec(view.width, View.MeasureSpec.EXACTLY)
-//                    val hMeasureSpec =
-//                        View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED)
-//                    view.measure(wMeasureSpec, hMeasureSpec)
-//
-//                    if (pager.layoutParams.height != view.measuredHeight) {
-//                        pager.layoutParams = (pager.layoutParams)
-//                            .also { lp ->
-//                                lp.height = view.measuredHeight
-//                            }
-//                    }
-//                }
-//            }
-//        })
     }
 }

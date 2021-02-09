@@ -1,9 +1,12 @@
 <resources>
     <string name="app_name">WholeSaler</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment_profile">profile</string>
+    <string name="hello_blank_fragment_schedule">Schedule</string>
     <string-array name="spinner_role">
         <item>Supplier</item>
         <item>Distributor</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

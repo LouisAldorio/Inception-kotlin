@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.RelativeLayout
 import android.widget.Toast
 import com.example.inception.R
+import com.example.inception.activity.LandingPage
 import kotlinx.android.synthetic.main.fragment_register.*
 
 // TODO: Rename parameter arguments, choose names that match
@@ -53,9 +54,8 @@ class register : Fragment() {
 
         var imageButton = objectView.findViewById<RelativeLayout>(R.id.register)
         imageButton.setOnClickListener {
-//            var intentSecond = Intent(activity,SecondActivity::class.java)
-//            startActivity(intentSecond)
-            Toast.makeText(activity, "Halo", Toast.LENGTH_SHORT).show()
+            var LandingPageIntent = Intent(activity,LandingPage::class.java)
+            startActivity(LandingPageIntent)
         }
 
 
