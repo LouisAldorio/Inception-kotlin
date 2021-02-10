@@ -24,11 +24,9 @@ class CommodityRecycleViewAdapter(private val commodities: List<Commodity>) : Re
 }
 
 class CommodityHolder(view: View) : RecyclerView.ViewHolder(view) {
-    private val tvHeroName = view.txtHeroName
     private val imgHero = view.imgHeroes
 
     fun bindCommodity(hero: Commodity) {
-        tvHeroName.text = hero.name
         Picasso.get().load(hero.image).into(imgHero)
     }
 }
