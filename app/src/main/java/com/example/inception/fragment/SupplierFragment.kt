@@ -16,7 +16,11 @@ class SupplierFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_supplier, container, false)
+        var objectView = inflater.inflate(R.layout.fragment_supplier, container, false)
+
+
+
+        return objectView
     }
 
     companion object {

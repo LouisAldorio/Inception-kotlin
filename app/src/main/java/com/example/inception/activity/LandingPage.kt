@@ -35,10 +35,10 @@ class LandingPage : AppCompatActivity() {
                     replaceFragment(CommodityFragment.newInstance())
                 }
                 1 -> {
-                    replaceFragment(ScheduleFragment.newInstance())
+                    replaceFragment(SupplierFragment.newInstance())
                 }
                 2 -> {
-                    replaceFragment(SupplierFragment.newInstance())
+                    replaceFragment(ScheduleFragment.newInstance())
                 }
                 3 -> {
                     replaceFragment(DistributorFragment.newInstance())

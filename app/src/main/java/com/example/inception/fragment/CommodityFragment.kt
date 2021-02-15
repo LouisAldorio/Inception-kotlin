@@ -95,16 +95,16 @@ class CommodityFragment : Fragment() {
         allCategoryList.add(AllCategorizedCommodity("Category 5th", categoryItemList5))
         setMainCategoryRecycler(allCategoryList)
 
-
-
-
         return objectView
     }
 
     private fun setMainCategoryRecycler(allCategoryList: List<AllCategorizedCommodity>) {
+
         mainCategoryRecycler = objectView.findViewById(R.id.rvMain)
+
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainCategoryRecycler.setLayoutManager(layoutManager)
+
         mainRecyclerAdapter = AllCategorizedCommodityRecycleViewAdapter(requireActivity(), allCategoryList)
         mainCategoryRecycler.setAdapter(mainRecyclerAdapter)
     }
