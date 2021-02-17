@@ -1,0 +1,8 @@
+query GetSupplier(
+    $role: String!
+) {
+    users_by_role(role: $role){
+        profile_image
+        username
+    }
+}

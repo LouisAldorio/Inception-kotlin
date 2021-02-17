@@ -1,0 +1,12 @@
+query GetCommodity (
+    $limit: Int!
+    $page: Int!
+){
+    comodities(limit:$limit,page: $page){
+        total_item
+        nodes{
+            name
+            image
+        }
+    }
+}

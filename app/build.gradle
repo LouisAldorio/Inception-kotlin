@@ -1,6 +1,15 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
+//apply plugin:
+//apply plugin: 'kotlin-android'
+//apply plugin:
+
+plugins {
+    // ...
+    id("com.apollographql.apollo")
+    id('com.android.application')
+    id('kotlin-android')
+    id('kotlin-android-extensions')
+}
+
 
 android {
     compileSdkVersion 30
@@ -25,6 +34,13 @@ android {
 
     dataBinding {
         enabled = true
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
     }
 }
 
@@ -52,4 +68,15 @@ dependencies {
     //if you want to use Picasso for loading images
     implementation 'agency.tango.android:avatar-view-picasso:0.0.2'
     implementation 'agency.tango.android:avatar-view-bindings:0.0.2'
+
+    //apollo
+    implementation 'com.apollographql.apollo:apollo-runtime:2.5.3'
+    // Coroutines extensions for easier asynchronicity handling
+    implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.3")
+    compileOnly 'org.jetbrains:annotations:13.0'
+    testCompileOnly 'org.jetbrains.annotations:13.0'
+}
+
+apollo {
+    generateKotlinModels.set(true)
 }
