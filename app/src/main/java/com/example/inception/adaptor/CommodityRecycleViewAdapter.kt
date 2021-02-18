@@ -31,8 +31,8 @@ class CommodityHolder(view: View) : RecyclerView.ViewHolder(view) {
     fun bindCommodity(hero: Commodity) {
 
 
-        Picasso.get().load("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU")
-            .error(R.drawable.ic_calendar).fit().into(imgHero, object: com.squareup.picasso.Callback {
+        Picasso.get().load(hero.image)
+            .error(R.drawable.ic_calendar).resize(180,170).into(imgHero, object: com.squareup.picasso.Callback {
             override fun onSuccess() {
                 //set animations here
 

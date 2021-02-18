@@ -2,20 +2,41 @@ package com.example.inception.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.RelativeLayout
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
+import com.auth0.android.jwt.JWT
 import com.example.inception.R
+import com.example.inception.RegisterMutation
 import com.example.inception.activity.LandingPage
+import com.example.inception.api.apolloClient
+import com.example.inception.objectClass.User
 import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.android.synthetic.main.fragment_register.view.*
 
 
 class register : Fragment() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val token = User.getToken(requireContext())
+        if (token != null){
+            var LandingPageIntent = Intent(activity,LandingPage::class.java)
+            startActivity(LandingPageIntent)
+        }
+
+    }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -29,15 +50,97 @@ class register : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         var objectView = inflater.inflate(R.layout.fragment_register, container, false)
-
-        var imageButton = objectView.findViewById<RelativeLayout>(R.id.register)
-        imageButton.setOnClickListener {
-            var LandingPageIntent = Intent(activity,LandingPage::class.java)
-            startActivity(LandingPageIntent)
-        }
-
-
         return objectView
     }
 
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        view.findViewById<RelativeLayout>(R.id.register).setOnClickListener {
+
+            //collect all data and mutate
+            val username = view.username.text.toString()
+            if(username.trim() == ""){
+                ToastInvalidInput("Username must not be empty")
+                return@setOnClickListener
+            }
+
+            val email = view.email.text.toString()
+            if(email.trim() == ""){
+                ToastInvalidInput("Email must not be empty!")
+                return@setOnClickListener
+            }else{
+                if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
+                    ToastInvalidInput("Email Seems to be Invalid!")
+                    return@setOnClickListener
+                }
+            }
+
+            val whatsapp_number = view.whatsapp.text.toString()
+            if(whatsapp_number.trim() == ""){
+                ToastInvalidInput("Whatsapp Number must not be empty!")
+                return@setOnClickListener
+            }
+
+            val password = view.password.text.toString()
+            if(password.trim() == ""){
+                ToastInvalidInput("Password must not be empty!")
+                return@setOnClickListener
+            }
+
+            val confirm_password = view.confirm_password.text.toString()
+            if(confirm_password.trim() == ""){
+                ToastInvalidInput("Password does not match!")
+                return@setOnClickListener
+            }
+
+            val role = view.role_spinner.selectedItem.toString()
+
+            view.findViewById<ProgressBar>(R.id.progressBar).visibility = View.VISIBLE
+            it.visibility = View.GONE
+
+            register(username,email,whatsapp_number,password,confirm_password,role)
+        }
+    }
+
+    private fun ToastInvalidInput(text: String){
+
+        var toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT)
+        toast.show()
+    }
+
+    private fun register(username: String, email: String, whatsapp_number : String, password : String, confirm_password: String, role: String){
+        lifecycleScope.launchWhenResumed {
+            val response = try {
+                apolloClient.mutate(RegisterMutation(
+                    username = username,
+                    role = role,
+                    password = password,
+                    confirm_password = confirm_password,
+                    email = email,
+                    wa_number = whatsapp_number
+                )).await()
+            } catch (e: ApolloException) {
+                Log.i("error",e.toString())
+                null
+            }
+
+            val registerResponse = response?.data?.user?.register
+            if (registerResponse == null || response.hasErrors()) {
+                view?.progressBar?.visibility = View.GONE
+                view?.register?.visibility = View.VISIBLE
+
+                ToastInvalidInput(response?.errors?.get(0)?.message.toString())
+                return@launchWhenResumed
+            }
+
+
+            val access_token = registerResponse?.access_token
+            User.setToken(requireContext(),access_token)
+
+            var LandingPageIntent = Intent(activity,LandingPage::class.java)
+            startActivity(LandingPageIntent)
+        }
+    }
 }
