@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.inception.GetCommodityQuery
 import com.example.inception.R
 import com.example.inception.data.Commodity
 import com.squareup.picasso.Picasso
@@ -28,11 +29,11 @@ class CommodityRecycleViewAdapter(private val commodities: List<Commodity>) : Re
 class CommodityHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val imgHero = view.imgHeroes
 
-    fun bindCommodity(hero: Commodity) {
+    fun bindCommodity(commodity: Commodity) {
 
 
-        Picasso.get().load(hero.image)
-            .error(R.drawable.ic_calendar).resize(180,170).into(imgHero, object: com.squareup.picasso.Callback {
+        Picasso.get().load(commodity.image)
+            .error(R.drawable.ic_hotel_supplier).resize(180,170).into(imgHero, object: com.squareup.picasso.Callback {
             override fun onSuccess() {
                 //set animations here
 

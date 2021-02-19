@@ -109,7 +109,7 @@ class CommodityFragment : Fragment() {
         val allCategoryList: MutableList<AllCategorizedCommodity> = ArrayList()
         lifecycleScope.launchWhenResumed {
             val response = try {
-                apolloClient.query(GetCommodityQuery(page = 1,limit = 100)).await()
+                apolloClient(requireContext()).query(GetCommodityQuery(page = 1,limit = 100)).await()
             }catch (e: ApolloException){
                 Log.d("CommodityList", "Failure", e)
                 null

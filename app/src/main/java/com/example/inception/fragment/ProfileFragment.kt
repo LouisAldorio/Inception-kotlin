@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.inception.R
+import com.example.inception.objectClass.User
+import kotlinx.android.synthetic.main.fragment_profile.view.*
 
 
 class ProfileFragment : Fragment() {
@@ -16,7 +18,14 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        var objectView = inflater.inflate(R.layout.fragment_profile, container, false)
+
+        objectView.logout.setOnClickListener {
+            User.removeToken(requireContext())
+            requireActivity().finish()
+        }
+
+        return objectView
     }
 
 

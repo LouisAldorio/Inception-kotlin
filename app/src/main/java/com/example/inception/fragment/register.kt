@@ -19,6 +19,7 @@ import com.auth0.android.jwt.JWT
 import com.example.inception.R
 import com.example.inception.RegisterMutation
 import com.example.inception.activity.LandingPage
+import com.example.inception.activity.hideKeyboard
 import com.example.inception.api.apolloClient
 import com.example.inception.objectClass.User
 import kotlinx.android.synthetic.main.fragment_register.*
@@ -58,6 +59,7 @@ class register : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         view.findViewById<RelativeLayout>(R.id.register).setOnClickListener {
+            it.hideKeyboard()
 
             //collect all data and mutate
             val username = view.username.text.toString()
@@ -104,7 +106,7 @@ class register : Fragment() {
         }
     }
 
-    private fun ToastInvalidInput(text: String){
+    fun ToastInvalidInput(text: String){
 
         var toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT)
         toast.show()
@@ -113,7 +115,7 @@ class register : Fragment() {
     private fun register(username: String, email: String, whatsapp_number : String, password : String, confirm_password: String, role: String){
         lifecycleScope.launchWhenResumed {
             val response = try {
-                apolloClient.mutate(RegisterMutation(
+                apolloClient(requireContext()).mutate(RegisterMutation(
                     username = username,
                     role = role,
                     password = password,
@@ -141,6 +143,9 @@ class register : Fragment() {
 
             var LandingPageIntent = Intent(activity,LandingPage::class.java)
             startActivity(LandingPageIntent)
+
+            view?.progressBar?.visibility = View.GONE
+            view?.register?.visibility = View.VISIBLE
         }
     }
 }

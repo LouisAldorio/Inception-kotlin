@@ -54,9 +54,7 @@ class LandingPage : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
-        finish()
-        System.exit(0)
+        finishAffinity()
     }
 
     private fun replaceFragment(fragment:Fragment){

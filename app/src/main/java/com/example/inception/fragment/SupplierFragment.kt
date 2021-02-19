@@ -37,7 +37,7 @@ class SupplierFragment : Fragment() {
         lifecycleScope.launchWhenResumed {
 
             val response = try {
-                apolloClient.query(GetSupplierQuery(role = "Supplier")).await()
+                apolloClient(requireContext()).query(GetSupplierQuery(role = "Supplier")).await()
             }catch (e: ApolloException){
                 Log.d("SupplierList", "Failure", e)
                 null

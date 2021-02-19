@@ -38,3 +38,23 @@ mutation register(
         }
     }
 }
+
+mutation login(
+    $username: String!
+    $password: String!
+){
+    user{
+        login(input:{
+            username: $username
+            password: $password
+        }){
+            access_token
+            user{
+                username
+                email
+                role
+                hashed_password
+            }
+        }
+    }
+}
