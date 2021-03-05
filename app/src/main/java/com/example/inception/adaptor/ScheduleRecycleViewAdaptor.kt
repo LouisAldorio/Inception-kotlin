@@ -41,5 +41,8 @@ class ScheduleHolder(view : View) : RecyclerView.ViewHolder(view){
         involvedUser1 = view.involved_users_1
         involvedUser2 = view.involved_users_2
         commodityName = view.commodity_name
+
     }
+
+
 }

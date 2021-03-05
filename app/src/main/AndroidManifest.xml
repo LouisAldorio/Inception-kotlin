@@ -12,7 +12,6 @@
         <activity android:name=".activity.LandingPage"></activity>
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/NoActionBar"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

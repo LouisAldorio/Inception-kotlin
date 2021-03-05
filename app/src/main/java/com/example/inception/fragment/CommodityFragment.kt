@@ -42,62 +42,6 @@ class CommodityFragment : Fragment() {
 
         objectView = inflater.inflate(R.layout.fragment_commodity, container, false)
 
-//        val categoryItemList: MutableList<Commodity> = ArrayList()
-//        categoryItemList.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList.add(Commodity("Ino Yamanaka", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGBTlbSz9UGFiU9ErCRl06P-wAwBi8Yw-oPA&usqp=CAU"))
-//        categoryItemList.add(Commodity("Hinata Hyuga", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgs_iBwZ97480GesBwA7A3Jc0BBXxtuw8hDw&usqp=CAU"))
-//        categoryItemList.add(Commodity("Tenten", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7y-ZWfFb2aLI7n2Lb2m8jQnCeRUOy9zQiqQ&usqp=CAU"))
-//        categoryItemList.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList.add(Commodity("Ino Yamanaka", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGBTlbSz9UGFiU9ErCRl06P-wAwBi8Yw-oPA&usqp=CAU"))
-//        categoryItemList.add(Commodity("Hinata Hyuga", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgs_iBwZ97480GesBwA7A3Jc0BBXxtuw8hDw&usqp=CAU"))
-//        categoryItemList.add(Commodity("Tenten", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7y-ZWfFb2aLI7n2Lb2m8jQnCeRUOy9zQiqQ&usqp=CAU"))
-//
-//        val categoryItemList2: MutableList<Commodity> = ArrayList()
-//        categoryItemList2.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList2.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList2.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList2.add(Commodity("Ino Yamanaka", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGBTlbSz9UGFiU9ErCRl06P-wAwBi8Yw-oPA&usqp=CAU"))
-//        categoryItemList2.add(Commodity("Hinata Hyuga", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgs_iBwZ97480GesBwA7A3Jc0BBXxtuw8hDw&usqp=CAU"))
-//        categoryItemList2.add(Commodity("Tenten", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7y-ZWfFb2aLI7n2Lb2m8jQnCeRUOy9zQiqQ&usqp=CAU"))
-//
-//        val categoryItemList3: MutableList<Commodity> = ArrayList()
-//        categoryItemList3.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList3.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList3.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList3.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList3.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList3.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//
-//        val categoryItemList4: MutableList<Commodity> = ArrayList()
-//        categoryItemList4.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList4.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList4.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList4.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList4.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList4.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//
-//        val categoryItemList5: MutableList<Commodity> = ArrayList()
-//        categoryItemList5.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList5.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList5.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-//        categoryItemList5.add(Commodity("Maria Ozawa", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThcsdrANTmext5iM3tef0GKGGgv2seeWpNPA&usqp=CAU"))
-//        categoryItemList5.add(Commodity("Aoi Sora", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSe1_d38bWCsr5GoHupSX82WkjWujntiRiPLQ&usqp=CAU"))
-//        categoryItemList5.add(Commodity("Sakura Haruno", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTT2o3vUrZBTiZ4msyyL8MeK6N2UlYkzVEZ_Q&usqp=CAU"))
-
-
-
-
-//        allCategoryList.add(AllCategorizedCommodity("Groceries", categoryItemList))
-//        allCategoryList.add(AllCategorizedCommodity("Most Viewed", categoryItemList2))
-//        allCategoryList.add(AllCategorizedCommodity("Snacks", categoryItemList3))
-//        allCategoryList.add(AllCategorizedCommodity("Category 4th", categoryItemList4))
-//        allCategoryList.add(AllCategorizedCommodity("Category 5th", categoryItemList5))
-//        setMainCategoryRecycler(allCategoryList)
-
         return objectView
     }
 

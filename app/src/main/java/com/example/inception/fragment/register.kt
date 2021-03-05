@@ -21,6 +21,7 @@ import com.example.inception.RegisterMutation
 import com.example.inception.activity.LandingPage
 import com.example.inception.activity.hideKeyboard
 import com.example.inception.api.apolloClient
+import com.example.inception.constant.*
 import com.example.inception.objectClass.User
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.view.*
@@ -55,8 +56,20 @@ class register : Fragment() {
     }
 
 
+    //setelah saya reasearch idealnya memanggil state yang telah disimpan ialah pada onViewCreated pada fragment
+    //pada onViewCreated juga telah disediakan argument savedInstanceState agar dapat kita gunakan
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // sebelum mengambil isi state , cek terlabih dahulu apakah state kosong atau berisi
+        // jika berisi maka ambil nilai yang telah disimpan kedalam state sesuai KEY nya lalu asukkan ke dalam View nya
+        if(savedInstanceState != null) {
+            view.username.setText(savedInstanceState.getString(USERNAME))
+            view.password.setText(savedInstanceState.getString(PASSWORD))
+            view.confirm_password.setText(savedInstanceState.getString(CONFIRM_PASSWORD))
+            view.whatsapp.setText(savedInstanceState.getString(WHATSAPP))
+            view.email.setText(savedInstanceState.getString(EMAIL))
+        }
 
         view.findViewById<RelativeLayout>(R.id.register).setOnClickListener {
             it.hideKeyboard()
@@ -148,4 +161,16 @@ class register : Fragment() {
             view?.register?.visibility = View.VISIBLE
         }
     }
+
+    //pada form register saya menyimpan seluruh data yang sebelumnya sudah diketikkan oleh user kedalam state
+    //agar ketika terjadi perubahan yang menimbulkan activity terdestroy maka data yang telah diinput tidak hilang begitu saja
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(USERNAME,view?.username?.text.toString())
+        outState.putString(PASSWORD,view?.password?.text.toString())
+        outState.putString(CONFIRM_PASSWORD,view?.confirm_password?.text.toString())
+        outState.putString(WHATSAPP,view?.whatsapp?.text.toString())
+        outState.putString(EMAIL,view?.email?.text.toString())
+    }
+
 }
