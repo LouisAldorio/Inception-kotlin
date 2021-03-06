@@ -17,15 +17,29 @@ class LandingPage : AppCompatActivity() {
 
     var fragments = mutableListOf<Fragment>(CommodityFragment(),SupplierFragment(),ScheduleFragment(),DistributorFragment(),ProfileFragment())
 
+    private val commodityFragment = CommodityFragment()
+    private val supplierFragment = SupplierFragment()
+    private val scheduleFragment = ScheduleFragment()
+    private val distributorFragment = DistributorFragment()
+    private val profileFragment = ProfileFragment()
+    private val fragmentManager = supportFragmentManager
+    private var activeFragment: Fragment = commodityFragment
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing_page)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+        fragmentManager.beginTransaction().apply {
+            add(R.id.fragmentContainer, supplierFragment).hide(supplierFragment)
+            add(R.id.fragmentContainer, scheduleFragment).hide(scheduleFragment)
+            add(R.id.fragmentContainer, distributorFragment).hide(distributorFragment)
+            add(R.id.fragmentContainer, profileFragment).hide(profileFragment)
+            add(R.id.fragmentContainer, commodityFragment)
+        }.commit()
 
-
-        addFragment(fragments[0])
+//        addFragment(fragments[0])
         bottomNavigation.show(0)
         bottomNavigation.add(MeowBottomNavigation.Model(0,R.drawable.ic_commodity))
         bottomNavigation.add(MeowBottomNavigation.Model(1,R.drawable.ic_hotel_supplier))
@@ -34,27 +48,35 @@ class LandingPage : AppCompatActivity() {
         bottomNavigation.add(MeowBottomNavigation.Model(4,R.drawable.ic_profile_user))
 
         bottomNavigation.setOnClickMenuListener {
-//            when(it.id){
-//                0 -> {
-//                    replaceFragment(CommodityFragment.newInstance())
-//                }
-//                1 -> {
-//                    replaceFragment(SupplierFragment.newInstance())
-//                }
-//                2 -> {
-//                    replaceFragment(ScheduleFragment.newInstance())
-//                }
-//                3 -> {
-//                    replaceFragment(DistributorFragment.newInstance())
-//                }
-//                4 -> {
-//                    replaceFragment(ProfileFragment.newInstance())
-//                }
-//                else -> {
-//                    replaceFragment(CommodityFragment.newInstance())
-//                }
-//            }
-            replaceFragment(fragments[it.id])
+//            replaceFragment(fragments[it.id])
+            when (it.id) {
+                0 -> {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out).hide(activeFragment).show(commodityFragment).commit()
+                    activeFragment = commodityFragment
+                    true
+                }
+                1 -> {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out).hide(activeFragment).show(supplierFragment).commit()
+                    activeFragment = supplierFragment
+                    true
+                }
+                2 -> {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out).hide(activeFragment).show(scheduleFragment).commit()
+                    activeFragment = scheduleFragment
+                    true
+                }
+                3 -> {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out).hide(activeFragment).show(distributorFragment).commit()
+                    activeFragment = distributorFragment
+                    true
+                }
+                4 -> {
+                    fragmentManager.beginTransaction().setCustomAnimations(R.anim.design_bottom_sheet_slide_in, R.anim.design_bottom_sheet_slide_out).hide(activeFragment).show(profileFragment).commit()
+                    activeFragment = profileFragment
+                    true
+                }
+                else -> false
+            }
         }
     }
 

@@ -39,7 +39,7 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
 
 
     private fun setCatItemRecycler(recyclerView: RecyclerView, categoryItemList: List<Commodity>) {
-        val itemRecyclerAdapter = CommodityRecycleViewAdapter(categoryItemList)
+        val itemRecyclerAdapter = CommodityRecycleViewAdapter(context,categoryItemList)
         recyclerView.layoutManager = SpeedLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = itemRecyclerAdapter
 

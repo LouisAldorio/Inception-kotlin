@@ -1,5 +1,6 @@
 package com.example.inception.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -11,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
 import com.example.inception.GetCommodityQuery
@@ -24,6 +26,7 @@ import com.example.inception.data.AllCategorizedCommodity
 import com.example.inception.data.Commodity
 import kotlinx.android.synthetic.main.categorized_commodity_container.view.*
 import kotlinx.android.synthetic.main.fragment_commodity.view.*
+import kotlinx.coroutines.launch
 import java.util.ArrayList
 
 
@@ -33,7 +36,8 @@ class CommodityFragment : Fragment() {
 
     var mainRecyclerAdapter: AllCategorizedCommodityRecycleViewAdapter? = null
 
-    lateinit var objectView : View
+    lateinit var objectView: View
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,20 +51,29 @@ class CommodityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch {
+            val response = try {
+                apolloClient(requireContext()).query(GetCommodityQuery(page = 1, limit = 100))
+                    .await()
 
+
+            } catch (e: ApolloException) {
+                Log.d("CommodityList", "Failure", e)
+                null
+            }
+            this@CommodityFragment.view?.let { arrange(it, response) }
+        }
+    }
+
+    private fun arrange(view: View, response: Response<GetCommodityQuery.Data>?) {
         val categoryAmount = 5
 
         val allCategoryList: MutableList<AllCategorizedCommodity> = ArrayList()
         lifecycleScope.launchWhenResumed {
-            val response = try {
-                apolloClient(requireContext()).query(GetCommodityQuery(page = 1,limit = 100)).await()
-            }catch (e: ApolloException){
-                Log.d("CommodityList", "Failure", e)
-                null
-            }
+
 
             val commodities = response?.data?.comodities
-            if(commodities != null && !response.hasErrors()) {
+            if (commodities != null && !response.hasErrors()) {
                 view.findViewById<ProgressBar>(R.id.commodity_progress_bar).visibility = View.GONE
 
                 var page = 2
@@ -70,11 +83,13 @@ class CommodityFragment : Fragment() {
                     val offset = limit * (page - 1)
                     val categoryItemList: MutableList<Commodity> = ArrayList()
 
-                    for(j in counter until offset){
-                        Log.i("images",commodities.nodes[j].image[0].toString())
-                        categoryItemList.add(Commodity(
-                            commodities.nodes[j].name,commodities.nodes[j].image[0].toString()
-                        ))
+                    for (j in counter until offset) {
+                        Log.i("images", commodities.nodes[j].image[0].toString())
+                        categoryItemList.add(
+                            Commodity(
+                                commodities.nodes[j].name, commodities.nodes[j].image[0].toString()
+                            )
+                        )
                     }
                     counter = offset
                     page++
@@ -93,7 +108,8 @@ class CommodityFragment : Fragment() {
         val layoutManager: RecyclerView.LayoutManager = LinearLayoutManager(activity)
         mainCategoryRecycler.setLayoutManager(layoutManager)
 
-        mainRecyclerAdapter = AllCategorizedCommodityRecycleViewAdapter(requireActivity(), allCategoryList)
+        mainRecyclerAdapter =
+            AllCategorizedCommodityRecycleViewAdapter(requireActivity(), allCategoryList)
         mainCategoryRecycler.setAdapter(mainRecyclerAdapter)
     }
 
