@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
-import com.example.inception.GetDistributorQuery
-import com.example.inception.GetSupplierQuery
+//import com.example.inception.GetDistributorQuery
+//import com.example.inception.GetSupplierQuery
 import com.example.inception.R
 import com.example.inception.adaptor.DistributorRecycleViewAdaptor
 import com.example.inception.adaptor.DistributorWantedItemsRecycleViewAdaptor
@@ -34,29 +34,29 @@ class DistributorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        lifecycleScope.launchWhenResumed {
-
-            val response = try {
-                apolloClient(requireContext()).query(GetDistributorQuery(role = "Distributor")).await()
-            }catch (e: ApolloException){
-                Log.d("Distributor List", "Failure", e)
-                null
-            }
-
-            val distributors = response?.data?.users_by_role?.filterNotNull()
-            if(distributors != null && !response.hasErrors()) {
-                view.findViewById<ProgressBar>(R.id.progress_bar_distributor).visibility = View.GONE
-
-                //distributors
-                val distributorRv = view.findViewById<RecyclerView>(R.id.rv_distributor)
-                val adapter = DistributorRecycleViewAdaptor(requireContext(),distributors)
-
-                distributorRv.layoutManager = LinearLayoutManager(requireContext())
-                distributorRv.adapter = adapter
-
-
-            }
-        }
+//        lifecycleScope.launchWhenResumed {
+//
+//            val response = try {
+//                apolloClient(requireContext()).query(GetDistributorQuery(role = "Distributor")).await()
+//            }catch (e: ApolloException){
+//                Log.d("Distributor List", "Failure", e)
+//                null
+//            }
+//
+//            val distributors = response?.data?.users_by_role?.filterNotNull()
+//            if(distributors != null && !response.hasErrors()) {
+//                view.findViewById<ProgressBar>(R.id.progress_bar_distributor).visibility = View.GONE
+//
+//                //distributors
+//                val distributorRv = view.findViewById<RecyclerView>(R.id.rv_distributor)
+//                val adapter = DistributorRecycleViewAdaptor(requireContext(),distributors)
+//
+//                distributorRv.layoutManager = LinearLayoutManager(requireContext())
+//                distributorRv.adapter = adapter
+//
+//
+//            }
+//        }
     }
 
     companion object {

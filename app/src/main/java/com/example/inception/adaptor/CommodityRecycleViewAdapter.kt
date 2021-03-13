@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
-import com.example.inception.GetCommodityQuery
+//import com.example.inception.GetCommodityQuery
 import com.example.inception.R
 import com.example.inception.activity.DetailPage
 import com.example.inception.constant.CONTEXT_EXTRA

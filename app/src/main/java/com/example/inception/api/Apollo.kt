@@ -18,7 +18,7 @@ fun apolloClient(context: Context): ApolloClient {
     }
 
     instance =  ApolloClient.builder()
-        .serverUrl("https://safe-forest-36324.herokuapp.com/graphql")
+        .serverUrl("https://floating-basin-72676.herokuapp.com/query")
         .okHttpClient(
             OkHttpClient.Builder()
             .addInterceptor(AuthorizationInterceptor(context))

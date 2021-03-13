@@ -5,6 +5,11 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragment.CommodityFragment">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="kirim data"
+        android:id="@+id/send"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvMain"

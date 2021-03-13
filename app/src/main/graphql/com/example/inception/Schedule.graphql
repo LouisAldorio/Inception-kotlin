@@ -1,20 +1,20 @@
-query GetSchedule {
-    schedule_by_user{
-        id
-        schedule_name
-        commodity_name
-        dealed_unit
-        start_date
-        end_date
-        day
-        start_time
-        end_time
-        involved_users_username
-        involved_users{
-            profile_image
-            username
-            email
-            whatsapp_number
-        }
-    }
-}
+#query GetSchedule {
+#    schedule_by_user{
+#        id
+#        schedule_name
+#        commodity_name
+#        dealed_unit
+#        start_date
+#        end_date
+#        day
+#        start_time
+#        end_time
+#        involved_users_username
+#        involved_users{
+#            profile_image
+#            username
+#            email
+#            whatsapp_number
+#        }
+#    }
+#}
