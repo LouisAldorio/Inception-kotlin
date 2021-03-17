@@ -7,5 +7,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Commodity (
     val name: String,
-    val image: String?
+    val image: List<String?>
 ): Parcelable

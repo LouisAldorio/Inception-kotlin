@@ -1,20 +1,18 @@
 package com.example.inception.activity
 
-import android.app.Activity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.ListFragment
 import com.example.inception.R
 import kotlinx.android.synthetic.main.activity_landing_page.*
 
 import com.example.inception.fragment.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
-import com.example.inception.`interface`.InterfaceData
+import com.example.inception.`interface`.RecycleViewFragmentInterface
 
 //tidak lupa untuk mengimplementasikan interface yang tadi telah dibuat ke dalam activity
-class LandingPage : AppCompatActivity(),InterfaceData {
+class LandingPage : AppCompatActivity() {
 
     //dalam penggunaan fragment dalam activity kita terlebih dahulu inisiasi fragment yang ingin digunakan
     private val commodityFragment = CommodityFragment()
@@ -94,25 +92,10 @@ class LandingPage : AppCompatActivity(),InterfaceData {
         }
     }
 
-    //pengiriman data antar fragment menggunakan bundle
-    override fun KirimData(text: String) {
-        //inisiasi objeck dari class bundle
-        val bundle = Bundle()
-        //letakkan pesan ke bundler dengan key pesan
-        bundle.putString("pesan",text)
-
-        //mulai transaksi dan kirim bundle ke property argument dari supplier fragment
-        val transaksi = fragmentManager.beginTransaction()
-        supplierFragment.arguments = bundle
-
-        //panggil fragment supplier dengan menggunakan commit
-        transaksi.hide(activeFragment).show(supplierFragment).commit()
-    }
 
     override fun onBackPressed() {
         finishAffinity()
     }
-
 
 
 

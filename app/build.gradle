@@ -78,6 +78,12 @@ dependencies {
 
     implementation("androidx.security:security-crypto:1.0.0-rc02")
     implementation 'com.auth0.android:jwtdecode:2.0.0'
+    implementation 'com.flaviofaria:kenburnsview:1.0.7'
+
+    //image zommer
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    // Glide v4 uses this new annotation processor -- see https://bumptech.github.io/glide/doc/generatedapi.html
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }
 
 apollo {

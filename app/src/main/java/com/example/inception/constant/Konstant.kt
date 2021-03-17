@@ -8,3 +8,6 @@ const val EMAIL = "email"
 
 const val DETAIL_EXTRA = "detail"
 const val CONTEXT_EXTRA = "context"
+
+
+const val CLICKED_POSITION = "clicked_position"

@@ -56,13 +56,8 @@ class register : Fragment() {
     }
 
 
-    //setelah saya reasearch idealnya memanggil state yang telah disimpan ialah pada onViewCreated pada fragment
-    //pada onViewCreated juga telah disediakan argument savedInstanceState agar dapat kita gunakan
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // sebelum mengambil isi state , cek terlabih dahulu apakah state kosong atau berisi
-        // jika berisi maka ambil nilai yang telah disimpan kedalam state sesuai KEY nya lalu asukkan ke dalam View nya
         if(savedInstanceState != null) {
             view.username.setText(savedInstanceState.getString(USERNAME))
             view.password.setText(savedInstanceState.getString(PASSWORD))
@@ -162,8 +157,6 @@ class register : Fragment() {
         }
     }
 
-    //pada form register saya menyimpan seluruh data yang sebelumnya sudah diketikkan oleh user kedalam state
-    //agar ketika terjadi perubahan yang menimbulkan activity terdestroy maka data yang telah diinput tidak hilang begitu saja
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString(USERNAME,view?.username?.text.toString())

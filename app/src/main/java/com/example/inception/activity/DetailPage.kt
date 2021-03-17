@@ -2,6 +2,7 @@ package com.example.inception.activity
 
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ class DetailPage : AppCompatActivity() {
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setContentView(R.layout.activity_detail_page)
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         // pada activity detail (activity ini)
         //ambil terlebih dahulu context fragment yang diinginkan
