@@ -8,14 +8,16 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inception.CustomLayoutManager.SpeedLinearLayoutManager
+import com.example.inception.GetCommodityQuery
 import com.example.inception.R
-import com.example.inception.data.AllCategorizedCommodity
-import com.example.inception.data.Commodity
+import com.example.inception.utils.Capitalizer
 import java.util.*
 
 
-class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, private val categorizedCommodityItemList: List<AllCategorizedCommodity>) : RecyclerView.Adapter<AllCategorizedCommodityHolder>() {
+class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, private val categorizedCommodityItemList: List<GetCommodityQuery.ComoditiesByCategory>) : RecyclerView.Adapter<AllCategorizedCommodityHolder>() {
     var pos = categorizedCommodityItemList.size/2;
+
+    val cap = Capitalizer()
 
     lateinit var objectView : AllCategorizedCommodityHolder
 
@@ -33,12 +35,12 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
     }
 
     override fun onBindViewHolder(holder: AllCategorizedCommodityHolder, position: Int) {
-        holder.categoryTitle.text = categorizedCommodityItemList[position].categoryTitle
-        setCatItemRecycler(holder.itemRecycler, categorizedCommodityItemList[position].categoryCommodityList)
+        holder.categoryTitle.text = cap.Capitalize(categorizedCommodityItemList[position].category.name)
+        setCatItemRecycler(holder.itemRecycler, categorizedCommodityItemList[position].nodes)
     }
 
 
-    private fun setCatItemRecycler(recyclerView: RecyclerView, categoryItemList: List<Commodity>) {
+    private fun setCatItemRecycler(recyclerView: RecyclerView, categoryItemList: List<GetCommodityQuery.Node>) {
         val itemRecyclerAdapter = CommodityRecycleViewAdapter(context,categoryItemList)
         recyclerView.layoutManager = SpeedLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = itemRecyclerAdapter

@@ -17,15 +17,11 @@ class DetailPage : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val actionBar: ActionBar? = supportActionBar
-
         actionBar?.setDisplayHomeAsUpEnabled(true)
 
         setContentView(R.layout.activity_detail_page)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        // pada activity detail (activity ini)
-        //ambil terlebih dahulu context fragment yang diinginkan
-        //inflate fragment sesuai yang diminta oleh activity parent
         var context = intent.getStringExtra(CONTEXT_EXTRA)
         if(context == "Commodity"){
             replaceFragment(CommodityDetailFragment())

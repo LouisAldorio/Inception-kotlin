@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.image_carousel.view.*
 class ImageCarouselAdaptor(
     var mContext: Context,
     private val images: List<String?>,
-    private val callback: (position: Int, thumbView: View) -> Unit
-) : RecyclerView.Adapter<ImageHolder>() {
+    private val callback: (position: Int, thumbView: View) -> Unit) : RecyclerView.Adapter<ImageHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         return ImageHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.image_carousel, parent, false)
@@ -34,9 +33,8 @@ class ImageCarouselAdaptor(
     override fun onBindViewHolder(holder: ImageHolder, position: Int) {
         holder.itemView.commodity_image.clipToOutline = true
         holder.bindImage(images[position]!!)
-        holder.itemView.commodity_image.resume()
+//        holder.itemView.commodity_image.resume()
         holder.itemView.commodity_image.setOnClickListener {
-//            interfaceData.SendClickedPosition(position,holder.itemView.commodity_image)
             callback(position, holder.itemView.commodity_image)
         }
     }

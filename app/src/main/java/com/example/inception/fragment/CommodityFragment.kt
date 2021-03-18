@@ -16,11 +16,9 @@ import com.apollographql.apollo.exception.ApolloException
 import com.example.inception.GetCommodityQuery
 //import com.example.inception.GetSupplierQuery
 import com.example.inception.R
-import com.example.inception.`interface`.RecycleViewFragmentInterface
 import com.example.inception.adaptor.AllCategorizedCommodityRecycleViewAdapter
 import com.example.inception.api.apolloClient
-import com.example.inception.data.AllCategorizedCommodity
-import com.example.inception.data.Commodity
+import com.example.inception.utils.Capitalizer
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -61,25 +59,17 @@ class CommodityFragment : Fragment() {
     }
 
     private fun arrange(view: View, response: Response<GetCommodityQuery.Data>?) {
-        val allCategoryList: MutableList<AllCategorizedCommodity> = ArrayList()
+        var allCategoryList: List<GetCommodityQuery.ComoditiesByCategory> = ArrayList()
         val commodities = response?.data?.comoditiesByCategory
         if (commodities != null && !response.hasErrors()) {
             view.findViewById<ProgressBar>(R.id.commodity_progress_bar).visibility = View.GONE
-            for(item in commodities){
-                val categoryItemList: MutableList<Commodity> = ArrayList()
-                for (commodity in item.nodes){
-                    categoryItemList.add(
-                        Commodity(commodity.name,commodity.image)
-                    )
-                }
-                allCategoryList.add(AllCategorizedCommodity(item.category.name, categoryItemList))
-            }
+            allCategoryList = commodities!!
+            setMainCategoryRecycler(allCategoryList)
         }
-        setMainCategoryRecycler(allCategoryList)
     }
 
 
-    private fun setMainCategoryRecycler(allCategoryList: List<AllCategorizedCommodity>) {
+    private fun setMainCategoryRecycler(allCategoryList: List<GetCommodityQuery.ComoditiesByCategory>) {
 
         mainCategoryRecycler = objectView.findViewById(R.id.rvMain)
 

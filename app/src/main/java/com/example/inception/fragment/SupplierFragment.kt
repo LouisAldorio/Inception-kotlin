@@ -27,16 +27,7 @@ class SupplierFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         var objectView = inflater.inflate(R.layout.fragment_supplier, container, false)
-        //ambil isi pesan dari argument di supplier fragment
-        val pesan = arguments?.getString("pesan")
-        //cek pesan jika ada masukkan ke dalam view
-        if (pesan != null) {
-            Log.i("Supplier Fragment",pesan)
-            objectView.terimaPesan.text = pesan
-        }
-
         return objectView
     }
 

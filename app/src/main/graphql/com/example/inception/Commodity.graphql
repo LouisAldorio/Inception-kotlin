@@ -13,7 +13,12 @@ query GetCommodity (
             unit_price
             unit_type
             min_purchase
-
+            user{
+                username
+                email
+                whatsapp
+                avatar
+            }
         }
     }
 }
