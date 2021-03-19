@@ -1,15 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/logout"
-        android:layout_width="wrap_content"
-        android:text="Log Out"
-        android:background="@color/yellowInception"
-        android:layout_height="wrap_content"/>
+        <agency.tango.android.avatarview.views.AvatarView
+            android:id="@+id/profile_avatar"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            app:av_border_color="@android:color/white"
+            app:av_border_width="4dp"
+            app:av_text_size_percentage="35" />
+
+
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="wrap_content"
+            android:text="Log Out"
+            android:background="@color/yellowInception"
+            android:layout_height="wrap_content"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnPickUpload"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:background="@color/yellowInception"
+            android:src="@drawable/ic_gallery_svgrepo_com"
+            android:layout_marginLeft="25dp"
+            android:layout_marginBottom="16dp"/>
+
+    </LinearLayout>
+
+
 
 </FrameLayout>

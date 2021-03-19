@@ -11,7 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.DetailPage" ></activity>
+        <service
+            android:name=".service.UploadImageIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:exported="true"/>
+
+        <activity android:name=".activity.DetailPage" />
         <activity android:name=".activity.LandingPage" />
         <activity
             android:name=".activity.MainActivity"
