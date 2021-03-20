@@ -11,4 +11,5 @@
     <color name="grey">#808080</color>
     <color name="colortransparent">#50000000</color>
     <color name="transparent_color">#50000000</color>
+    <color name="gold">#FFB300</color>
 </resources>

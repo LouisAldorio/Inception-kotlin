@@ -1,6 +1,9 @@
 package com.example.inception.activity
 
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
+import android.provider.Telephony
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -10,6 +13,7 @@ import kotlinx.android.synthetic.main.activity_landing_page.*
 import com.example.inception.fragment.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.example.inception.`interface`.RecycleViewFragmentInterface
+import com.example.inception.internalreceiver.SMSReceiver
 
 class LandingPage : AppCompatActivity() {
 
@@ -74,6 +78,13 @@ class LandingPage : AppCompatActivity() {
                 else -> false
             }
         }
+        //inisiasi internal receiver pada activity
+        var SMSReceiver = SMSReceiver()
+        var filter = IntentFilter()
+        //masukkan action yg ingin dihandle
+        filter.addAction(Telephony.Sms.Intents.SMS_RECEIVED_ACTION)
+        //registerkan receivernya
+        registerReceiver(SMSReceiver, filter)
     }
 
 

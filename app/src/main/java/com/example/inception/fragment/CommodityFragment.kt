@@ -59,8 +59,8 @@ class CommodityFragment : Fragment() {
     }
 
     private fun arrange(view: View, response: Response<GetCommodityQuery.Data>?) {
-        var allCategoryList: List<GetCommodityQuery.ComoditiesByCategory> = ArrayList()
-        val commodities = response?.data?.comoditiesByCategory
+        var allCategoryList: List<GetCommodityQuery.Comodities_with_category> = ArrayList()
+        val commodities = response?.data?.comodities_with_categories
         if (commodities != null && !response.hasErrors()) {
             view.findViewById<ProgressBar>(R.id.commodity_progress_bar).visibility = View.GONE
             allCategoryList = commodities!!
@@ -69,7 +69,7 @@ class CommodityFragment : Fragment() {
     }
 
 
-    private fun setMainCategoryRecycler(allCategoryList: List<GetCommodityQuery.ComoditiesByCategory>) {
+    private fun setMainCategoryRecycler(allCategoryList: List<GetCommodityQuery.Comodities_with_category >) {
 
         mainCategoryRecycler = objectView.findViewById(R.id.rvMain)
 

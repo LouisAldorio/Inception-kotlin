@@ -23,6 +23,7 @@ import com.example.inception.data.UploadParams
 import com.example.inception.data.UploadResponse
 import com.example.inception.objectClass.User
 import com.example.inception.service.UploadImageIntentService
+import com.example.inception.utils.ImageZoomer
 import com.google.android.material.shape.CornerFamily
 import com.squareup.picasso.Picasso
 import com.vincent.filepicker.Constant
@@ -38,19 +39,28 @@ import java.io.File
 
 
 class ProfileFragment : Fragment() {
+    //deklarasi variabel Global kosong untuk menampung data dari receiver
     var uploadedURL : String? = ""
+    //buat receiver pada fragment profile
     private val downloadReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
+            //ambil data URL yang dikirimkan dari broadcast
             uploadedURL = p1?.getStringExtra(UPLOADED_FILE_URL)
+            //load gambar yang telah terupload ke dalam avatar view
             Picasso.get().load(uploadedURL).into(requireView().profile_avatar)
+
+            requireView().profile_avatar.setOnClickListener {
+                zoomer.zoomImageFromThumb(requireContext(),requireView().profile_avatar,uploadedURL!!,requireView().container,requireView().expanded_image)
+            }
         }
     }
 
-
+    val zoomer = ImageZoomer()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        zoomer.shortAnimationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime)
         // Inflate the layout for this fragment
         var objectView = inflater.inflate(R.layout.fragment_profile, container, false)
 
@@ -59,28 +69,31 @@ class ProfileFragment : Fragment() {
             requireActivity().finish()
         }
 
-        // memberikan onClick listener pada btnPickUpload
+        //onCreateView Profile Fragment
         objectView.btnPickUpload.setOnClickListener {
-
-            // check permission untuk android M dan ke atas.
-            // saat permission disetujui oleh user maka jalan script untuk intent ke pick image.
+            //untuk mengakses gallery kita terlebih dahulu minta izin ke user
             if(EasyPermissions.hasPermissions(requireContext(),android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+                // jika di setujui , jalankan Intent Implisit dengan activity tujuan berupa ImagePickActivity
                 val i = Intent(requireActivity(), ImagePickActivity::class.java)
                 i.putExtra(Constant.MAX_NUMBER,1)
+                //ketika activity selesai , kita berharap activity mengembalikan hasil berupa path foto yang telah dipilih
                 startActivityForResult(i, Constant.REQUEST_CODE_PICK_IMAGE)
             }else{
                 // tampilkan permission request saat belum mendapat permission dari user
                 EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)
             }
-
         }
+
+        //pada fungsi OnCreateView yng telah kita overwrite registerkan receiver yang kita buat sebelumnya
+        //arahkan receiver untuk menerima broadcast dengan action ID = ACTION_UPLOAD
         var filterUpload = IntentFilter(ACTION_UPLOAD)
         requireActivity().registerReceiver(downloadReceiver,filterUpload)
 
         return objectView
     }
 
-    // override method onActivityResult untuk handling data dari pickImageActivity.
+
+    // override method onActivityResult untuk handling data dari ImagePickActivity.
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -93,16 +106,19 @@ class ProfileFragment : Fragment() {
             // membuat variable yang menampung path dari picked image.
             val pickedImg = data?.getParcelableArrayListExtra<ImageFile>(Constant.RESULT_PICK_IMAGE)?.get(0)?.path
 
+            //inisiasi intent untuk mengaktifkan service setelah user berhasil memilih gambar
             var UploadService = Intent(requireContext(), UploadImageIntentService::class.java)
+            //masukkan parameter yang nantinya dibutuhkan oleh service untuk mengeksekusi task
             val temp = UploadParams("GDRIVE",pickedImg!!)
-
             UploadService.putExtra(UPLOAD_PARAMS,temp)
+            //mulai service
             UploadImageIntentService.enqueueWork(requireActivity(),UploadService)
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        //unregister receiver jika activity dihancurkan agar tidak terjadi memory leak
         requireActivity().unregisterReceiver(downloadReceiver)
     }
 

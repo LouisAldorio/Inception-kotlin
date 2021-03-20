@@ -1,23 +1,21 @@
-#query GetSupplier(
-#    $role: String!
-#) {
-#    users_by_role(role: $role){
-#        profile_image
-#        username
-#        email
-#        role
-#        whatsapp_number
-#        friend_list
-#        hashed_password
-#        looking_for
-#        products {
-#            id
-#            name
-#            image
-#            unit_price
-#            unit_type
-#            min_purchase
-#            description
-#        }
-#    }
-#}
+query GetSupplier(
+    $role: String!
+) {
+    users_by_role(role: $role){
+        id
+        username
+        email
+        role
+        whatsapp
+        image{
+            link
+        }
+        comodity{
+            name
+            image
+            unit_price
+            unit_type
+            min_purchase
+        }
+    }
+}

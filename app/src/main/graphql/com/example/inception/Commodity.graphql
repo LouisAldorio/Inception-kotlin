@@ -2,8 +2,9 @@ query GetCommodity (
     $limit: Int!
     $page: Int!
 ){
-    comoditiesByCategory(limit:$limit,page: $page){
+    comodities_with_categories(limit:$limit,page: $page){
         category{
+            id
             name
         }
         total_item
@@ -17,7 +18,29 @@ query GetCommodity (
                 username
                 email
                 whatsapp
-                avatar
+                image{
+                    link
+                }
+            }
+        }
+    }
+}
+
+query GetCommodityByCategory(
+    $category_id: Int!
+) {
+    comodities_by_category(categoryID: $category_id) {
+        name
+        image
+        unit_price
+        unit_type
+        min_purchase
+        user {
+            username
+            email
+            whatsapp
+            image {
+                link
             }
         }
     }

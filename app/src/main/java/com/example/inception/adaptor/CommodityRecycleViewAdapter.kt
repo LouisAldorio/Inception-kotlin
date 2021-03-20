@@ -1,6 +1,5 @@
 package com.example.inception.adaptor
 
-//import com.example.inception.GetCommodityQuery
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -48,7 +47,7 @@ class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: 
                     commodities[position].user.username,
                     commodities[position].user.email,
                     commodities[position].user.whatsapp,
-                    commodities[position].user.avatar!!
+                    commodities[position].user.image.link!!
                 )
             )
             intentdetail.putExtra(DETAIL_EXTRA,commodity)
