@@ -6,6 +6,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import android.transition.ChangeBounds
 import com.example.inception.R
 import com.example.inception.constant.CONTEXT_EXTRA
 import com.example.inception.fragment.CommodityDetailFragment
@@ -15,6 +16,9 @@ class DetailPage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val bounds = ChangeBounds()
+        bounds.setDuration(500)
+        window.sharedElementEnterTransition = bounds
 
         val actionBar: ActionBar? = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)

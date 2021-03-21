@@ -60,7 +60,7 @@ class ProfileFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        zoomer.shortAnimationDuration = resources.getInteger(android.R.integer.config_mediumAnimTime)
+        zoomer.shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
         // Inflate the layout for this fragment
         var objectView = inflater.inflate(R.layout.fragment_profile, container, false)
 
@@ -101,7 +101,7 @@ class ProfileFragment : Fragment() {
 
             view?.btnPickUpload?.visibility = View.GONE
 
-            view?.profile_avatar?.visibility = View.VISIBLE
+//            view?.profile_avatar?.visibility = View.VISIBLE
 
             // membuat variable yang menampung path dari picked image.
             val pickedImg = data?.getParcelableArrayListExtra<ImageFile>(Constant.RESULT_PICK_IMAGE)?.get(0)?.path

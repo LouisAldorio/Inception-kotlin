@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.RelativeLayout
+import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
@@ -81,7 +82,7 @@ class login : Fragment() {
                 view?.progress_bar_login?.visibility = View.GONE
                 view?.login?.visibility = View.VISIBLE
 
-                objectFromRegister.ToastInvalidInput(response?.errors?.get(0)?.message.toString())
+                Toast.makeText(activity,response?.errors?.get(0)?.message.toString(),Toast.LENGTH_SHORT).show()
                 return@launchWhenResumed
             }
 

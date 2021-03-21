@@ -49,8 +49,8 @@
                     android:id="@+id/detail_commodity_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
                     android:textSize="26dp"
+                    android:transitionName="fadeText"
                     app:layout_constraintStart_toEndOf="@id/nama"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Nama" />
