@@ -9,14 +9,14 @@
 
     <ImageView
         android:id="@+id/more_commodity"
-        android:layout_width="37dp"
+        android:layout_width="32dp"
         android:layout_height="26dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         app:layout_constraintEnd_toEndOf="@+id/item_recycler"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/cat_title"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_media_play"
+        app:srcCompat="@drawable/ic_baseline_keyboard_arrow_right_24"
         tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
@@ -43,7 +43,17 @@
         app:layout_constraintTop_toBottomOf="@+id/cat_title"
         app:layout_constraintVertical_bias="0.0" />
 
-
+    <TextView
+        android:id="@+id/more_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="More"
+        app:layout_constraintBottom_toTopOf="@+id/item_recycler"
+        app:layout_constraintEnd_toStartOf="@+id/more_commodity"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/cat_title"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.75" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

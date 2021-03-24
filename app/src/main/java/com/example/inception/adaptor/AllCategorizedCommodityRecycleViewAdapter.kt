@@ -43,10 +43,17 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
         setCatItemRecycler(holder.itemRecycler, categorizedCommodityItemList[position].nodes)
 
         holder.moreButton.setOnClickListener {
-            var moreIntent = Intent(context,CommodityMore::class.java)
-            moreIntent.putExtra(CATEGORY_ID,categorizedCommodityItemList[position].category.id)
-            context.startActivity(moreIntent)
+            GoToDetail(position)
         }
+        holder.moreText.setOnClickListener {
+            GoToDetail(position)
+        }
+    }
+
+    private fun GoToDetail(position: Int){
+        var moreIntent = Intent(context,CommodityMore::class.java)
+        moreIntent.putExtra(CATEGORY_ID,categorizedCommodityItemList[position].category.id)
+        context.startActivity(moreIntent)
     }
 
 
@@ -79,10 +86,12 @@ class AllCategorizedCommodityHolder(itemView: View) : RecyclerView.ViewHolder(it
     var categoryTitle: TextView
     var itemRecycler: RecyclerView
     var moreButton: ImageView
+    var moreText : TextView
 
     init {
         categoryTitle = itemView.findViewById(R.id.cat_title)
         itemRecycler = itemView.findViewById(R.id.item_recycler)
         moreButton = itemView.findViewById(R.id.more_commodity)
+        moreText = itemView.findViewById(R.id.more_text)
     }
 }

@@ -7,17 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
     <LinearLayout
-
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <agency.tango.android.avatarview.views.AvatarView
-            android:id="@+id/profile_avatar"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
-            app:av_border_color="@android:color/white"
-            app:av_border_width="4dp"
-            app:av_text_size_percentage="35" />
+        <androidx.cardview.widget.CardView
+            android:orientation="vertical"
+            android:layout_width="120dp"
+            android:layout_margin="20dp"
+            android:elevation="4dp"
+            app:cardCornerRadius="50dp"
+            android:layout_height="120dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/profile_avatar"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:scaleType="centerCrop"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
 
 
         <Button
@@ -45,6 +60,5 @@
         android:visibility="invisible"
         tools:layout_editor_absoluteX="3dp"
         tools:layout_editor_absoluteY="2dp" />
-
 
 </FrameLayout>

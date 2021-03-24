@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+
         val mAdapter = RegistrationPagerAdaptor(this)
         myPager.adapter = mAdapter
 

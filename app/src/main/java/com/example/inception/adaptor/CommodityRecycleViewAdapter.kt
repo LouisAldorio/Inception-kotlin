@@ -75,7 +75,7 @@ class CommodityHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 
         Picasso.get().load(commodity.image[commodity.image.size - 1])
-            .error(R.drawable.ic_hotel_supplier).resize(180,170).into(imgHero, object: Callback {
+            .error(R.drawable.ic_hotel_supplier).into(imgHero, object: Callback {
             override fun onSuccess() {
                 //set animations here
 
