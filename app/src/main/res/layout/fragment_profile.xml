@@ -6,41 +6,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
         <androidx.cardview.widget.CardView
-            android:orientation="vertical"
-            android:layout_width="120dp"
+            android:id="@+id/avatar_container"
+            android:layout_width="141dp"
+            android:layout_height="146dp"
             android:layout_margin="20dp"
             android:elevation="4dp"
+            android:orientation="vertical"
             app:cardCornerRadius="50dp"
-            android:layout_height="120dp">
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0">
 
-                <ImageView
-                    android:id="@+id/profile_avatar"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageView
+                android:id="@+id/profile_avatar"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@id/avatar_container"
+                app:layout_constraintEnd_toEndOf="@id/avatar_container"
+                app:layout_constraintStart_toStartOf="@id/avatar_container"
+                app:layout_constraintTop_toTopOf="@id/avatar_container" />
+
         </androidx.cardview.widget.CardView>
 
 
         <Button
             android:id="@+id/logout"
             android:layout_width="wrap_content"
-            android:text="Log Out"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
             android:background="@color/yellowInception"
-            android:layout_height="wrap_content"/>
+            android:text="Log Out"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.276" />
+
+        <Button
+            android:id="@+id/commodity_create"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="128dp"
+            android:text="Create Commodity"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/logout"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/avatar_container"
+            app:layout_constraintVertical_bias="0.044" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnPickUpload"
@@ -49,16 +72,21 @@
             android:layout_gravity="end|bottom"
             android:background="@color/yellowInception"
             android:src="@drawable/ic_gallery_svgrepo_com"
-            android:layout_marginLeft="25dp"
-            android:layout_marginBottom="16dp"/>
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.954"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logout"
+            app:layout_constraintVertical_bias="0.963" />
 
-    </LinearLayout>
-    <ImageView
-        android:id="@+id/expanded_image"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="invisible"
-        tools:layout_editor_absoluteX="3dp"
-        tools:layout_editor_absoluteY="2dp" />
+        <ImageView
+            android:id="@+id/expanded_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="7dp"
+            tools:layout_editor_absoluteY="-7dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -45,3 +45,39 @@ query GetCommodityByCategory(
         }
     }
 }
+
+query GetCategory {
+    category_list{
+        id
+        name
+    }
+}
+
+mutation createCommodity(
+    $name: String!
+    $unit_price: Float!
+    $unit_type: String!
+    $min_purchase: Int!
+    $description: String
+    $category_id: ID!
+    $images: [String]!
+){
+    commodity {
+        create(input: {
+            name: $name
+            unit_price: $unit_price
+            unit_type: $unit_type
+            min_purchase: $min_purchase
+            description: $description
+            category_id: $category_id
+            images: $images
+        }) {
+            id
+            name
+            image
+            unit_price
+            unit_type
+            min_purchase
+        }
+    }
+}

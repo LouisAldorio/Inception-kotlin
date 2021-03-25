@@ -6,6 +6,7 @@ import com.example.inception.objectClass.User
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import java.util.concurrent.TimeUnit
 
 
 //instance means the client
@@ -20,7 +21,7 @@ fun apolloClient(context: Context): ApolloClient {
     instance =  ApolloClient.builder()
         .serverUrl("https://floating-basin-72676.herokuapp.com/query")
         .okHttpClient(
-            OkHttpClient.Builder()
+            OkHttpClient.Builder().callTimeout(30,TimeUnit.SECONDS)
             .addInterceptor(AuthorizationInterceptor(context))
             .build()
         )

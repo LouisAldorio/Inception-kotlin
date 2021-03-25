@@ -15,6 +15,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.example.inception.R
+import com.example.inception.activity.CreateCommodity
 import com.example.inception.api.Upload
 import com.example.inception.constant.ACTION_UPLOAD
 import com.example.inception.constant.UPLOADED_FILE_URL
@@ -67,6 +68,11 @@ class ProfileFragment : Fragment() {
         objectView.logout.setOnClickListener {
             User.removeToken(requireContext())
             requireActivity().finish()
+        }
+
+        objectView.commodity_create.setOnClickListener {
+            val intent = Intent(activity,CreateCommodity::class.java)
+            startActivity(intent)
         }
 
         //onCreateView Profile Fragment

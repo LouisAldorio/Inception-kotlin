@@ -1,0 +1,200 @@
+package com.example.inception.activity
+
+import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.util.Log
+import android.view.MenuItem
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.FrameLayout
+import android.widget.SpinnerAdapter
+import android.widget.Toast
+import androidx.appcompat.app.ActionBar
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
+import com.example.inception.GetCategoryQuery
+import com.example.inception.R
+import com.example.inception.adaptor.CommodityAttachmentCreateRecycleViewAdapter
+import com.example.inception.adaptor.CommodityCategorySpinnerAdapter
+import com.example.inception.api.apolloClient
+import com.example.inception.constant.ACTION_UPLOAD
+import com.example.inception.constant.UPLOADED_FILE_URL
+import com.example.inception.constant.UPLOAD_PARAMS
+import com.example.inception.data.UploadParams
+import com.example.inception.service.UploadImageIntentService
+import com.example.inception.utils.ImageZoomer
+import com.vincent.filepicker.Constant
+import com.vincent.filepicker.activity.ImagePickActivity
+import com.vincent.filepicker.filter.entity.ImageFile
+import kotlinx.android.synthetic.main.activity_create_commodity.*
+import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import pub.devrel.easypermissions.EasyPermissions
+
+class CreateCommodity : AppCompatActivity() {
+    var Attachments : MutableList<String> = arrayListOf("https://www.pngitem.com/pimgs/m/65-653761_add-button-png-image-free-download-searchpng-png.png")
+    var AttachmentAdapter : CommodityAttachmentCreateRecycleViewAdapter? = null
+
+    val zoomer = ImageZoomer()
+
+    private val finishUploadReceiver = object : BroadcastReceiver(){
+        override fun onReceive(p0: Context?, p1: Intent?) {
+            val uploadedURL = p1?.getStringExtra(UPLOADED_FILE_URL)
+            Attachments.add(uploadedURL!!)
+            AttachmentAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        zoomer.shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
+
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        setContentView(R.layout.activity_create_commodity)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        val adapter = this.let { ArrayAdapter.createFromResource(it,R.array.spinner_unit_type,android.R.layout.simple_spinner_dropdown_item) }
+        spinner_unit_type.adapter = adapter
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            val response = try {
+                withContext(Dispatchers.IO) {
+                    apolloClient(this@CreateCommodity).query(GetCategoryQuery())
+                        .await()
+                }
+            } catch (e: ApolloException) {
+                Log.d("Category", "Failure", e)
+                null
+            }
+
+            if(response?.data?.category_list != null && !response.hasErrors()) {
+                progress_bar_commodity_create.visibility = View.GONE
+                create_form.visibility = View.VISIBLE
+
+                this@CreateCommodity.let {
+                    var adapter: SpinnerAdapter = CommodityCategorySpinnerAdapter(this@CreateCommodity,
+                        response?.data?.category_list as List<GetCategoryQuery.Category_list>
+                    );
+
+                    spinner_category.adapter = adapter
+                }
+            }
+        }
+
+        var filterUpload = IntentFilter(ACTION_UPLOAD)
+        this.registerReceiver(finishUploadReceiver,filterUpload)
+
+        btn_create_commodity.setOnClickListener {
+            it.hideKeyboard()
+
+            //collect all data and mutate
+            val commodity_name = commodity_name.text.toString()
+            if(commodity_name.trim() == ""){
+                ToastInvalidInput("Commodity Name must not be empty")
+                return@setOnClickListener
+            }
+
+            val price = price.text.toString()
+            if(price.trim() == ""){
+                ToastInvalidInput("Price must not be empty!")
+                return@setOnClickListener
+            }
+
+            val min_purchase = min_purchase.text.toString()
+            if(min_purchase.trim() == ""){
+                ToastInvalidInput("Minimum Purchase Number must not be empty!")
+                return@setOnClickListener
+            }
+
+
+            val description = description.text.toString()
+            if(description.trim() == ""){
+                ToastInvalidInput("Description does not match!")
+                return@setOnClickListener
+            }
+
+            val unit_type = spinner_unit_type.selectedItem.toString()
+            val category_id = spinner_category.selectedItemId
+
+            progress_bar_commodity_create.visibility = View.VISIBLE
+            create_form.visibility = View.GONE
+            CreateCommodity(commodity_name,price,min_purchase,unit_type,category_id,description,Attachments)
+        }
+
+        //attachment
+        val rvAttachments = recycler_view_attachment
+        val layoutManager = LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false)
+        rvAttachments.layoutManager = layoutManager
+        AttachmentAdapter = CommodityAttachmentCreateRecycleViewAdapter(this,Attachments,{
+
+            if(EasyPermissions.hasPermissions(this,android.Manifest.permission.READ_EXTERNAL_STORAGE)){
+                val i = Intent(this@CreateCommodity, ImagePickActivity::class.java)
+                i.putExtra(Constant.MAX_NUMBER,1)
+                startActivityForResult(i, Constant.REQUEST_CODE_PICK_IMAGE)
+            }else{
+                EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+
+        },{ position : Int, imageView : View ->
+            this?.let { ac ->
+                zoomer.zoomImageFromThumb(
+                    ac,
+                    imageView,
+                    Attachments[position]!!,
+                    container,
+                    expanded_image
+                )
+            }
+        })
+        rvAttachments.adapter = AttachmentAdapter
+    }
+
+    private fun CreateCommodity(commodity_name: String,price: String,min_purchase: String,unit_type: String,category_id: Long, description: String,attachments : MutableList<String>) {
+
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == Constant.REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null){
+            val pickedImg = data?.getParcelableArrayListExtra<ImageFile>(Constant.RESULT_PICK_IMAGE)?.get(0)?.path
+
+            var UploadService = Intent(this, UploadImageIntentService::class.java)
+            val temp = UploadParams("GDRIVE",pickedImg!!)
+            UploadService.putExtra(UPLOAD_PARAMS,temp)
+            UploadImageIntentService.enqueueWork(this,UploadService)
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        this.unregisterReceiver(finishUploadReceiver)
+    }
+
+    fun ToastInvalidInput(text: String){
+        var toast = Toast.makeText(this, text, Toast.LENGTH_SHORT)
+        toast.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                onBackPressed()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+}
