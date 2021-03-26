@@ -88,6 +88,7 @@ class login : Fragment() {
 
             val access_token = loginResponse?.access_token
             User.setToken(requireContext(),access_token)
+            User.setUsername(requireContext(),loginResponse?.user?.username)
 
             var LandingPageIntent = Intent(activity,LandingPage::class.java)
             startActivity(LandingPageIntent)

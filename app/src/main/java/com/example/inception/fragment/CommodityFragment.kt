@@ -63,7 +63,7 @@ class CommodityFragment : Fragment() {
         val commodities = response?.data?.comodities_with_categories
         if (commodities != null && !response.hasErrors()) {
             view.findViewById<ProgressBar>(R.id.commodity_progress_bar).visibility = View.GONE
-            allCategoryList = commodities!!
+            allCategoryList = (commodities as List<GetCommodityQuery.Comodities_with_category>?)!!
             setMainCategoryRecycler(allCategoryList)
         }
     }

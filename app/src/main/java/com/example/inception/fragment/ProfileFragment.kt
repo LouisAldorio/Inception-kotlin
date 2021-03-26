@@ -13,11 +13,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
+import com.apollographql.apollo.api.Response
+import com.apollographql.apollo.coroutines.await
+import com.apollographql.apollo.exception.ApolloException
 import com.bumptech.glide.Glide
+import com.example.inception.GetCommodityQuery
+import com.example.inception.GetUserByUsernameQuery
 import com.example.inception.R
 import com.example.inception.activity.CreateCommodity
 import com.example.inception.api.Upload
+import com.example.inception.api.apolloClient
 import com.example.inception.constant.ACTION_UPLOAD
+import com.example.inception.constant.CREATE_COMMODITY_REQUEST_CODE
 import com.example.inception.constant.UPLOADED_FILE_URL
 import com.example.inception.constant.UPLOAD_PARAMS
 import com.example.inception.data.UploadParams
@@ -26,11 +34,16 @@ import com.example.inception.objectClass.User
 import com.example.inception.service.UploadImageIntentService
 import com.example.inception.utils.ImageZoomer
 import com.google.android.material.shape.CornerFamily
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import com.vincent.filepicker.Constant
 import com.vincent.filepicker.activity.ImagePickActivity
 import com.vincent.filepicker.filter.entity.ImageFile
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.fragment_register.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -40,14 +53,13 @@ import java.io.File
 
 
 class ProfileFragment : Fragment() {
-    //deklarasi variabel Global kosong untuk menampung data dari receiver
+
     var uploadedURL : String? = ""
-    //buat receiver pada fragment profile
+
     private val downloadReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
-            //ambil data URL yang dikirimkan dari broadcast
+
             uploadedURL = p1?.getStringExtra(UPLOADED_FILE_URL)
-            //load gambar yang telah terupload ke dalam avatar view
             Picasso.get().load(uploadedURL).into(requireView().profile_avatar)
 
             requireView().profile_avatar.setOnClickListener {
@@ -62,7 +74,6 @@ class ProfileFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         zoomer.shortAnimationDuration = resources.getInteger(android.R.integer.config_shortAnimTime)
-        // Inflate the layout for this fragment
         var objectView = inflater.inflate(R.layout.fragment_profile, container, false)
 
         objectView.logout.setOnClickListener {
@@ -72,7 +83,7 @@ class ProfileFragment : Fragment() {
 
         objectView.commodity_create.setOnClickListener {
             val intent = Intent(activity,CreateCommodity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, CREATE_COMMODITY_REQUEST_CODE)
         }
 
         //onCreateView Profile Fragment
@@ -89,9 +100,6 @@ class ProfileFragment : Fragment() {
                 EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)
             }
         }
-
-        //pada fungsi OnCreateView yng telah kita overwrite registerkan receiver yang kita buat sebelumnya
-        //arahkan receiver untuk menerima broadcast dengan action ID = ACTION_UPLOAD
         var filterUpload = IntentFilter(ACTION_UPLOAD)
         requireActivity().registerReceiver(downloadReceiver,filterUpload)
 
@@ -99,32 +107,51 @@ class ProfileFragment : Fragment() {
     }
 
 
-    // override method onActivityResult untuk handling data dari ImagePickActivity.
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        lifecycleScope.launch(Dispatchers.Main) {
+            val response = try {
+                withContext(Dispatchers.IO) {
+                    apolloClient(requireContext()).query(GetUserByUsernameQuery(username = User.getUsername(requireContext())!!))
+                        .await()
+                }
+            } catch (e: ApolloException) {
+                Log.d("User Profile", "Failure", e)
+                null
+            }
+            this@ProfileFragment.view?.let { LoadToView(it, response) }
+        }
+    }
+
+    private fun LoadToView(view: View, response: Response<GetUserByUsernameQuery.Data>?) {
+        Picasso.get().load(response?.data?.user_by_username?.image?.link).into(view.profile_avatar)
+        view.profile_avatar.setOnClickListener {
+            zoomer.zoomImageFromThumb(requireContext(),view.profile_avatar,response?.data?.user_by_username?.image?.link!!,view.container,view.expanded_image)
+        }
+
+        view.username.text = response?.data?.user_by_username?.username
+        view.role.text = response?.data?.user_by_username?.role
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(requestCode == Constant.REQUEST_CODE_PICK_IMAGE && resultCode == Activity.RESULT_OK && data != null){
-
             view?.btnPickUpload?.visibility = View.GONE
-
-//            view?.profile_avatar?.visibility = View.VISIBLE
-
-            // membuat variable yang menampung path dari picked image.
             val pickedImg = data?.getParcelableArrayListExtra<ImageFile>(Constant.RESULT_PICK_IMAGE)?.get(0)?.path
-
-            //inisiasi intent untuk mengaktifkan service setelah user berhasil memilih gambar
             var UploadService = Intent(requireContext(), UploadImageIntentService::class.java)
-            //masukkan parameter yang nantinya dibutuhkan oleh service untuk mengeksekusi task
             val temp = UploadParams("GDRIVE",pickedImg!!)
             UploadService.putExtra(UPLOAD_PARAMS,temp)
-            //mulai service
             UploadImageIntentService.enqueueWork(requireActivity(),UploadService)
+        }else if(requestCode == CREATE_COMMODITY_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        //unregister receiver jika activity dihancurkan agar tidak terjadi memory leak
         requireActivity().unregisterReceiver(downloadReceiver)
     }
 

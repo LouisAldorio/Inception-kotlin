@@ -148,6 +148,7 @@ class register : Fragment() {
 
             val access_token = registerResponse?.access_token
             User.setToken(requireContext(),access_token)
+            User.setUsername(requireContext(),registerResponse?.user?.username)
 
             var LandingPageIntent = Intent(activity,LandingPage::class.java)
             startActivity(LandingPageIntent)

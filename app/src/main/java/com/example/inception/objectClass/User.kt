@@ -7,6 +7,7 @@ import androidx.security.crypto.MasterKeys
 object User {
 
     private const val KEY_TOKEN = "TOKEN"
+    private const val USERNAME = "USERNAME"
     private fun preferences(context: Context): SharedPreferences {
         val masterKeyAlias: String = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
@@ -27,6 +28,18 @@ object User {
     fun setToken(context: Context, token: String) {
         preferences(context).edit().apply {
             putString(KEY_TOKEN, token)
+            apply()
+        }
+    }
+
+
+    fun getUsername(context: Context): String? {
+        return preferences(context).getString(USERNAME, null)
+    }
+
+    fun setUsername(context: Context, username: String) {
+        preferences(context).edit().apply {
+            putString(USERNAME, username)
             apply()
         }
     }

@@ -2,8 +2,22 @@ query GetUserByUsername (
     $username: String!
 ){
     user_by_username(username: $username){
-        avatar
+        image{
+            link
+        }
         username
+        role
+        comodity{
+            id
+            name
+            image
+            unit_price
+            unit_type
+            min_purchase
+            description
+            category_id
+        }
+        looking_for
     }
 }
 

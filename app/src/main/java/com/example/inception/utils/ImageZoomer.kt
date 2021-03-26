@@ -42,29 +42,6 @@ class ImageZoomer {
         // Load the high-resolution "zoomed-in" image.
         val expandedImageView: ImageView = expanded
 
-//        Glide.with(context)
-//            .load(imageResURL).listener(object : RequestListener<Drawable> {
-//                override fun onLoadFailed(
-//                    e: GlideException?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return true
-//                }
-//
-//                override fun onResourceReady(
-//                    resource: Drawable?,
-//                    model: Any?,
-//                    target: Target<Drawable>?,
-//                    dataSource: DataSource?,
-//                    isFirstResource: Boolean
-//                ): Boolean {
-//                    return true
-//                }
-//
-//            })
-//            .into(expandedImageView)
         Picasso.get().load(imageResURL).into(expandedImageView, object: Callback {
             override fun onSuccess() {
                 //set animations here

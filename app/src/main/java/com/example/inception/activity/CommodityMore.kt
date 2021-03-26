@@ -46,10 +46,12 @@ class CommodityMore : AppCompatActivity() {
                 Log.d("CommodityList", "Failure", e)
                 null
             }
-            val commodities = response?.data?.comodities_by_category
+            val commodities = response!!.data!!.comodities_by_category
             if (commodities != null && !response.hasErrors()){
                 commodity_more_progress_bar.visibility = View.GONE
-                adapter = CommodityGridViewAdapter(this@CommodityMore,commodities)
+                adapter = CommodityGridViewAdapter(this@CommodityMore,
+                    commodities as List<GetCommodityByCategoryQuery.Comodities_by_category>
+                )
                 commodity_more_GV.adapter = adapter
             }
         }

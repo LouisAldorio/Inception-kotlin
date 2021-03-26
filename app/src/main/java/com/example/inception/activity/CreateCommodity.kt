@@ -17,9 +17,12 @@ import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.apollographql.apollo.api.toInput
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
+import com.example.inception.CreateCommodityMutation
 import com.example.inception.GetCategoryQuery
+import com.example.inception.GetCommodityQuery
 import com.example.inception.R
 import com.example.inception.adaptor.CommodityAttachmentCreateRecycleViewAdapter
 import com.example.inception.adaptor.CommodityCategorySpinnerAdapter
@@ -129,7 +132,7 @@ class CreateCommodity : AppCompatActivity() {
 
             progress_bar_commodity_create.visibility = View.VISIBLE
             create_form.visibility = View.GONE
-            CreateCommodity(commodity_name,price,min_purchase,unit_type,category_id,description,Attachments)
+            CreateCommodity(this,commodity_name,price,min_purchase,unit_type,category_id,description,Attachments)
         }
 
         //attachment
@@ -160,8 +163,27 @@ class CreateCommodity : AppCompatActivity() {
         rvAttachments.adapter = AttachmentAdapter
     }
 
-    private fun CreateCommodity(commodity_name: String,price: String,min_purchase: String,unit_type: String,category_id: Long, description: String,attachments : MutableList<String>) {
+    private fun CreateCommodity(ctx : Context,commodity_name: String,price: String,min_purchase: String,unit_type: String,category_id: Long, description: String,attachments : MutableList<String>) {
+        lifecycleScope.launch(Dispatchers.Main) {
+            val response = try {
+                withContext(Dispatchers.IO) {
+                    apolloClient(ctx).mutate(CreateCommodityMutation(
+                        name = commodity_name,
+                        min_purchase = min_purchase.toInt(),
+                        unit_price = price.toDouble(),
+                        unit_type = unit_type,
+                        description = description.toInput(),
+                        category_id = category_id.toString(),
+                        images = attachments
+                    )).await()
+                }
+            } catch (e: ApolloException) {
+                Log.d("CommodityList", "Failure", e)
+                null
+            }
 
+            Log.i("Create Commodity",response?.data.toString())
+        }
     }
 
 

@@ -60,7 +60,7 @@ mutation createCommodity(
     $min_purchase: Int!
     $description: String
     $category_id: ID!
-    $images: [String]!
+    $images: [String!]!
 ){
     commodity {
         create(input: {

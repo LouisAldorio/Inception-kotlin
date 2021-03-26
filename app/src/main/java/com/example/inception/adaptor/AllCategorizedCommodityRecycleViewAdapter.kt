@@ -40,7 +40,9 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
 
     override fun onBindViewHolder(holder: AllCategorizedCommodityHolder, position: Int) {
         holder.categoryTitle.text = cap.Capitalize(categorizedCommodityItemList[position].category.name)
-        setCatItemRecycler(holder.itemRecycler, categorizedCommodityItemList[position].nodes)
+        setCatItemRecycler(holder.itemRecycler,
+            categorizedCommodityItemList[position].nodes as List<GetCommodityQuery.Node>
+        )
 
         holder.moreButton.setOnClickListener {
             GoToDetail(position)
