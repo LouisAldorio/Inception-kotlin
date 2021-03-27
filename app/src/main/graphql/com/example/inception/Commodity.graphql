@@ -9,6 +9,7 @@ query GetCommodity (
         }
         total_item
         nodes{
+            id
             name
             image
             unit_price
@@ -30,6 +31,7 @@ query GetCommodityByCategory(
     $category_id: Int!
 ) {
     comodities_by_category(categoryID: $category_id) {
+        id
         name
         image
         unit_price
@@ -78,6 +80,14 @@ mutation createCommodity(
             unit_price
             unit_type
             min_purchase
+            user {
+                username
+                email
+                whatsapp
+                image {
+                    link
+                }
+            }
         }
     }
 }

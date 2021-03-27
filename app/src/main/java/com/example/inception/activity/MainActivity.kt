@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.example.inception.R
@@ -22,6 +23,7 @@ fun View.hideKeyboard() {
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        Log.d("masuk pak eko", "oncreate")
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
@@ -41,5 +43,14 @@ class MainActivity : AppCompatActivity() {
         }.attach()
     }
 
+    override fun onPause() {
+        Toast.makeText(this, "on pause", Toast.LENGTH_SHORT).show()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        Toast.makeText(this, "on destroy", Toast.LENGTH_SHORT).show()
+        super.onDestroy()
+    }
 
 }

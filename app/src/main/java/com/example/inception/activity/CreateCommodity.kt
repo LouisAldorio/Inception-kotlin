@@ -27,9 +27,9 @@ import com.example.inception.R
 import com.example.inception.adaptor.CommodityAttachmentCreateRecycleViewAdapter
 import com.example.inception.adaptor.CommodityCategorySpinnerAdapter
 import com.example.inception.api.apolloClient
-import com.example.inception.constant.ACTION_UPLOAD
-import com.example.inception.constant.UPLOADED_FILE_URL
-import com.example.inception.constant.UPLOAD_PARAMS
+import com.example.inception.constant.*
+import com.example.inception.data.Commodity
+import com.example.inception.data.CommodityUser
 import com.example.inception.data.UploadParams
 import com.example.inception.service.UploadImageIntentService
 import com.example.inception.utils.ImageZoomer
@@ -51,9 +51,13 @@ class CreateCommodity : AppCompatActivity() {
 
     private val finishUploadReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
-            val uploadedURL = p1?.getStringExtra(UPLOADED_FILE_URL)
-            Attachments.add(uploadedURL!!)
-            AttachmentAdapter?.notifyDataSetChanged()
+            if(p1?.getStringExtra(UPLOAD_CONTEXT) == "create_commodity_attachment") {
+                val uploadedURL = p1?.getStringExtra(UPLOADED_FILE_URL)
+                Attachments.add(uploadedURL!!)
+                AttachmentAdapter?.notifyDataSetChanged()
+
+                btn_create_commodity.isEnabled = true
+            }
         }
     }
 
@@ -95,7 +99,7 @@ class CreateCommodity : AppCompatActivity() {
             }
         }
 
-        var filterUpload = IntentFilter(ACTION_UPLOAD)
+        var filterUpload = IntentFilter(ACTION_UPLOAD_ATTACHMENT)
         this.registerReceiver(finishUploadReceiver,filterUpload)
 
         btn_create_commodity.setOnClickListener {
@@ -123,12 +127,17 @@ class CreateCommodity : AppCompatActivity() {
 
             val description = description.text.toString()
             if(description.trim() == ""){
-                ToastInvalidInput("Description does not match!")
+                ToastInvalidInput("Description is Needed!")
                 return@setOnClickListener
             }
 
             val unit_type = spinner_unit_type.selectedItem.toString()
             val category_id = spinner_category.selectedItemId
+
+            if (Attachments.size < 2){
+                ToastInvalidInput("You need to upload One Photo at least!")
+                return@setOnClickListener
+            }
 
             progress_bar_commodity_create.visibility = View.VISIBLE
             create_form.visibility = View.GONE
@@ -174,7 +183,7 @@ class CreateCommodity : AppCompatActivity() {
                         unit_type = unit_type,
                         description = description.toInput(),
                         category_id = category_id.toString(),
-                        images = attachments
+                        images = attachments.drop(1)
                     )).await()
                 }
             } catch (e: ApolloException) {
@@ -182,7 +191,16 @@ class CreateCommodity : AppCompatActivity() {
                 null
             }
 
-            Log.i("Create Commodity",response?.data.toString())
+            val createdCommodity = response?.data?.commodity?.create
+            if (createdCommodity != null && !response.hasErrors()){
+                val returnIntent = Intent()
+                returnIntent.putExtra(CREATED_COMMODITY_DATA,Commodity(
+                    createdCommodity.name,createdCommodity.image,createdCommodity.unit_price.toString(),createdCommodity.unit_type,createdCommodity.min_purchase.toString(),
+                    CommodityUser(createdCommodity.user.username,createdCommodity.user.email,createdCommodity.user.whatsapp,createdCommodity.user.image.link)
+                ))
+                setResult(Activity.RESULT_OK,returnIntent)
+                finish()
+            }
         }
     }
 
@@ -195,8 +213,11 @@ class CreateCommodity : AppCompatActivity() {
 
             var UploadService = Intent(this, UploadImageIntentService::class.java)
             val temp = UploadParams("GDRIVE",pickedImg!!)
+            UploadService.putExtra(UPLOAD_CONTEXT, "create_commodity_attachment")
             UploadService.putExtra(UPLOAD_PARAMS,temp)
             UploadImageIntentService.enqueueWork(this,UploadService)
+
+            btn_create_commodity.isEnabled = false
         }
     }
 

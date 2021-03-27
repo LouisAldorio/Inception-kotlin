@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.commodity_item_layout.view.*
 
 
-class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: List<GetCommodityQuery.Node>) : RecyclerView.Adapter<CommodityHolder>(){
+class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: List<Commodity>) : RecyclerView.Adapter<CommodityHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommodityHolder {
         return CommodityHolder(LayoutInflater.from(parent.context).inflate(R.layout.commodity_item_layout,parent,false))
     }
@@ -47,7 +47,7 @@ class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: 
                     commodities[position].user.username,
                     commodities[position].user.email,
                     commodities[position].user.whatsapp,
-                    commodities[position].user.image.link!!
+                    commodities[position].user.avatar!!
                 )
             )
             intentdetail.putExtra(DETAIL_EXTRA,commodity)
@@ -71,7 +71,7 @@ class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: 
 class CommodityHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val imgHero = view.imgHeroes
 
-    fun bindCommodity(commodity: GetCommodityQuery.Node) {
+    fun bindCommodity(commodity: Commodity) {
 
 
         Picasso.get().load(commodity.image[commodity.image.size - 1])

@@ -14,6 +14,8 @@ import com.example.inception.GetCommodityQuery
 import com.example.inception.R
 import com.example.inception.activity.CommodityMore
 import com.example.inception.constant.CATEGORY_ID
+import com.example.inception.data.Commodity
+import com.example.inception.data.CommodityUser
 import com.example.inception.utils.Capitalizer
 import java.util.*
 
@@ -60,7 +62,27 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
 
 
     private fun setCatItemRecycler(recyclerView: RecyclerView, categoryItemList: List<GetCommodityQuery.Node>) {
-        val itemRecyclerAdapter = CommodityRecycleViewAdapter(context,categoryItemList)
+        val itemList : MutableList<Commodity> = arrayListOf()
+
+        for(item in categoryItemList){
+            itemList.add(
+                Commodity(
+                item.name,
+                item.image,
+                item.unit_price.toString(),
+                item.unit_type,
+                item.min_purchase.toString(),
+                CommodityUser(
+                    item.user.username,
+                    item.user.email,
+                    item.user.whatsapp,
+                    item.user.image.link
+                )
+            )
+            )
+        }
+
+        val itemRecyclerAdapter = CommodityRecycleViewAdapter(context,itemList)
         recyclerView.layoutManager = SpeedLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = itemRecyclerAdapter
 

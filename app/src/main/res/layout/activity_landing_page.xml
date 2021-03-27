@@ -23,7 +23,7 @@
         app:mbn_countTextColor="#000"
         app:mbn_defaultIconColor="#909090"
         app:mbn_rippleColor="@color/colorPrimary"
-        app:mbn_selectedIconColor="@color/semi_transparent"
+        app:mbn_selectedIconColor="@color/yellowInception"
         app:mbn_shadowColor="#5000" />
 
 </RelativeLayout>

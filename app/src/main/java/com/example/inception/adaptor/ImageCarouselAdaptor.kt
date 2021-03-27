@@ -7,13 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.inception.R
-import com.example.inception.`interface`.RecycleViewFragmentInterface
-import com.example.inception.data.Commodity
-import com.example.inception.fragment.CommodityDetailFragment
-import com.example.inception.utils.ImageZoomer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.commodity_item_layout.view.*
-import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
 import kotlinx.android.synthetic.main.image_carousel.view.*
 
 class ImageCarouselAdaptor(

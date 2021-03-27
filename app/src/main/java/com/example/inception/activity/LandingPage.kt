@@ -1,6 +1,5 @@
 package com.example.inception.activity
 
-import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
 import android.provider.Telephony
@@ -12,7 +11,6 @@ import kotlinx.android.synthetic.main.activity_landing_page.*
 
 import com.example.inception.fragment.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
-import com.example.inception.`interface`.RecycleViewFragmentInterface
 import com.example.inception.internalreceiver.SMSReceiver
 
 class LandingPage : AppCompatActivity() {
@@ -91,7 +89,6 @@ class LandingPage : AppCompatActivity() {
     override fun onBackPressed() {
         finishAffinity()
     }
-
 
 
 

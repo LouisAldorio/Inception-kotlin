@@ -9,6 +9,8 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
+        android:id="@+id/loaded_view"
+        android:visibility="invisible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -38,6 +40,14 @@
                 app:layout_constraintStart_toStartOf="@id/avatar_container"
                 app:layout_constraintTop_toTopOf="@id/avatar_container" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnPickUpload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:backgroundTint="@color/yellowInception"
+                android:src="@drawable/ic_gallery_svgrepo_com" />
+
         </androidx.cardview.widget.CardView>
 
 
@@ -64,21 +74,6 @@
             android:text="Create Commodity"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/user_commodity_rv" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnPickUpload"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:background="@color/yellowInception"
-            android:src="@drawable/ic_gallery_svgrepo_com"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.954"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logout"
-            app:layout_constraintVertical_bias="0.963" />
-
 
 
         <TextView
@@ -124,8 +119,14 @@
             android:translationZ="3dp"
             tools:layout_editor_absoluteX="7dp"
             tools:layout_editor_absoluteY="-7dp" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/commodity_profile_progress_bar"
+        android:layout_gravity="center_vertical|center_horizontal"/>
 
 </FrameLayout>
