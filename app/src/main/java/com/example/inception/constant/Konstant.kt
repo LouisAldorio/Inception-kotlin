@@ -26,3 +26,6 @@ const val CREATE_COMMODITY_REQUEST_CODE = 120
 const val CREATED_COMMODITY_DATA = "created_commodity_data"
 
 const val UPLOAD_CONTEXT = "profile_picture_upload_context"
+
+
+const val NOTIFICATION_CONTEXT = "notification_context"

@@ -9,7 +9,9 @@ import androidx.fragment.app.Fragment
 import android.transition.ChangeBounds
 import com.example.inception.R
 import com.example.inception.constant.CONTEXT_EXTRA
+import com.example.inception.constant.NOTIFICATION_CONTEXT
 import com.example.inception.fragment.CommodityDetailFragment
+import com.example.inception.objectClass.User
 
 
 class DetailPage : AppCompatActivity() {
@@ -28,6 +30,10 @@ class DetailPage : AppCompatActivity() {
 
         var context = intent.getStringExtra(CONTEXT_EXTRA)
         if(context == "Commodity"){
+            var isNotification = intent.getBooleanExtra(NOTIFICATION_CONTEXT,false)
+            if(isNotification == true) {
+                User.setNotificationAmount(this,(User.getNotificationAmount(this)!!.toInt() - 1).toString())
+            }
             replaceFragment(CommodityDetailFragment())
         }
     }

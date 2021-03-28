@@ -42,7 +42,7 @@ class ImageUpload {
 //            Log.i("upload",url)
 //        })
 
-        url = response!!.imageURL
+        url = response!!.data[0].serve_link
         Log.i("upload",url)
         return url
     }

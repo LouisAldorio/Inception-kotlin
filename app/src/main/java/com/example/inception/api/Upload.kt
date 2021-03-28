@@ -12,7 +12,7 @@ import retrofit2.http.Part
 class Upload {
 
     companion object {
-        const val BASE_URL = "https://secure-river-11996.herokuapp.com/"
+        const val BASE_URL = "https://upload.dextion.com/"
     }
 
     // init retrofit
@@ -32,7 +32,7 @@ class Upload {
 interface ApiInterface{
 
     @Multipart
-    @POST("upload")
+    @POST("upload/all")
     fun upload(@Part Type_Adapter : MultipartBody.Part, @Part File : MultipartBody.Part) : Call<UploadResponse>
 
 }

@@ -4,10 +4,12 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+
 object User {
 
     private const val KEY_TOKEN = "TOKEN"
     private const val USERNAME = "USERNAME"
+    private val NOTIFICATION_AMOUNT = "NOTIFICATION_AMOUNT"
     private fun preferences(context: Context): SharedPreferences {
         val masterKeyAlias: String = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
@@ -32,6 +34,14 @@ object User {
         }
     }
 
+    fun removeToken(context: Context) {
+        preferences(context).edit().apply {
+            remove(KEY_TOKEN)
+            apply()
+        }
+    }
+
+
 
     fun getUsername(context: Context): String? {
         return preferences(context).getString(USERNAME, null)
@@ -44,10 +54,18 @@ object User {
         }
     }
 
-    fun removeToken(context: Context) {
+
+    //dot notification State
+    fun getNotificationAmount(context: Context): String? {
+        return preferences(context).getString(NOTIFICATION_AMOUNT, "0")
+    }
+
+    fun setNotificationAmount(context: Context, amount: String) {
         preferences(context).edit().apply {
-            remove(KEY_TOKEN)
+            putString(NOTIFICATION_AMOUNT, amount)
             apply()
         }
     }
+
+
 }

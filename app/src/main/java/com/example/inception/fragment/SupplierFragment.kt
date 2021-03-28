@@ -49,13 +49,13 @@ class SupplierFragment : Fragment() {
             }
 
 
-            val suppliers = response?.data?.users_by_role?.filterNotNull()
+            val suppliers = response?.data?.users_by_role
             if(suppliers != null && !response.hasErrors()) {
                 view.findViewById<ProgressBar>(R.id.progress_bar).visibility = View.GONE
 
 
                 val supplierRv = view.findViewById<RecyclerView>(R.id.rv_supplier)
-                val adapter = SupplierRecycleViewAdaptor(suppliers)
+                val adapter = SupplierRecycleViewAdaptor(suppliers as List<GetSupplierQuery.Users_by_role>)
 
                 val snapHelper = LinearSnapHelper()
                 snapHelper.attachToRecyclerView(supplierRv)

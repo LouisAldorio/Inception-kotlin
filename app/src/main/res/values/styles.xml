@@ -50,5 +50,10 @@
 <!--        <item name="background">@color/semi_transparent</item>-->
         <item name="android:opacity">translucent</item>
     </style>
+    <style name="AppTheme.GenderChip" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="fontFamily">monospace</item>
+    </style>
 
 </resources>

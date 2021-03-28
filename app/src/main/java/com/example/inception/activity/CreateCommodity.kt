@@ -212,7 +212,7 @@ class CreateCommodity : AppCompatActivity() {
             val pickedImg = data?.getParcelableArrayListExtra<ImageFile>(Constant.RESULT_PICK_IMAGE)?.get(0)?.path
 
             var UploadService = Intent(this, UploadImageIntentService::class.java)
-            val temp = UploadParams("GDRIVE",pickedImg!!)
+            val temp = UploadParams("DO",pickedImg!!)
             UploadService.putExtra(UPLOAD_CONTEXT, "create_commodity_attachment")
             UploadService.putExtra(UPLOAD_PARAMS,temp)
             UploadImageIntentService.enqueueWork(this,UploadService)

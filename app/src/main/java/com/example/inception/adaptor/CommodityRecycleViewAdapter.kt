@@ -16,6 +16,7 @@ import com.example.inception.R
 import com.example.inception.activity.DetailPage
 import com.example.inception.constant.CONTEXT_EXTRA
 import com.example.inception.constant.DETAIL_EXTRA
+import com.example.inception.constant.NOTIFICATION_CONTEXT
 import com.example.inception.data.Commodity
 import com.example.inception.data.CommodityUser
 import com.squareup.picasso.Callback
