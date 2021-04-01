@@ -220,7 +220,6 @@ class ProfileFragment : Fragment() {
             val contentView = RemoteViews(activity?.packageName, R.layout.custom_notification_layout)
             contentView.setTextViewText(R.id.sub_title,createdCommodity.name)
             contentView.setTextViewText(R.id.notif_title,"New Commodity Created!")
-
             //action Intent
             // Buat Action Intent dan isikan informasi yang diperlukan untuk ditampilkan
             //saat notifikasi di tekan
@@ -243,22 +242,20 @@ class ProfileFragment : Fragment() {
                 getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT)
             }
 
+            contentView.setOnClickPendingIntent(R.id.button_open,resultPendingIntent)
             var notificationAmount = User.getNotificationAmount(requireContext())!!.toInt() + 1
             User.setNotificationAmount(requireContext(),notificationAmount.toString())
 
-            //lakukan pengecekan jika versi android >= O
-            //maka invoke notification menggunakan channel yang telah ada
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                //seluruh proses dibawah digunakan untuk mengkalibrasi gaya panel yang muncul saat push notif dijalankan
-                //pada setCustomView kita memasukkan View yang telah kita rancang
-                //pada setContentIntent kita memasukkan intent yang telah kita buat sebagai tujuan ketika notifikasi di click
-                //setSmall Icon merupakan icon yang akan muncul di bagian statusbar, ketika ada notifikasi
-                builder = Notification.Builder(activity, "profile_fragment")
+                builder = Notification.Builder(requireContext(), "profile_fragment")
                     .setSmallIcon(R.drawable.ic_commodity)
                     .setCustomContentView(contentView)
-                    .setContentIntent(resultPendingIntent)
+                    .setChannelId("profile_fragment")
+//                    .setContentIntent(resultPendingIntent)
                     .setBadgeIconType(BADGE_ICON_SMALL)
                     .setNumber(User.getNotificationAmount(requireContext())!!.toInt())
+
+
             }else {
                 //jika tidak invoke seperti biasanya tanpa channel
                 builder = Notification.Builder(activity)
@@ -266,7 +263,7 @@ class ProfileFragment : Fragment() {
                     .setCustomContentView(contentView)
                     .setContentIntent(resultPendingIntent)
             }
-            notificationManager.notify(1234,builder.build())
+            notificationManager.notify(1,builder.build())
         }
     }
 
@@ -292,20 +289,15 @@ class ProfileFragment : Fragment() {
         notificationManager!!.createNotificationChannelGroups(list)
     }
 
-    //setelah itu kita definisikan function yang akan membuat channel notifikasi dan dimasukkan kedalam
-    //channel grroup yang sebelumnya kita buat
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun CreateNotificationChannel(){
-        //buat channel dengan nama Create Commodity
         notificationChannel = NotificationChannel("profile_fragment", "Create Commodity", NotificationManager.IMPORTANCE_HIGH)
-        //definisikan group channel yang dituju
         notificationChannel.group = "Activity"
-        //lakukan beberapa kalibrasi bagaimana notifikasi ketika di munculkan
         notificationChannel.enableLights(true)
         notificationChannel.lightColor = Color.GREEN
         notificationChannel.enableVibration(true)
         notificationChannel.setShowBadge(true)
-        //panggil createNotificationChannel untuk membuat channel notifikasi dan berikan parameter channel yang kita buat sebelumnya
         notificationManager.createNotificationChannel(notificationChannel)
     }
 
