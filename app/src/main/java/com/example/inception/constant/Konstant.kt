@@ -29,3 +29,7 @@ const val UPLOAD_CONTEXT = "profile_picture_upload_context"
 
 
 const val NOTIFICATION_CONTEXT = "notification_context"
+
+
+const val EXTRA_PESAN = "extra_pesan"
+const val ALARM_MANAGER_CHANNELID = "alarm_manager_channel_id"

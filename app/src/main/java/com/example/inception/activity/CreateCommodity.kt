@@ -196,7 +196,7 @@ class CreateCommodity : AppCompatActivity() {
                 val returnIntent = Intent()
                 returnIntent.putExtra(CREATED_COMMODITY_DATA,Commodity(
                     createdCommodity.name,createdCommodity.image,createdCommodity.unit_price.toString(),createdCommodity.unit_type,createdCommodity.min_purchase.toString(),
-                    CommodityUser(createdCommodity.user.username,createdCommodity.user.email,createdCommodity.user.whatsapp,createdCommodity.user.image.link)
+                    CommodityUser(createdCommodity.user.username,createdCommodity.user.email,createdCommodity.user.whatsapp,createdCommodity.user.image.link),createdCommodity.description
                 ))
                 setResult(Activity.RESULT_OK,returnIntent)
                 finish()

@@ -1,5 +1,6 @@
 package com.example.inception.internalreceiver
 
+import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -8,7 +9,8 @@ import android.telephony.SmsMessage
 import android.util.Log
 import android.widget.Toast
 
-
+const val EXTRA_HIDE = "YES"
+const val EXTRA_OPEN  = "NO"
 //berhubung aplikasi kami tidak mengugnakan internal receiver, maka kami akan mengimplementasikan sms receiver
 class SMSReceiver : BroadcastReceiver() {
 
@@ -37,6 +39,9 @@ class SMSReceiver : BroadcastReceiver() {
                 Toast.makeText(context,"Phone : $no_pengirim \n" +
                         "Message : $pesan", Toast.LENGTH_SHORT).show()
             }
+        }else if(intent.action ==  EXTRA_HIDE){
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.cancelAll()
         }
     }
 }

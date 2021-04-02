@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RemoteViews
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.BADGE_ICON_SMALL
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -33,6 +34,8 @@ import com.example.inception.constant.*
 import com.example.inception.data.Commodity
 import com.example.inception.data.CommodityUser
 import com.example.inception.data.UploadParams
+import com.example.inception.internalreceiver.EXTRA_HIDE
+import com.example.inception.internalreceiver.SMSReceiver
 import com.example.inception.objectClass.User
 import com.example.inception.service.UploadImageIntentService
 import com.example.inception.utils.Capitalizer
@@ -61,7 +64,7 @@ class ProfileFragment : Fragment() {
     //definisikan beberapa variabel yang akan membantu kita mengelola notification
     lateinit var notificationManager: NotificationManager
     lateinit var notificationChannel: NotificationChannel
-    lateinit var builder: Notification.Builder
+    lateinit var builder: NotificationCompat.Builder
 
     private val downloadReceiver = object : BroadcastReceiver(){
         override fun onReceive(p0: Context?, p1: Intent?) {
@@ -151,7 +154,8 @@ class ProfileFragment : Fragment() {
                             item!!.min_purchase.toString(),
                             CommodityUser(
                                 "","","",""
-                            )
+                            ),
+                            item.description
                         )
                     )
                 }
@@ -220,9 +224,8 @@ class ProfileFragment : Fragment() {
             val contentView = RemoteViews(activity?.packageName, R.layout.custom_notification_layout)
             contentView.setTextViewText(R.id.sub_title,createdCommodity.name)
             contentView.setTextViewText(R.id.notif_title,"New Commodity Created!")
-            //action Intent
-            // Buat Action Intent dan isikan informasi yang diperlukan untuk ditampilkan
-            //saat notifikasi di tekan
+
+            //result pending intent dibuat agar nanti action open pada notification dapat ditekan, dam masuk ke DetailPage
             val resultIntent = Intent(activity, DetailPage::class.java)
             var commodity = Commodity(
                 createdCommodity.name,
@@ -230,7 +233,8 @@ class ProfileFragment : Fragment() {
                 createdCommodity.unit_price,
                 createdCommodity.unit_type,
                 createdCommodity.min_purchase,
-                CommodityUser("","","","")
+                CommodityUser("","","",""),
+                createdCommodity.description
             )
             resultIntent.putExtra(DETAIL_EXTRA,commodity)
             resultIntent.putExtra(CONTEXT_EXTRA,"Commodity")
@@ -247,23 +251,40 @@ class ProfileFragment : Fragment() {
             User.setNotificationAmount(requireContext(),notificationAmount.toString())
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                builder = Notification.Builder(requireContext(), "profile_fragment")
+                //pada builder kita set komponen notification sesuai kebutuhan, seperti title, dan contentText berupa nama komoditas yang baru dibuat,
+                //serta bigText kita berikan description dari commodity yang barusan kita buat, jangan lupa juga berikan channel id
+                builder = NotificationCompat.Builder(requireContext(), "profile_fragment")
                     .setSmallIcon(R.drawable.ic_commodity)
-                    .setCustomContentView(contentView)
+                    .setLargeIcon(BitmapFactory.decodeResource(context?.getResources(), R.drawable.ic_commodity))
+                    .setContentTitle("New Commodity Created!")
+                    .setContentText(createdCommodity.name)
                     .setChannelId("profile_fragment")
-//                    .setContentIntent(resultPendingIntent)
+                    .setContentIntent(resultPendingIntent)
                     .setBadgeIconType(BADGE_ICON_SMALL)
                     .setNumber(User.getNotificationAmount(requireContext())!!.toInt())
 
 
             }else {
                 //jika tidak invoke seperti biasanya tanpa channel
-                builder = Notification.Builder(activity)
+                builder = NotificationCompat.Builder(activity)
                     .setSmallIcon(R.drawable.ic_commodity)
                     .setCustomContentView(contentView)
                     .setContentIntent(resultPendingIntent)
             }
-            notificationManager.notify(1,builder.build())
+
+            //membuat intent untuk hide notification yang dibuat agar nantinya tombol action "Hide" pada notification dapat berfungsi
+            //kita arahkan action ke dalam receiver yang telah kita buat
+            val hideIntent = Intent(activity,SMSReceiver::class.java)
+            //set action agar nantinya receiver dapat mengenali aksi apa yang harus diambil ke tika tombol hide di notification di panggil
+            hideIntent.setAction(EXTRA_HIDE)
+            val hidePendingIntent = PendingIntent.getBroadcast(activity,0,hideIntent,0)
+            builder.addAction(R.drawable.ic_baseline_email_24,"Hide",hidePendingIntent)
+
+            //buat pending intent dan berikan reuslt intent yang telah kita buat sebelumnya untuk membuka activity detail
+            val openPendingIntent = PendingIntent.getActivity(activity,0,resultIntent,0)
+            builder.addAction(R.drawable.ic_baseline_email_24,"Open",openPendingIntent)
+
+            notificationManager.notify(notificationAmount,builder.build())
         }
     }
 

@@ -18,7 +18,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MainTheme">
-        <activity android:name=".activity.CreateCommodity"></activity>
+        <activity android:name=".activity.CovidActivity"></activity>
+
+        <receiver
+            android:name=".internalreceiver.ScheduledAlarmReceiver"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".activity.CreateCommodity" />
         <activity
             android:name=".activity.CommodityMore"
             android:screenOrientation="portrait" />

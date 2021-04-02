@@ -1,11 +1,17 @@
 package com.example.inception.fragment
 
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.Context
+import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.coroutines.await
@@ -24,7 +30,8 @@ class ScheduleFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
+
+
         return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
@@ -53,17 +60,7 @@ class ScheduleFragment : Fragment() {
 //                Log.i("error schedule", response?.errors?.get(0)?.message.toString())
 //            }
 //        }
-    }
 
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance() =
-            ScheduleFragment().apply {
-                arguments = Bundle().apply {
-
-                }
-            }
+        //job Scheduler
     }
 }

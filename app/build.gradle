@@ -88,6 +88,8 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.7'
 
+
+    implementation 'com.loopj.android:android-async-http:1.4.11'
 }
 
 apollo {

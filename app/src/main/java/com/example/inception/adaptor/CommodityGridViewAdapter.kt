@@ -46,7 +46,7 @@ class CommodityGridViewAdapter(private val context: Context,private val commodit
                     commodity.user.email,
                     commodity.user.whatsapp,
                     commodity.user.image.link!!
-                )
+                ),""
             )
             intentdetail.putExtra(DETAIL_EXTRA,commodity)
             intentdetail.putExtra(CONTEXT_EXTRA,"Commodity")

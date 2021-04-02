@@ -80,6 +80,7 @@ mutation createCommodity(
             unit_price
             unit_type
             min_purchase
+            description
             user {
                 username
                 email

@@ -49,7 +49,7 @@ class CommodityRecycleViewAdapter(var mContext:Context,private val commodities: 
                     commodities[position].user.email,
                     commodities[position].user.whatsapp,
                     commodities[position].user.avatar!!
-                )
+                ),""
             )
             intentdetail.putExtra(DETAIL_EXTRA,commodity)
             intentdetail.putExtra(CONTEXT_EXTRA,"Commodity")

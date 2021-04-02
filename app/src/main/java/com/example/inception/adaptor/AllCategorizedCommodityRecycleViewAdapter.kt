@@ -77,7 +77,8 @@ class AllCategorizedCommodityRecycleViewAdapter(private val context: Context, pr
                     item.user.email,
                     item.user.whatsapp,
                     item.user.image.link
-                )
+                ),
+                ""
             )
             )
         }
