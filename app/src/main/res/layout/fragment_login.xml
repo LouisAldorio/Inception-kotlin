@@ -25,7 +25,7 @@
                 android:theme="@style/MyEditTextTheme"
                 app:startIconDrawable="@drawable/ic_baseline_person_24"
                 android:hint="Username">
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/username_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,7 +41,7 @@
                 android:theme="@style/MyEditTextTheme"
                 app:startIconDrawable="@drawable/ic_baseline_lock_24"
                 android:hint="Password">
-                <EditText
+                <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/password_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -114,6 +114,7 @@ class LandingPage : AppCompatActivity() {
             R.id.covid_info -> {
                 val intent = Intent(this, CovidActivity::class.java)
                 startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
         }
         return true

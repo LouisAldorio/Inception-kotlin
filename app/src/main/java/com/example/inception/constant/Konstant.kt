@@ -33,3 +33,6 @@ const val NOTIFICATION_CONTEXT = "notification_context"
 
 const val EXTRA_PESAN = "extra_pesan"
 const val ALARM_MANAGER_CHANNELID = "alarm_manager_channel_id"
+
+const val COVID_NEW_UPDATE = "covid_new_update"
+const val COVID_NEW_UPDATE_DATA = "covid_new_update_data"
