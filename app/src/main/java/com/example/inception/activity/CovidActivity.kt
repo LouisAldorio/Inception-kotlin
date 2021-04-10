@@ -89,7 +89,7 @@ class CovidActivity : AppCompatActivity() {
             .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
                 //set delay sebelum tiap job dijalankan ulang ialah 3 menit
                 // saya tidak menggunakan setPeriodic dikarenakan batas minimum ialah 15 menit
-            .setMinimumLatency(3 * 60 * 1000)
+//            .setMinimumLatency(3 * 60 * 1000)
 
         //definisikan jobScheduler Service nya
         var JobCovid = getSystemService(Context.JOB_SCHEDULER_SERVICE) as JobScheduler

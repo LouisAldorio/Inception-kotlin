@@ -7,6 +7,8 @@
     android:layout_height="match_parent"
     tools:context=".fragment.ProfileFragment">
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:orientation="vertical"
         android:id="@+id/loaded_view"
@@ -115,12 +117,38 @@
             android:id="@+id/expanded_image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="invisible"
             android:translationZ="3dp"
-            tools:layout_editor_absoluteX="7dp"
-            tools:layout_editor_absoluteY="-7dp" />
+            android:visibility="invisible"
+            tools:layout_editor_absoluteX="-385dp"
+            tools:layout_editor_absoluteY="0dp" />
 
+        <androidx.core.widget.NestedScrollView
+            android:fillViewport="true"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/commodity_create">
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_marginLeft="15dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:text="Recently Added Photo"
+                    android:textSize="23dp" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recently_added_photo_rv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar

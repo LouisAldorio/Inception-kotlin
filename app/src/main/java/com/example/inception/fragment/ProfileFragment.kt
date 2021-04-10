@@ -5,10 +5,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,20 +22,26 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.BADGE_ICON_SMALL
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.loader.app.LoaderManager
+import androidx.loader.content.CursorLoader
+import androidx.loader.content.Loader
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.apollographql.apollo.api.Response
 import com.apollographql.apollo.coroutines.await
 import com.apollographql.apollo.exception.ApolloException
+import com.example.inception.CustomLayoutManager.SpeedLinearLayoutManager
 import com.example.inception.GetUserByUsernameQuery
 import com.example.inception.R
 import com.example.inception.activity.CreateCommodity
 import com.example.inception.activity.DetailPage
 import com.example.inception.adaptor.CommodityRecycleViewAdapter
 import com.example.inception.adaptor.DistributorWantedItemsRecycleViewAdaptor
+import com.example.inception.adaptor.RecentlyAddedImageAdapter
 import com.example.inception.api.apolloClient
 import com.example.inception.constant.*
 import com.example.inception.data.Commodity
 import com.example.inception.data.CommodityUser
+import com.example.inception.data.MediaLoaderData
 import com.example.inception.data.UploadParams
 import com.example.inception.internalreceiver.EXTRA_HIDE
 import com.example.inception.internalreceiver.SMSReceiver
@@ -44,15 +53,22 @@ import com.squareup.picasso.Picasso
 import com.vincent.filepicker.Constant
 import com.vincent.filepicker.activity.ImagePickActivity
 import com.vincent.filepicker.filter.entity.ImageFile
+import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_profile.view.*
+import kotlinx.android.synthetic.main.fragment_profile.view.container
+import kotlinx.android.synthetic.main.fragment_profile.view.expanded_image
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.EasyPermissions
-import java.net.URL
 
 
-class ProfileFragment : Fragment() {
+
+//kami akan mengimplementasikan Loader(CursorLoader ke dalam Fragment
+//untuk mengambil data gambar yang baru baru ini diambil user dengan tujuan incase jika user telah mengambil gambar komoditas tetapi lupa mengupload data
+// ini tentunya akan membantu user dalam mengingatkan nya kembali
+class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     val cap = Capitalizer()
 
     var uploadedURL : String? = ""
@@ -60,8 +76,21 @@ class ProfileFragment : Fragment() {
     var adapter : CommodityRecycleViewAdapter? = null
     var LookingForAdapter : DistributorWantedItemsRecycleViewAdaptor? = null
 
+    //Gallery Cursor Loader
+    //definisikan loader ID
+    private val IMAGE_LOADER_ID = 1325
+    //buat array kosong yang akan di supply ke Adapter
+    private val GalleryImages = ArrayList<MediaLoaderData>()
+    //persiapkan projectionField , kolom yang ingin kita ambil datanya dari Content Provider(dalam hal ini = Gallery(MediaStore))
+    var projectionField = arrayOf(
+        MediaStore.Images.Media._ID
+    )
+    //karna kami akan mengambil semuanya, maka kami tidak akan memberikan selection Criteria
+    val selectionCriteria : String? = null
+    //definisikan URI tujuan (URI dari content Provider)
+    var queryUri: Uri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI
 
-    //definisikan beberapa variabel yang akan membantu kita mengelola notification
+
     lateinit var notificationManager: NotificationManager
     lateinit var notificationChannel: NotificationChannel
     lateinit var builder: NotificationCompat.Builder
@@ -77,6 +106,12 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        LoaderManager.getInstance(this).initLoader(IMAGE_LOADER_ID,null,this)
     }
 
     val zoomer = ImageZoomer()
@@ -239,14 +274,17 @@ class ProfileFragment : Fragment() {
             resultIntent.putExtra(DETAIL_EXTRA,commodity)
             resultIntent.putExtra(CONTEXT_EXTRA,"Commodity")
             resultIntent.putExtra(NOTIFICATION_CONTEXT,true)
-            // Buat sebuah TackStackBuilder yang nantinya akan membatnu kita memanggil backstack untuk mengelola activity dari aksi notifikasi
+
+            //deep link dengan notifikasi
+            // Buat sebuah TackStackBuilder yang nantinya akan membantu kita memanggil backstack untuk mengelola activity dari aksi notifikasi untuk mekanisme deep link
             val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(activity).run {
-                // masukkan intent kedalam Stack
+                // masukkan intent kedalam Stack, beserta parent activity
                 addNextIntentWithParentStack(resultIntent)
+                //berikan request code dan flag
                 getPendingIntent(0, PendingIntent.FLAG_CANCEL_CURRENT)
             }
 
-            contentView.setOnClickPendingIntent(R.id.button_open,resultPendingIntent)
+//            contentView.setOnClickPendingIntent(R.id.button_open,resultPendingIntent)
             var notificationAmount = User.getNotificationAmount(requireContext())!!.toInt() + 1
             User.setNotificationAmount(requireContext(),notificationAmount.toString())
 
@@ -256,9 +294,9 @@ class ProfileFragment : Fragment() {
                 builder = NotificationCompat.Builder(requireContext(), "profile_fragment")
                     .setSmallIcon(R.drawable.ic_commodity)
                     .setLargeIcon(BitmapFactory.decodeResource(context?.getResources(), R.drawable.ic_commodity))
-                    .setContentTitle("New Commodity Created!")
-                    .setContentText(createdCommodity.name)
+                    .setContent(contentView)
                     .setChannelId("profile_fragment")
+                        //bagian ini akan menyimpan pending intent yang akan dipanggil ketika notifikasi ditekan
                     .setContentIntent(resultPendingIntent)
                     .setBadgeIconType(BADGE_ICON_SMALL)
                     .setNumber(User.getNotificationAmount(requireContext())!!.toInt())
@@ -274,15 +312,15 @@ class ProfileFragment : Fragment() {
 
             //membuat intent untuk hide notification yang dibuat agar nantinya tombol action "Hide" pada notification dapat berfungsi
             //kita arahkan action ke dalam receiver yang telah kita buat
-            val hideIntent = Intent(activity,SMSReceiver::class.java)
-            //set action agar nantinya receiver dapat mengenali aksi apa yang harus diambil ke tika tombol hide di notification di panggil
-            hideIntent.setAction(EXTRA_HIDE)
-            val hidePendingIntent = PendingIntent.getBroadcast(activity,0,hideIntent,0)
-            builder.addAction(R.drawable.ic_baseline_email_24,"Hide",hidePendingIntent)
-
-            //buat pending intent dan berikan reuslt intent yang telah kita buat sebelumnya untuk membuka activity detail
-            val openPendingIntent = PendingIntent.getActivity(activity,0,resultIntent,0)
-            builder.addAction(R.drawable.ic_baseline_email_24,"Open",openPendingIntent)
+//            val hideIntent = Intent(activity,SMSReceiver::class.java)
+//            //set action agar nantinya receiver dapat mengenali aksi apa yang harus diambil ke tika tombol hide di notification di panggil
+//            hideIntent.setAction(EXTRA_HIDE)
+//            val hidePendingIntent = PendingIntent.getBroadcast(activity,0,hideIntent,0)
+//            builder.addAction(R.drawable.ic_baseline_email_24,"Hide",hidePendingIntent)
+//
+//            //buat pending intent dan berikan reuslt intent yang telah kita buat sebelumnya untuk membuka activity detail
+//            val openPendingIntent = PendingIntent.getActivity(activity,0,resultIntent,0)
+//            builder.addAction(R.drawable.ic_baseline_email_24,"Open",openPendingIntent)
 
             notificationManager.notify(notificationAmount,builder.build())
         }
@@ -320,6 +358,76 @@ class ProfileFragment : Fragment() {
         notificationChannel.enableVibration(true)
         notificationChannel.setShowBadge(true)
         notificationManager.createNotificationChannel(notificationChannel)
+    }
+
+    //kita implement member dari Class Loader
+    //onCreateLoader
+    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
+        //disini kita melakukan query ke content Provider(Gallery), dengan menyertakan
+        //context, URI tujuan , field yang ingin kita ambil , selection Criteria, dan order berdasarkan waktu foto tersebut di ambil
+        //dalam hal ini DESCENDING(Dari terbaru ke terlama)
+        return CursorLoader(
+            requireContext(),
+            queryUri,
+            projectionField,
+            selectionCriteria,
+            null,
+            MediaStore.Files.FileColumns.DATE_ADDED + " DESC"
+        );
+    }
+
+    //pada onLoadFinished kita akan membaca data yang telah dikembalikan
+    override fun onLoadFinished(loader: Loader<Cursor>, data: Cursor?) {
+        //pastikan array penampung kosong
+        GalleryImages.clear()
+        //cek apakah ada data
+        if(data != null){
+            //jika ada data, berhubung kursor sudah berada pada posisi terkahir, arahkan kursor untuk pindah ke bagian awal
+            data.moveToFirst()
+            //lakukam pembacaan data dari awal sampai akhir
+            while (!data.isAfterLast){
+                // setiap data yang berhasil dibaca masukkan kedalam array kosong yang telah kita buat sebelumnya
+                GalleryImages.add(
+                    MediaLoaderData(
+                        //untuk mendapat URI yang dapat nantinya di load kedalam imageView maka kita akan menggabungkan queryURI dengan id yang kita dapatkan dari hasil query sebelumnya
+                        //misal queryURI = "/content/media/gallery/image"
+                        //dan ID = 15432345
+                        // kita gabungkan menjadi /content/media/gallery/image/15432345
+                        //hal ini bertujuan agar sistem operasi mengetahui gambar mana yang ingin kita tampilkan ke imgaeIvew
+                        Uri.withAppendedPath(queryUri, "" + data.getLong(data.getColumnIndex(MediaStore.Images.Media._ID))).toString()
+                    )
+                )
+                //instruksikan cursor untuk pindah ke baris selanjutnya dan membaca data selanjutnya
+                data.moveToNext()
+            }
+
+            //setelah data selesai dibaca, masukkan data URI gambar yang telah kita dapatkan kedalam recycle view
+            recently_added_photo_rv.apply {
+                //masukkan context dan array of URI yang telah kita produce dari proses sebelumnya
+                //jangan lupa mempassing callback function yang dapat membantu kita dalam melakukan zoom terhadap image yang terload ke recycle view
+                adapter = RecentlyAddedImageAdapter(requireContext(),GalleryImages){ position, imageView ->
+                    activity?.let { ac ->
+                        zoomer.zoomImageFromThumb(
+                            ac,
+                            imageView,
+                            GalleryImages[position].uri!!,
+                            requireView().container,
+                            requireView().expanded_image
+                        )
+                    }
+                }
+                //masukkan layout manager yang dibutuhkan oleh recycel view, disini kami menggunakan layout manager yang telah kami custom sesuai kebutuhan
+                layoutManager = SpeedLinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            }
+        }
+    }
+
+    //pada onLoaderReset kita panggil adaptor untuk menjalankan notifyDatasetChanged, agar jika terjadi perubahan configurasi
+    //loader dapat tahu dan mengupdate recycle view
+    override fun onLoaderReset(loader: Loader<Cursor>) {
+//        if(recently_added_photo_rv.adapter != null) {
+//            recently_added_photo_rv.adapter?.notifyDataSetChanged()
+//        }
     }
 
 }

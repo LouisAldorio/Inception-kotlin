@@ -53,6 +53,7 @@ class CovidJobScheduler : JobService() {
             // digunakan dalam broadcast
             override fun onSuccess(statusCode: Int, headers: Array<out Header>?, responseBody: ByteArray?) {
                 var result = responseBody?.toString(charset) ?: "Covid-19 is GONE!"
+                Log.i("TAG",result)
                 var jsonArray = JSONArray(result)
                 var objectData = jsonArray.getJSONObject(0)
 

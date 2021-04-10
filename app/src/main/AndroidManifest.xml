@@ -18,7 +18,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MainTheme">
-        <activity android:name=".activity.CovidActivity"></activity>
+
+<!--        kita akan menerapkan deeplink dengan menggunakan URL dimana jika URL ditekan maka akan masuk kedalam activity tertentu yang telah kita atur-->
+        <activity android:name=".activity.CovidActivity">
+<!--            untuk dapat melakukan nya kita hanya perlu memberikan intent-filter dengan beberap konfigurasi seperti dibawah-->
+            <intent-filter>
+
+<!--                gunakan android.intent.action.VIEW agar nantinya ketika link di tekan intent dapat ditampilkan-->
+                <action android:name="android.intent.action.VIEW" />
+<!--                kita gunakan konfigurasi default dari class intent-->
+                <category android:name="android.intent.category.DEFAULT" />
+<!--                sertakan android.intent.category.BROWSABLE agar nantinya activity ini dapat di map ke URL yang kita tetapkan-->
+                <category android:name="android.intent.category.BROWSABLE" />
+
+<!--                berikan beberapa data yang diperlukan-->
+<!--                scheme yang digunakan ialah http, berikan host nya, bisa berupa nama website , jika ada, pathPattern mirip dengan Route /prefix-->
+<!--                dengan beberapa konfigurasi diatas maka secara otomatis kita telah melakukan mekanisme deeplink dengan URL ke dalam activity kita-->
+                <data
+                    android:scheme="http"
+                    android:host="wholesaler.com"
+                    android:pathPattern="/covid" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".internalreceiver.ScheduledAlarmReceiver"
@@ -50,13 +71,42 @@
             android:enabled="true"
             android:exported="true"
             android:permission="android.permission.BIND_JOB_SERVICE" />
+<!--        jika ingin menjalankan menjadi activity rutin berikan parent activity name pada activity terkait di manifest-->
+<!--        <activity-->
+<!--            android:name=".activity.DetailPage"-->
+<!--            android:screenOrientation="portrait"-->
+<!--            android:parentActivityName=".activity.LandingPage" />-->
 
+
+<!--        untuk hanya menjalankan aktivitas khusus makan berikan beberapa konfigurasi di manefist untuk activity terkait-->
         <activity
             android:name=".activity.DetailPage"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:taskAffinity=""/>
+
+
+
+
+
+
         <activity
             android:name=".activity.LandingPage"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait">
+            <tools:validation testUrl="http://wholesaler.com/commodities" />
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:scheme="http"
+                    android:host="wholesaler.com"
+                    android:pathPattern="/commodities" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"

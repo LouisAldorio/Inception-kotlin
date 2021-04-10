@@ -17,8 +17,9 @@ import com.flaviofaria.kenburnsview.KenBurnsView
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.distributor_item_layout.view.*
 
-class DistributorRecycleViewAdaptor(private val context: Context,private val distributors : List<GetDistributorQuery.Users_by_role>): RecyclerView.Adapter<DistributorHolder>() {
+class DistributorRecycleViewAdaptor(private val context: Context, distributors : List<GetDistributorQuery.Users_by_role>): RecyclerView.Adapter<DistributorHolder>() {
     val cap = Capitalizer()
+    private var distributors: MutableList<GetDistributorQuery.Users_by_role> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DistributorHolder {
         return DistributorHolder(LayoutInflater.from(parent.context).inflate(R.layout.distributor_item_layout,parent,false))
@@ -36,6 +37,13 @@ class DistributorRecycleViewAdaptor(private val context: Context,private val dis
         val wantedItemsAdapter = DistributorWantedItemsRecycleViewAdaptor(distributors[position].looking_for as List<String>)
         holder.wantedItemRecycler.adapter = wantedItemsAdapter
         holder.wantedItemRecycler.layoutManager = LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false)
+    }
+
+    //berikut fungsi memesukka data yang diterima dari Graphql Server ke dalam Mutable List
+    // dan memberitahu recycle view bahwa ada entry baru (notifyDatasetChanged)
+    fun setDistributors(data: List<GetDistributorQuery.Users_by_role>) {
+        distributors.addAll(data)
+        notifyDataSetChanged()
     }
 }
 
