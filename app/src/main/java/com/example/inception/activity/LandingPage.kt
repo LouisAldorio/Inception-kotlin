@@ -117,6 +117,11 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+            R.id.phone_contact -> {
+                val intent = Intent(this, ContactActivtity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
         }
         return true
     }

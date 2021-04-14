@@ -4,4 +4,9 @@
         android:id="@+id/covid_info"
         android:icon="@drawable/ic_virus"
         android:title="Covid Info Update"/>
+
+    <item
+        android:id="@+id/phone_contact"
+        android:icon="@drawable/ic_virus"
+        android:title="Phone Contact"/>
 </menu>
