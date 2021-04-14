@@ -36,5 +36,6 @@ class ContactHolder(view: View) : RecyclerView.ViewHolder(view) {
         contactLastName.text = contact.last_name
         contactEmail.text = contact.email
         contactPhoneNumber.text = contact.phone_number
+        contactAvatar.setImageBitmap(contact.avatar_path)
     }
 }
