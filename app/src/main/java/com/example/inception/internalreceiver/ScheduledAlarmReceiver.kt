@@ -72,6 +72,6 @@ class ScheduledAlarmReceiver : BroadcastReceiver() {
         //buat notification channel
         NotificationManager.createNotificationChannel(NotifyChannel)
         //jalankan notifikasi
-        NotificationManager.notify(NotificationId,Builder.build())
+//        NotificationManager.notify(NotificationId,Builder.build())
     }
 }

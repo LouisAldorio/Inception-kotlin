@@ -1,7 +1,6 @@
 package com.example.inception.fragment
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,21 +10,15 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.apollographql.apollo.coroutines.await
-import com.apollographql.apollo.exception.ApolloException
 import com.example.inception.CustomLayoutManager.CustomAutoScrollCenterZoomLayoutManager
-import com.example.inception.GetSupplierQuery
-//import com.example.inception.GetSupplierQuery
-import com.example.inception.GetUserByUsernameQuery
 import com.example.inception.R
+import com.example.inception.`interface`.SupplierInterface
 import com.example.inception.adaptor.SupplierRecycleViewAdaptor
-import com.example.inception.api.apolloClient
-import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
-import kotlinx.android.synthetic.main.fragment_supplier.view.*
+import com.example.inception.data.Supplier
+import com.example.inception.presenter.SupplierPresenter
 
-
-class SupplierFragment : Fragment() {
-
+//pada fragment supplier yang akan merender list supplier kita implementasi kan Supplier Interface yang telah kita buat sebelumnya
+class SupplierFragment : Fragment(),SupplierInterface {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,31 +31,25 @@ class SupplierFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        //init object dari class presenter dan berikan context , serta this, karena kita telah mengimplementasi SupplierInterface pada fragment
+        var presenter = SupplierPresenter(requireContext(),this)
+        //panggil fungsi yang sebelumnya telah kita buat di presenter, dan jangan lupa memberikan Scope Coroutine, disini saya menggunakan lifecycleScope
+        presenter.LoadSupplierList(lifecycleScope)
+    }
+    // disinilah kita akan mengoverride  fungsi yang telah ktia buat pada interface
+    override fun RenderSupplierList(SupplierModel: MutableList<Supplier>) {
+        //ketika menerima dari model, maka masukkan data kedalam adapter recycle view dan render seperti biasanya
+        //dengan begini, kita telah memisahkan, model(data), view serta logic proses(presenter)
         val layoutManager = CustomAutoScrollCenterZoomLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-        lifecycleScope.launchWhenResumed {
+        requireView().findViewById<ProgressBar>(R.id.progress_bar).visibility = View.GONE
 
-            val response = try {
-                apolloClient(requireContext()).query(GetSupplierQuery(role = "Supplier")).await()
-            }catch (e: ApolloException){
-                Log.d("SupplierList", "Failure", e)
-                null
-            }
+        val supplierRv = requireView().findViewById<RecyclerView>(R.id.rv_supplier)
+        val adapter = SupplierRecycleViewAdaptor(SupplierModel)
 
+        val snapHelper = LinearSnapHelper()
+        snapHelper.attachToRecyclerView(supplierRv)
 
-            val suppliers = response?.data?.users_by_role
-            if(suppliers != null && !response.hasErrors()) {
-                view.findViewById<ProgressBar>(R.id.progress_bar).visibility = View.GONE
-
-
-                val supplierRv = view.findViewById<RecyclerView>(R.id.rv_supplier)
-                val adapter = SupplierRecycleViewAdaptor(suppliers as List<GetSupplierQuery.Users_by_role>)
-
-                val snapHelper = LinearSnapHelper()
-                snapHelper.attachToRecyclerView(supplierRv)
-
-                supplierRv.layoutManager = layoutManager
-                supplierRv.adapter = adapter
-            }
-        }
+        supplierRv.layoutManager = layoutManager
+        supplierRv.adapter = adapter
     }
 }
