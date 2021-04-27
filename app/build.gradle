@@ -91,7 +91,10 @@ dependencies {
 
     implementation 'com.loopj.android:android-async-http:1.4.11'
 
-    testImplementation 'org.mockito:mockito-inline:3.3.0'
+    testImplementation 'org.mockito:mockito-core:2.24.5'
+    // required if you want to use Mockito for Android tests
+    androidTestImplementation 'org.mockito:mockito-android:2.24.5'
+//    testImplementation 'org.mockito:mockito-inline:3.3.0'
     androidTestImplementation'androidx.test:runner:1.1.0'
     androidTestImplementation'androidx.test:rules:1.1.0'
     androidTestImplementation'androidx.test.espresso:espresso-intents:3.1.0'
