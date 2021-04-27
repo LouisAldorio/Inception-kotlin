@@ -48,13 +48,13 @@ class login : Fragment() {
             val username = view.username_login.text.toString()
             if(username.trim() == ""){
 
-                objectFromRegister.ToastInvalidInput("Username must not be empty")
+                toastInvalidInput("Username must not be empty")
                 return@setOnClickListener
             }
 
             val password = view.password_login.text.toString()
             if(password.trim() == ""){
-                objectFromRegister.ToastInvalidInput("Password must not be empty!")
+                toastInvalidInput("Password must not be empty!")
                 return@setOnClickListener
             }
 
@@ -63,6 +63,12 @@ class login : Fragment() {
 
             login(username,password)
         }
+    }
+
+    fun toastInvalidInput(text: String){
+
+        var toast = Toast.makeText(activity, text, Toast.LENGTH_SHORT)
+        toast.show()
     }
 
     private fun login(username : String, password: String){

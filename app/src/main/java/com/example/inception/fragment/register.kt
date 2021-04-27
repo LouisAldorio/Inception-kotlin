@@ -101,8 +101,13 @@ class register : Fragment() {
 
             val confirm_password = view.confirm_password.text.toString()
             if(confirm_password.trim() == ""){
-                ToastInvalidInput("Password does not match!")
+                ToastInvalidInput("Confirm Password must not be Empty!")
                 return@setOnClickListener
+            }else {
+                if(confirm_password != password) {
+                    ToastInvalidInput("Password does not match!")
+                    return@setOnClickListener
+                }
             }
 
             val role = view.role_spinner.selectedItem.toString()

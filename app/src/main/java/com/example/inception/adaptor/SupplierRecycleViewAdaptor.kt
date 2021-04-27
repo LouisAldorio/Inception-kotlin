@@ -9,12 +9,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.inception.GetSupplierQuery
 //import com.example.inception.GetSupplierQuery
 import com.example.inception.R
+import com.example.inception.data.Supplier
 import com.flaviofaria.kenburnsview.KenBurnsView
 import com.squareup.picasso.Picasso
 
 //param =
-class SupplierRecycleViewAdaptor (val suppliers: List<GetSupplierQuery.Users_by_role>) : RecyclerView.Adapter<SupplierHolder>(){
-    var onItemClicked: ((GetSupplierQuery.Users_by_role) -> Unit)? = null
+class SupplierRecycleViewAdaptor (val suppliers: List<Supplier>) : RecyclerView.Adapter<SupplierHolder>(){
+    var onItemClicked: ((Supplier) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SupplierHolder {
         return SupplierHolder(LayoutInflater.from(parent.context).inflate(R.layout.supplier_item_layout,parent,false))
@@ -25,7 +26,7 @@ class SupplierRecycleViewAdaptor (val suppliers: List<GetSupplierQuery.Users_by_
     }
 
     override fun onBindViewHolder(holder: SupplierHolder, position: Int) {
-        Picasso.get().load(suppliers[position].image.link).into(holder.profileImage)
+        Picasso.get().load(suppliers[position].photoUrl).into(holder.profileImage)
         holder.username.text = suppliers[position].username
 
         holder.itemView.setOnClickListener {
