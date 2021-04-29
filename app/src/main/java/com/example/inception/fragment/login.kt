@@ -19,12 +19,22 @@ import com.example.inception.activity.LandingPage
 import com.example.inception.activity.hideKeyboard
 import com.example.inception.api.apolloClient
 import com.example.inception.objectClass.User
+import com.example.inception.utils.EspressoIdlingResource
 import kotlinx.android.synthetic.main.fragment_login.view.*
 
 
 class login : Fragment() {
 
-    val objectFromRegister = register()
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val token = User.getToken(requireContext())
+        if (token != null){
+            var LandingPageIntent = Intent(activity,LandingPage::class.java)
+            startActivity(LandingPageIntent)
+        }
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -72,6 +82,7 @@ class login : Fragment() {
     }
 
     private fun login(username : String, password: String){
+        EspressoIdlingResource.increment()
         lifecycleScope.launchWhenResumed {
             val response = try {
                 apolloClient(requireContext()).mutate(LoginMutation(
@@ -101,6 +112,8 @@ class login : Fragment() {
 
             view?.progress_bar_login?.visibility = View.GONE
             view?.login?.visibility = View.VISIBLE
+
+            EspressoIdlingResource.decrement()
         }
     }
 }

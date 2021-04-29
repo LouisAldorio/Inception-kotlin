@@ -39,9 +39,7 @@ class LandingPage : AppCompatActivity() {
 
     private val fragmentManager = supportFragmentManager
 
-    private var activeFragment: Fragment = commodityFragment
-
-
+    private var activeFragment: Fragment = profileFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,12 +51,12 @@ class LandingPage : AppCompatActivity() {
         fragmentManager.beginTransaction().apply {
             add(R.id.fragmentContainer, supplierFragment).hide(supplierFragment)
             add(R.id.fragmentContainer, scheduleFragment).hide(scheduleFragment)
+            add(R.id.fragmentContainer, commodityFragment).hide(commodityFragment)
+            add(R.id.fragmentContainer, profileFragment)
             add(R.id.fragmentContainer, distributorFragment).hide(distributorFragment)
-            add(R.id.fragmentContainer, profileFragment).hide(profileFragment)
-            add(R.id.fragmentContainer, commodityFragment)
         }.commit()
 
-        bottomNavigation.show(0)
+        bottomNavigation.show(4)
         bottomNavigation.add(MeowBottomNavigation.Model(0,R.drawable.ic_commodity))
         bottomNavigation.add(MeowBottomNavigation.Model(1,R.drawable.ic_hotel_supplier))
         bottomNavigation.add(MeowBottomNavigation.Model(2,R.drawable.ic_calendar))

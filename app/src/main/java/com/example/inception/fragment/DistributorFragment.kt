@@ -24,6 +24,7 @@ import com.example.inception.R
 import com.example.inception.adaptor.DistributorRecycleViewAdaptor
 import com.example.inception.api.apolloClient
 import com.example.inception.loader.DistributorAsyncTaskLoader
+import com.example.inception.utils.EspressoIdlingResource
 import kotlinx.android.synthetic.main.distributor_item_layout.view.*
 import kotlinx.android.synthetic.main.fragment_distributor.*
 import kotlinx.android.synthetic.main.fragment_distributor.view.*
@@ -81,6 +82,7 @@ class DistributorFragment : Fragment(),
         args: Bundle?
     ): Loader<ApolloQueryCall<GetDistributorQuery.Data>> {
         //jangan lupa berikan context nya
+
         return DistributorAsyncTaskLoader(requireContext())
     }
 
@@ -92,6 +94,7 @@ class DistributorFragment : Fragment(),
     ) {
         //setelah schema berhasil di load pada asyncTask Loader kita lakukan fetch data  distributor ke server Graphql
         //seperti biasa kita melakukan upaya fetch pada thread IO lalu mengupdate Main Thread ketika data berhasil di fetch
+        EspressoIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main) {
             //request dimulai pada thread IO
             val response = try {
@@ -114,6 +117,7 @@ class DistributorFragment : Fragment(),
                     // pada adapter distributor kami ada membuat sebuah method yang berguna unutk mengupdateseluruh data yang ada pada recycle view,
                     //maka setelah data diterima, lakukan update pada recycle view
                     DistributorAdapater!!.setDistributors(distributors as List<GetDistributorQuery.Users_by_role>)
+                    EspressoIdlingResource.decrement()
                 }
             }
         }

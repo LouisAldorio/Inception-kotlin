@@ -23,6 +23,7 @@ import com.example.inception.activity.hideKeyboard
 import com.example.inception.api.apolloClient
 import com.example.inception.constant.*
 import com.example.inception.objectClass.User
+import com.example.inception.utils.EspressoIdlingResource
 import kotlinx.android.synthetic.main.fragment_register.*
 import kotlinx.android.synthetic.main.fragment_register.view.*
 
@@ -58,6 +59,7 @@ class register : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         if(savedInstanceState != null) {
             view.username.setText(savedInstanceState.getString(USERNAME))
             view.password.setText(savedInstanceState.getString(PASSWORD))
@@ -126,6 +128,7 @@ class register : Fragment() {
     }
 
     private fun register(username: String, email: String, whatsapp_number : String, password : String, confirm_password: String, role: String){
+        EspressoIdlingResource.increment()
         lifecycleScope.launchWhenResumed {
             val response = try {
                 apolloClient(requireContext()).mutate(RegisterMutation(
@@ -160,8 +163,11 @@ class register : Fragment() {
 
             view?.progressBar?.visibility = View.GONE
             view?.register?.visibility = View.VISIBLE
+
+            EspressoIdlingResource.decrement()
         }
     }
+
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)

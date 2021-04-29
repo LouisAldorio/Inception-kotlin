@@ -31,6 +31,7 @@ import com.example.inception.constant.ALARM_MANAGER_CHANNELID
 import com.example.inception.constant.EXTRA_PESAN
 import com.example.inception.internalreceiver.ScheduledAlarmReceiver
 import com.example.inception.utils.Capitalizer
+import com.example.inception.utils.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -86,6 +87,7 @@ class CommodityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        EspressoIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main) {
             val response = try {
                 withContext(Dispatchers.IO) {
@@ -97,6 +99,7 @@ class CommodityFragment : Fragment() {
                 null
             }
             this@CommodityFragment.view?.let { arrange(it, response) }
+            EspressoIdlingResource.decrement()
         }
     }
 

@@ -48,6 +48,7 @@ import com.example.inception.internalreceiver.SMSReceiver
 import com.example.inception.objectClass.User
 import com.example.inception.service.UploadImageIntentService
 import com.example.inception.utils.Capitalizer
+import com.example.inception.utils.EspressoIdlingResource
 import com.example.inception.utils.ImageZoomer
 import com.squareup.picasso.Picasso
 import com.vincent.filepicker.Constant
@@ -157,7 +158,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        EspressoIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main) {
             val response = try {
                 withContext(Dispatchers.IO) {
@@ -169,6 +170,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 null
             }
             this@ProfileFragment.view?.let { LoadToView(it, response) }
+            EspressoIdlingResource.decrement()
         }
     }
 
@@ -203,6 +205,8 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             view.user_commodity_rv.layoutManager = layoutManager
             view.user_commodity_rv.adapter = adapter
 
+
+
             view.commodity_create.commodity_create.setOnClickListener {
                 val intent = Intent(activity,CreateCommodity::class.java)
                 startActivityForResult(intent, CREATE_COMMODITY_REQUEST_CODE)
@@ -229,6 +233,8 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         view.username.text = cap.Capitalize(response?.data?.user_by_username?.username!!)
         view.role.text = response?.data?.user_by_username?.role
+
+
     }
 
 
@@ -328,6 +334,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onDestroy() {
         super.onDestroy()
+
         requireActivity().unregisterReceiver(downloadReceiver)
     }
 

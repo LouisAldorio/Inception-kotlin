@@ -74,6 +74,7 @@ dependencies {
     implementation 'com.apollographql.apollo:apollo-runtime:2.5.3'
     // Coroutines extensions for easier asynchronicity handling
     implementation("com.apollographql.apollo:apollo-coroutines-support:2.5.3")
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0-alpha05'
     compileOnly 'org.jetbrains:annotations:13.0'
     testCompileOnly 'org.jetbrains.annotations:13.0'
 
@@ -99,6 +100,8 @@ dependencies {
     androidTestImplementation'androidx.test:rules:1.1.0'
     androidTestImplementation'androidx.test.espresso:espresso-intents:3.1.0'
     androidTestCompile 'com.21buttons:fragment-test-rule:1.0.0'
+    implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.2'
+
 }
 
 apollo {
