@@ -53,7 +53,6 @@ class OptionMenuTest {
                 ViewMatchers.isDisplayed()
             )
         )
-
         Thread.sleep(1000)
         //press back kembali ke parent activity
         pressBack()

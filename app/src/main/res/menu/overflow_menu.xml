@@ -9,4 +9,9 @@
         android:id="@+id/phone_contact"
         android:icon="@drawable/ic_virus"
         android:title="Phone Contact"/>
+
+    <item
+        android:id="@+id/song"
+        android:icon="@drawable/ic_virus"
+        android:title="Songs Recommendation"/>
 </menu>

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.example.inception.constant.PREVIOUS_PLAYED_SONG
+import com.example.inception.constant.PREVIOUS_SONG_INDEX
 
 object User {
 
@@ -41,6 +43,37 @@ object User {
             apply()
         }
     }
+
+
+    fun setPreviousPlayedSong(context: Context,songUri : String) {
+        preferences(context).edit().apply {
+            putString(PREVIOUS_PLAYED_SONG,songUri)
+            apply()
+        }
+    }
+    fun setPreviousSongIndex(context: Context,songIndex : Int) {
+        preferences(context).edit().apply {
+            putInt(PREVIOUS_SONG_INDEX,songIndex)
+            apply()
+        }
+    }
+    fun getPreviousPlayedSong(context: Context): String? {
+        return preferences(context).getString(PREVIOUS_PLAYED_SONG, null)
+    }
+    fun getpreviousSongIndex(context: Context): String? {
+        return preferences(context).getString(PREVIOUS_SONG_INDEX, null)
+    }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

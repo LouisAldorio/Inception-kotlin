@@ -14,14 +14,19 @@
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:usesCleartextTraffic="true"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/MainTheme">
-        <activity android:name=".activity.ContactActivtity"></activity>
-        <!-- kita akan menerapkan deeplink dengan menggunakan URL dimana jika URL ditekan maka akan masuk kedalam activity tertentu yang telah kita atur -->
+        android:theme="@style/MainTheme"
+        android:usesCleartextTraffic="true">
+        <service
+            android:name=".service.AudioPlayerService"
+            android:enabled="true"
+            android:exported="true"></service>
+
+        <activity android:name=".activity.MusicRecommendation" />
+        <activity android:name=".activity.ContactActivtity" /> <!-- kita akan menerapkan deeplink dengan menggunakan URL dimana jika URL ditekan maka akan masuk kedalam activity tertentu yang telah kita atur -->
         <activity android:name=".activity.CovidActivity">
 
             <!-- untuk dapat melakukan nya kita hanya perlu memberikan intent-filter dengan beberap konfigurasi seperti dibawah -->

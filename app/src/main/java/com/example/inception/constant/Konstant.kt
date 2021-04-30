@@ -36,3 +36,11 @@ const val ALARM_MANAGER_CHANNELID = "alarm_manager_channel_id"
 
 const val COVID_NEW_UPDATE = "covid_new_update"
 const val COVID_NEW_UPDATE_DATA = "covid_new_update_data"
+
+
+const val ACTION_PLAY = "PLAY"
+const val ACTION_STOP = "STOP"
+const val ACTION_CREATE = "CREATE"
+const val CURRENT_PLAYED_SONG = "CURRENT_PLAYED_SONG"
+const val PREVIOUS_PLAYED_SONG = "PREVIOUS_PLAYED_SONG"
+const val PREVIOUS_SONG_INDEX = "PREVIOUS_SONG_INDEX"

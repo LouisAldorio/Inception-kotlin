@@ -87,6 +87,7 @@ class CommodityFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //untuk setiap proses yang melakukan request ke API, sebelum dilakukn requets, kita mulai proses idling
         EspressoIdlingResource.increment()
         lifecycleScope.launch(Dispatchers.Main) {
             val response = try {
@@ -99,6 +100,7 @@ class CommodityFragment : Fragment() {
                 null
             }
             this@CommodityFragment.view?.let { arrange(it, response) }
+            //kita akhiri psoes Idling setelah data selesai di set kedalam view agar, apda Unit test nanti, dapat dilanjutkan ke proses test berikutnya
             EspressoIdlingResource.decrement()
         }
     }
