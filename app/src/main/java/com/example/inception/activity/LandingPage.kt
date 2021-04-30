@@ -1,14 +1,18 @@
 package com.example.inception.activity
 
+import android.annotation.TargetApi
 import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Color
+import android.media.AudioManager
+import android.media.SoundPool
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Telephony
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -29,7 +33,8 @@ import java.util.*
 
 class LandingPage : AppCompatActivity() {
 
-
+    var sp : SoundPool? = null
+    var soundID  : Int = 0
 
     private val commodityFragment = CommodityFragment()
     private val supplierFragment = SupplierFragment()
@@ -123,6 +128,50 @@ class LandingPage : AppCompatActivity() {
         }
         return true
     }
+
+    override fun onStart() {
+        super.onStart()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            createNewSoundPool()
+        else
+            createOldSoundPool()
+
+        sp?.setOnLoadCompleteListener{soundPool, id, status ->
+            if(status != 0)
+                Toast.makeText(this,"Sound Load Failed",Toast.LENGTH_SHORT)
+                    .show()
+            else{
+                sp?.play(soundID,.99f,.99f,1,0,.99f)
+            }
+        }
+        soundID = sp?.load(this, R.raw.sound,1) ?: 0
+
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun createNewSoundPool() {
+        sp = SoundPool.Builder()
+            .setMaxStreams(15)
+            .build()
+    }
+
+    @Suppress("DEPRECATION")
+    private fun createOldSoundPool() {
+        sp = SoundPool(15, AudioManager.STREAM_MUSIC,0)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        sp?.release()
+        sp = null
+    }
+
+
+
+
+
+
+
 
 
 

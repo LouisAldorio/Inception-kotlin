@@ -44,7 +44,7 @@ import kotlinx.coroutines.withContext
 import pub.devrel.easypermissions.EasyPermissions
 
 class CreateCommodity : AppCompatActivity() {
-    var Attachments : MutableList<String> = arrayListOf("https://www.pngitem.com/pimgs/m/65-653761_add-button-png-image-free-download-searchpng-png.png")
+    var Attachments : MutableList<String> = arrayListOf("http://128.199.174.165:8081/photo/DSCF2979-067277033.jpg")
     var AttachmentAdapter : CommodityAttachmentCreateRecycleViewAdapter? = null
 
     val zoomer = ImageZoomer()

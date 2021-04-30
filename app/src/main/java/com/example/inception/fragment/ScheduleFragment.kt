@@ -20,6 +20,7 @@ import com.apollographql.apollo.exception.ApolloException
 import com.example.inception.R
 import com.example.inception.adaptor.ScheduleRecycleViewAdaptor
 import com.example.inception.api.apolloClient
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_register.view.*
 import kotlinx.android.synthetic.main.fragment_schedule.view.*
 
@@ -37,6 +38,8 @@ class ScheduleFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        Picasso.get().load("http://128.199.174.165:8081/photo/DSCF2979-067277033.jpg").into(view.temp)
 
 //        lifecycleScope.launchWhenResumed {
 //            val response = try {

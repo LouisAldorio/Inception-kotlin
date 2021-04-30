@@ -10,6 +10,7 @@ object User {
     private const val KEY_TOKEN = "TOKEN"
     private const val USERNAME = "USERNAME"
     private val NOTIFICATION_AMOUNT = "NOTIFICATION_AMOUNT"
+
     private fun preferences(context: Context): SharedPreferences {
         val masterKeyAlias: String = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
