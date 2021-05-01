@@ -1,19 +1,37 @@
 package com.example.inception.activity
 
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.inception.R
 import com.example.inception.adaptor.AudioSongRecycleViewAdapter
-import com.example.inception.constant.ACTION_CREATE
+import com.example.inception.constant.*
+import com.example.inception.data.CovidStatistic
 import com.example.inception.data.Song
 import com.example.inception.service.AudioPlayerService
+import kotlinx.android.synthetic.main.activity_covid.*
 import kotlinx.android.synthetic.main.activity_music_recommendation.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 var IntentService : Intent? = null
 class MusicRecommendation : AppCompatActivity() {
+    var adapterAudio : AudioSongRecycleViewAdapter? = null
+
+    private val AudioFinishedReceiver = object : BroadcastReceiver(){
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val index = intent?.getIntExtra(CURRENT_PLAYED_SONG_INDEX,0)
+            adapterAudio?.notifyItemChanged(index!!, AUDIO_RV_PAYLOAD)
+        }
+    }
 
 
     val songs = mutableListOf<Song>(
@@ -45,18 +63,27 @@ class MusicRecommendation : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.setDisplayHomeAsUpEnabled(true)
+        actionBar?.title = "Music Recommendation"
         setContentView(R.layout.activity_music_recommendation)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        val intentFilter = IntentFilter(AUDIO_FINISH_PLAY)
+        registerReceiver(AudioFinishedReceiver,intentFilter)
+
+        adapterAudio = AudioSongRecycleViewAdapter(this@MusicRecommendation,songs)
 
         song_rv.apply {
             layoutManager = LinearLayoutManager(this@MusicRecommendation)
-            adapter = AudioSongRecycleViewAdapter(this@MusicRecommendation,songs)
+            adapter = adapterAudio
         }
     }
 
     override fun onStart() {
         super.onStart()
 
-        //media player
         if(IntentService == null){
 
             IntentService = Intent(this, AudioPlayerService::class.java)
@@ -64,5 +91,16 @@ class MusicRecommendation : AppCompatActivity() {
             startService(IntentService)
 
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.getItemId()) {
+            android.R.id.home -> {
+                onBackPressed()
+                overridePendingTransition(R.anim.slide_left_in, R.anim.slide_right_out);
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

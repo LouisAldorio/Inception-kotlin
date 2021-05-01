@@ -6,10 +6,7 @@ import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.IBinder
 import android.widget.Toast
-import com.example.inception.constant.ACTION_CREATE
-import com.example.inception.constant.ACTION_PLAY
-import com.example.inception.constant.ACTION_STOP
-import com.example.inception.constant.CURRENT_PLAYED_SONG
+import com.example.inception.constant.*
 
 
 class AudioPlayerService : Service() ,
@@ -18,6 +15,8 @@ MediaPlayer.OnErrorListener,
 MediaPlayer.OnCompletionListener{
 
     private var MediaPlayer: MediaPlayer? = null
+
+    private var currentPlayedSongIndex = 0
 
     fun init() {
         MediaPlayer = MediaPlayer()
@@ -42,6 +41,7 @@ MediaPlayer.OnCompletionListener{
             when (actionIntent) {
                 ACTION_CREATE -> init()
                 ACTION_PLAY -> {
+                    currentPlayedSongIndex = intent.getIntExtra(CURRENT_PLAYED_SONG_INDEX,0)
                     MediaPlayer?.run {
                         reset()
                         setDataSource(intent.getStringExtra(CURRENT_PLAYED_SONG))
@@ -64,6 +64,9 @@ MediaPlayer.OnCompletionListener{
     }
 
     override fun onCompletion(mp: MediaPlayer?) {
+        val intent = Intent(AUDIO_FINISH_PLAY)
+        intent.putExtra(CURRENT_PLAYED_SONG_INDEX,currentPlayedSongIndex)
+        sendBroadcast(intent)
         Toast.makeText(this, "Player Stop", Toast.LENGTH_SHORT).show()
     }
 

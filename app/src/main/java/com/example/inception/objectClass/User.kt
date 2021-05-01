@@ -60,8 +60,8 @@ object User {
     fun getPreviousPlayedSong(context: Context): String? {
         return preferences(context).getString(PREVIOUS_PLAYED_SONG, null)
     }
-    fun getpreviousSongIndex(context: Context): String? {
-        return preferences(context).getString(PREVIOUS_SONG_INDEX, null)
+    fun getpreviousSongIndex(context: Context): Int? {
+        return preferences(context).getInt(PREVIOUS_SONG_INDEX, -1)
     }
 
 
