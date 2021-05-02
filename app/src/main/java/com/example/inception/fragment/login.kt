@@ -103,10 +103,11 @@ class login : Fragment() {
                 return@launchWhenResumed
             }
 
+            //dapat dilihat ketika user melakukan login, kami memnggila shared preference yanng sebelumnya telah dibuat, untuk mneyimpan token
             val access_token = loginResponse?.access_token
             User.setToken(requireContext(),access_token)
-            User.setUsername(requireContext(),loginResponse?.user?.username)
 
+            User.setUsername(requireContext(),loginResponse?.user?.username)
             var LandingPageIntent = Intent(activity,LandingPage::class.java)
             startActivity(LandingPageIntent)
 

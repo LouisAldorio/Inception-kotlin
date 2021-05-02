@@ -21,19 +21,25 @@ import kotlinx.android.synthetic.main.activity_music_recommendation.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
+//inisiasi variable yang akan menampung intent untuk menjalankan service, pada activity music
 var IntentService : Intent? = null
 class MusicRecommendation : AppCompatActivity() {
+    //karna kita akan menggunakan recycle view, maka kita buat variable yang akan menampung adapter nya
     var adapterAudio : AudioSongRecycleViewAdapter? = null
 
+    //karena kita ada mengirimkan broadcast dari service setelah music selesai dimainkan, kita perlu membuat receiver untuk menghandlenya
     private val AudioFinishedReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
+            //setelah sinyal broadcast berhasil diterima, ambil data index yang mennadakan lagu keberapa yang sedang dimainkan
             val index = intent?.getIntExtra(CURRENT_PLAYED_SONG_INDEX,0)
+            //kita akan mengabari recycel view melalui adapter dengan mengirimkan index lagu yang sedang dimainkan
+            // agar pada adapter nantinya kita dapat melakukan update pada item view tertentu sesuai dengan posisi index yang dikirimkan
             adapterAudio?.notifyItemChanged(index!!, AUDIO_RV_PAYLOAD)
         }
     }
 
-
+    // disini kita membuat sebuah list , yang akan di render pada recycle view nantinya
+    // kita memanfaatkan data class, yang akan menampung data judul, author, gambar cover dan URL lagu
     val songs = mutableListOf<Song>(
         Song(
             "Something Just Like This",
@@ -70,9 +76,11 @@ class MusicRecommendation : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+        //jangan lupa untuk mendaftarkan receiver, pada lifecycle onCreate, agar nantinya broadcast dapat dihandle oleh receiver
         val intentFilter = IntentFilter(AUDIO_FINISH_PLAY)
         registerReceiver(AudioFinishedReceiver,intentFilter)
 
+        //masukkan adapter kedalam recycle view dan jangan lupa layout manager nya
         adapterAudio = AudioSongRecycleViewAdapter(this@MusicRecommendation,songs)
 
         song_rv.apply {
@@ -84,10 +92,13 @@ class MusicRecommendation : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
+        //pada activity yang berisi kumpulan lagu, terutama pada lifecycle onStart, kita akan check apakah intent untuk mejalankan service sudah ada
         if(IntentService == null){
-
+            //jika tidak buat intent nya
             IntentService = Intent(this, AudioPlayerService::class.java)
+            //berikan action berupa create yang akan melakuakn inisialisasi terhadap instance media player
             IntentService?.setAction(ACTION_CREATE)
+            //start service
             startService(IntentService)
 
         }

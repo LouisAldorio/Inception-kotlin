@@ -33,7 +33,10 @@ import java.util.*
 
 class LandingPage : AppCompatActivity() {
 
+    //kita akan menggunakan soundpool, untuk memasukkan musik singkat ketika user pertama kali membuka aplikasi
+    //definisikan sebuat variable yang akan berisi intance souncpool nantinya
     var sp : SoundPool? = null
+    //jangan lupa pula variable untuk sound yang akan kita gunakan nanti, berikans aja nilai 0 sebagai nilai default
     var soundID  : Int = 0
 
     private val commodityFragment = CommodityFragment()
@@ -52,6 +55,32 @@ class LandingPage : AppCompatActivity() {
         setContentView(R.layout.activity_landing_page)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        //pada lifecycle onCreate, kita amakn membuat soundpool dan menyuruh soundpool untuk melalkukan load terhadap resource file .mp3 singkatnya
+        //kita check terlebih dahulu apakah versi adnroid > lolipop jika ya, kita akan menggunakan cara baru untuk menginisiasi instance soundpool
+        //jika tidak kita akan menggunakan cara lama untuk menginisiasi soudpool
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            createNewSoundPool()
+        else
+            createOldSoundPool()
+
+        //setelah soundpool berhasil diinisiasi, kita buat sebuah listener yang akan mengamati proses load, file resource audi ke dalam soundpool
+        sp?.setOnLoadCompleteListener{soundPool, id, status ->
+            //disini kita akan check apakah status laad berhasil apa tidak, jika 0 maka load gagal
+            //jika status != 0 , maka proses load berhasil maka kita akan langsung memainkan sound yang berhasil do load
+            if(status != 0)
+                Toast.makeText(this,"Sound Load Failed",Toast.LENGTH_SHORT)
+                    .show()
+            else{
+                // disini kita akan memainkan sound jika load berhasil, dengan kecepatan normal, dan volme yang stabil
+                // kita mau sound berulang maka kita set loop menjadi 0
+                sp?.play(soundID,.99f,.99f,1,0,.99f)
+            }
+        }
+        //setelah listener/observer berhasil ditambahkan, maka kita segera load file resouce sound nya, fungsi load akan mengembalikan sound id
+        // dimana nantinya akan kita gunakan sebagai identifier untuk melakukan play terhadap file resource yang dinginkan
+        soundID = sp?.load(this, R.raw.sound,1) ?: 0
+
 
         fragmentManager.beginTransaction().apply {
             add(R.id.fragmentContainer, supplierFragment).hide(supplierFragment)
@@ -134,27 +163,13 @@ class LandingPage : AppCompatActivity() {
         return true
     }
 
-    override fun onStart() {
-        super.onStart()
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-            createNewSoundPool()
-        else
-            createOldSoundPool()
-
-        sp?.setOnLoadCompleteListener{soundPool, id, status ->
-            if(status != 0)
-                Toast.makeText(this,"Sound Load Failed",Toast.LENGTH_SHORT)
-                    .show()
-            else{
-                sp?.play(soundID,.99f,.99f,1,0,.99f)
-            }
-        }
-        soundID = sp?.load(this, R.raw.sound,1) ?: 0
-
-    }
-
+    //kita berikan anotasi, ke function creat soundpool nya yang menyatakan function dibawah hanya bisa dijalankan apabila
+    // level API > lolipop
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private fun createNewSoundPool() {
+        //panggil builder dari soundpool, dan berikan maxstreams 15,
+        // artinya kita membuat soundpooldapat menangani proses play sound sebanyak 15 buah secara bersamaan
+        //lalu kita build
         sp = SoundPool.Builder()
             .setMaxStreams(15)
             .build()
@@ -162,11 +177,14 @@ class LandingPage : AppCompatActivity() {
 
     @Suppress("DEPRECATION")
     private fun createOldSoundPool() {
+        //pada proses create old soundpool kita hanya perlu memanggil constructor dan memberikan parameter yang dibutuhkan , seperti maxstreams
+        //maupun tipe apa yang ingin di stream
         sp = SoundPool(15, AudioManager.STREAM_MUSIC,0)
     }
 
     override fun onStop() {
         super.onStop()
+        //jangan lupa pula pada lifecycle onStop dari activity, kita release soundpool nya agar tidak memakan memori
         sp?.release()
         sp = null
     }

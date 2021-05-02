@@ -127,6 +127,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         var objectView = inflater.inflate(R.layout.fragment_profile, container, false)
 
+        //ketika logout kita menghapus token dari shared preference
         objectView.logout.setOnClickListener {
             User.removeToken(requireContext())
             requireActivity().finish()

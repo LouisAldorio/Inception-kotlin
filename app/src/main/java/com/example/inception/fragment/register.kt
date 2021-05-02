@@ -33,8 +33,10 @@ class register : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        //disini ketika user membuka aplikasi, ktia menegcek terlebih dahulu apakah token tersimpan didalam shared preference
         val token = User.getToken(requireContext())
         if (token != null){
+            //jika token ada maka, langsung kita arahkan user ke landing page tanpa harus memasuki activity untuk register maupun login
             var LandingPageIntent = Intent(activity,LandingPage::class.java)
             startActivity(LandingPageIntent)
         }
