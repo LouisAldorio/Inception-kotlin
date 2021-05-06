@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.inception">
 
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
@@ -85,8 +88,6 @@
         <!-- untuk hanya menjalankan aktivitas khusus makan berikan beberapa konfigurasi di manefist untuk activity terkait -->
         <activity
             android:name=".activity.DetailPage"
-            android:excludeFromRecents="true"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:taskAffinity="" />
         <activity
