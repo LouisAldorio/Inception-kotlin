@@ -159,6 +159,11 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+            R.id.bookmark -> {
+                val intent = Intent(this, Bookmarks::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
         }
         return true
     }

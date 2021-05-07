@@ -14,4 +14,9 @@
         android:id="@+id/song"
         android:icon="@drawable/ic_virus"
         android:title="Songs Recommendation"/>
+
+    <item
+        android:id="@+id/bookmark"
+        android:icon="@drawable/ic_virus"
+        android:title="Bookmarked Images"/>
 </menu>

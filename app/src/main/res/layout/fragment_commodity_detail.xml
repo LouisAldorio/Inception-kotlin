@@ -24,43 +24,59 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ScrollView
+<!--        <ScrollView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/image_carousel_rv">-->
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_carousel_rv">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/nama"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Nama : "
+                android:textSize="26dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Nama : " />
 
-                <TextView
-                    android:id="@+id/nama"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="15dp"
-                    android:text="Nama : "
-                    android:textSize="26dp"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Nama : " />
+            <TextView
+                android:id="@+id/detail_commodity_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="26dp"
+                android:transitionName="fadeText"
+                app:layout_constraintStart_toEndOf="@id/nama"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Nama" />
 
-                <TextView
-                    android:id="@+id/detail_commodity_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="26dp"
-                    android:transitionName="fadeText"
-                    app:layout_constraintStart_toEndOf="@id/nama"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Nama" />
-
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/download_commodity_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Bookmark Image"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.062"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.162" />
 
 
-        </ScrollView>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+<!--        </ScrollView>-->
 
         <ImageView
             android:id="@+id/expanded_image"
@@ -69,6 +85,7 @@
             android:visibility="invisible"
             tools:layout_editor_absoluteX="3dp"
             tools:layout_editor_absoluteY="2dp" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

@@ -14,6 +14,7 @@ class ImageCarouselAdaptor(
     var mContext: Context,
     private val images: List<String?>,
     private val callback: (position: Int, thumbView: View) -> Unit) : RecyclerView.Adapter<ImageHolder>() {
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageHolder {
         return ImageHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.image_carousel, parent, false)

@@ -22,6 +22,7 @@ import com.bumptech.glide.request.target.Target
 import com.example.inception.R
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
+import java.io.File
 
 class ImageZoomer {
     // Hold a reference to the current animator,
@@ -34,7 +35,7 @@ class ImageZoomer {
     var shortAnimationDuration: Int = 0
 
 
-    fun zoomImageFromThumb(context: Context,thumbView: View, imageResURL: String,container : FrameLayout, expanded : ImageView) {
+    fun zoomImageFromThumb(context: Context,thumbView: View, imageResURL: String,container : FrameLayout, expanded : ImageView,filepath : File?) {
         // If there's an animation in progress, cancel it
         // immediately and proceed with this one.
         currentAnimator?.cancel()
@@ -42,18 +43,35 @@ class ImageZoomer {
         // Load the high-resolution "zoomed-in" image.
         val expandedImageView: ImageView = expanded
 
-        Picasso.get().load(imageResURL).into(expandedImageView, object: Callback {
-            override fun onSuccess() {
-                //set animations here
-                Log.i("image load error", "hahahahah")
+        if(filepath != null) {
+            Picasso.get().load(filepath).into(expandedImageView, object: Callback {
+                override fun onSuccess() {
+                    //set animations here
+                    Log.i("image load error", "hahahahah")
 
-            }
+                }
 
-            override fun onError(e: java.lang.Exception?) {
-                //do smth when there is picture loading error
-                Log.i("image load error",e.toString())
-            }
-        })
+                override fun onError(e: java.lang.Exception?) {
+                    //do smth when there is picture loading error
+                    Log.i("image load error",e.toString())
+                }
+            })
+        }else {
+            Picasso.get().load(imageResURL).into(expandedImageView, object: Callback {
+                override fun onSuccess() {
+                    //set animations here
+                    Log.i("image load error", "hahahahah")
+
+                }
+
+                override fun onError(e: java.lang.Exception?) {
+                    //do smth when there is picture loading error
+                    Log.i("image load error",e.toString())
+                }
+            })
+        }
+
+
 //        expandedImageView.setImageResource(imageResId)
 
         // Calculate the starting and ending bounds for the zoomed-in image.

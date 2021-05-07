@@ -103,7 +103,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 Picasso.get().load(uploadedURL).into(requireView().profile_avatar)
 
                 requireView().profile_avatar.setOnClickListener {
-                    zoomer.zoomImageFromThumb(requireContext(),requireView().profile_avatar,uploadedURL!!,requireView().container,requireView().expanded_image)
+                    zoomer.zoomImageFromThumb(requireContext(),requireView().profile_avatar,uploadedURL!!,requireView().container,requireView().expanded_image,null)
                 }
             }
         }
@@ -229,7 +229,7 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         Picasso.get().load(response?.data?.user_by_username?.image?.link).into(view.profile_avatar)
         view.profile_avatar.setOnClickListener {
-            zoomer.zoomImageFromThumb(requireContext(),view.profile_avatar,response?.data?.user_by_username?.image?.link!!,view.container,view.expanded_image)
+            zoomer.zoomImageFromThumb(requireContext(),view.profile_avatar,response?.data?.user_by_username?.image?.link!!,view.container,view.expanded_image,null)
         }
 
         view.username.text = cap.Capitalize(response?.data?.user_by_username?.username!!)
@@ -420,7 +420,8 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                             imageView,
                             GalleryImages[position].uri!!,
                             requireView().container,
-                            requireView().expanded_image
+                            requireView().expanded_image,
+                            null
                         )
                     }
                 }

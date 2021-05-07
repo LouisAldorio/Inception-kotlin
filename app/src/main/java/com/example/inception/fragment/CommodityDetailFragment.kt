@@ -1,12 +1,14 @@
 package com.example.inception.fragment
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
+import com.bumptech.glide.load.model.GlideUrl
+import com.bumptech.glide.load.model.LazyHeaders
 import com.example.inception.CustomLayoutManager.CustomAutoScrollCenterZoomLayoutManager
 import com.example.inception.R
 import com.example.inception.activity.DetailPage
@@ -14,9 +16,12 @@ import com.example.inception.adaptor.ImageCarouselAdaptor
 import com.example.inception.constant.DETAIL_EXTRA
 import com.example.inception.data.Commodity
 import com.example.inception.utils.Capitalizer
+import com.example.inception.utils.DownloadImageAndSaveToInternalStorage
 import com.example.inception.utils.ImageZoomer
+import kotlinx.android.synthetic.main.fragment_commodity_detail.*
 import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
 import java.util.*
+
 
 class CommodityDetailFragment : Fragment() {
     private var myActivity: DetailPage? = null
@@ -47,7 +52,8 @@ class CommodityDetailFragment : Fragment() {
                     imageView,
                     Commodity!!.image[position]!!,
                     view.container,
-                    view.expanded_image
+                    view.expanded_image,
+                    null
                 )
             }
         }
@@ -72,6 +78,13 @@ class CommodityDetailFragment : Fragment() {
 
             }
         }, 1000, (3000..6000).random().toLong())
+
+        //download
+        download_commodity_image.setOnClickListener {
+            val position = layoutManager.findFirstVisibleItemPosition()
+
+            DownloadImageAndSaveToInternalStorage(requireContext()).execute(Commodity!!.image[position]!!)
+        }
     }
 
 }

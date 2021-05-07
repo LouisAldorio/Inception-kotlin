@@ -41,17 +41,23 @@ class ScheduleFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        Picasso.get().load(url).into(view.temp)
+        Picasso.get().load(url).into(view.temp)
     }
 
     private fun readFileFromInternalStorage() {
 
         var mypath = File(requireActivity().filesDir, "Images")
-        mypath = File(mypath,"img.jpg")
+//        mypath = File(mypath,"img.jpg")
 
-        val imageView: ImageView = requireView().findViewById(R.id.temp) as ImageView
-        Log.i("Images",mypath.toString())
-        imageView.setImageDrawable(Drawable.createFromPath(mypath.toString()))
+        if (mypath.listFiles().size != 0){
+            for(file in mypath.listFiles()) {
+                Log.i("Files",file.toString())
+            }
+        }
+
+//        val imageView: ImageView = requireView().findViewById(R.id.temp) as ImageView
+//        Log.i("Images",mypath.toString())
+//        imageView.setImageDrawable(Drawable.createFromPath(mypath.toString()))
     }
 
 

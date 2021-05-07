@@ -165,7 +165,8 @@ class CreateCommodity : AppCompatActivity() {
                     imageView,
                     Attachments[position]!!,
                     container,
-                    expanded_image
+                    expanded_image,
+                    null
                 )
             }
         })
