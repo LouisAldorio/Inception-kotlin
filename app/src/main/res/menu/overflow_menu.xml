@@ -16,7 +16,12 @@
         android:title="Songs Recommendation"/>
 
     <item
-        android:id="@+id/bookmark"
+        android:id="@+id/bookmark_internal"
         android:icon="@drawable/ic_virus"
-        android:title="Bookmarked Images"/>
+        android:title="Bookmarked Images Internal"/>
+
+    <item
+        android:id="@+id/bookmark_external"
+        android:icon="@drawable/ic_virus"
+        android:title="Bookmarked Images External"/>
 </menu>

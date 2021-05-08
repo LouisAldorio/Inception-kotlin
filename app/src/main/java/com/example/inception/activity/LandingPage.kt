@@ -1,35 +1,26 @@
 package com.example.inception.activity
 
 import android.annotation.TargetApi
-import android.app.*
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.graphics.Color
 import android.media.AudioManager
 import android.media.SoundPool
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.Telephony
+import android.os.Environment
+import android.os.StatFs
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.example.inception.R
-import kotlinx.android.synthetic.main.activity_landing_page.*
-
-import com.example.inception.fragment.*
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
-import com.example.inception.constant.ALARM_MANAGER_CHANNELID
-import com.example.inception.constant.EXTRA_PESAN
-import com.example.inception.internalreceiver.SMSReceiver
-import com.example.inception.internalreceiver.ScheduledAlarmReceiver
-import java.util.*
+import com.example.inception.R
+import com.example.inception.constant.INTERNAL_OR_EXTERNAL_MARKER
+import com.example.inception.fragment.*
+import kotlinx.android.synthetic.main.activity_landing_page.*
+import java.io.File
 
 class LandingPage : AppCompatActivity() {
 
@@ -52,9 +43,12 @@ class LandingPage : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_landing_page)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        Toast.makeText(this,"Space Left In Device is " + getAvailableExternalMemorySize(),Toast.LENGTH_LONG).show()
 
         //pada lifecycle onCreate, kita amakn membuat soundpool dan menyuruh soundpool untuk melalkukan load terhadap resource file .mp3 singkatnya
         //kita check terlebih dahulu apakah versi adnroid > lolipop jika ya, kita akan menggunakan cara baru untuk menginisiasi instance soundpool
@@ -159,8 +153,15 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
-            R.id.bookmark -> {
+            R.id.bookmark_internal -> {
                 val intent = Intent(this, Bookmarks::class.java)
+                intent.putExtra(INTERNAL_OR_EXTERNAL_MARKER,"Internal")
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
+            R.id.bookmark_external -> {
+                val intent = Intent(this, Bookmarks::class.java)
+                intent.putExtra(INTERNAL_OR_EXTERNAL_MARKER,"External")
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
@@ -194,8 +195,45 @@ class LandingPage : AppCompatActivity() {
         sp = null
     }
 
+    fun externalMemoryAvailable(): Boolean {
+        return Environment.getExternalStorageState() ==
+                Environment.MEDIA_MOUNTED
+    }
 
+    fun getAvailableExternalMemorySize(): String? {
+        return if (externalMemoryAvailable()) {
+            val path: File = Environment.getExternalStorageDirectory()
+            val stat = StatFs(path.getPath())
+            val blockSize: Long = stat.getBlockSizeLong()
+            val availableBlocks: Long = stat.getAvailableBlocksLong()
+            formatSize(availableBlocks * blockSize)
+        } else {
+            ""
+        }
+    }
 
+    fun formatSize(size: Long): String? {
+
+        var size = size
+        var suffix: String? = null
+        if (size >= 1024) {
+            suffix = " KB"
+            size /= 1024
+            if (size >= 1024) {
+                suffix = " MB"
+                size /= 1024
+            }
+        }
+        val resultBuffer =
+            StringBuilder(java.lang.Long.toString(size))
+        var commaOffset = resultBuffer.length - 3
+        while (commaOffset > 0) {
+            resultBuffer.insert(commaOffset, ',')
+            commaOffset -= 3
+        }
+        if (suffix != null) resultBuffer.append(suffix)
+        return resultBuffer.toString()
+    }
 
 
 

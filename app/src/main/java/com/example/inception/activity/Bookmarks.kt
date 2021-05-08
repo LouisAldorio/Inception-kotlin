@@ -11,6 +11,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBar
 import com.example.inception.R
 import com.example.inception.adaptor.BookMarkGridViewAdapter
+import com.example.inception.constant.INTERNAL_OR_EXTERNAL_MARKER
 import com.example.inception.utils.ImageZoomer
 import kotlinx.android.synthetic.main.activity_bookmarks.*
 import kotlinx.android.synthetic.main.activity_bookmarks.view.*
@@ -21,6 +22,7 @@ import java.io.File
 class Bookmarks : AppCompatActivity() {
 
     val zoomer = ImageZoomer()
+    var path : File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,33 +42,41 @@ class Bookmarks : AppCompatActivity() {
 
         var bookmarkedList = mutableListOf<String>()
 
-        var path = File(this.filesDir, "Images")
+        if (intent.getStringExtra(INTERNAL_OR_EXTERNAL_MARKER) == "Internal"){
+            path = File(this.filesDir, "Images")
+        }else if (intent.getStringExtra(INTERNAL_OR_EXTERNAL_MARKER) == "External"){
+            path = File(this.getExternalFilesDir("Inception"), "Images")
+        }
 
-        if (path.listFiles().size != 0){
-            for(file in path.listFiles()) {
-                bookmarkedList.add(file.toString())
-            }
 
-            val adapters = BookMarkGridViewAdapter(this@Bookmarks,bookmarkedList){ position, imageView ->
-                this@Bookmarks?.let { ac ->
+        if (path!!.exists()) {
+            if (path!!.listFiles().size != 0){
+                for(file in path!!.listFiles()) {
+                    bookmarkedList.add(file.toString())
+                }
 
-                    val temp = File(bookmarkedList[position])
+                val adapters = BookMarkGridViewAdapter(this@Bookmarks,bookmarkedList){ position, imageView ->
+                    this@Bookmarks?.let { ac ->
 
-                    zoomer.zoomImageFromThumb(
-                        ac,
-                        imageView,
-                        "",
-                        bookmark_container,
-                        expanded_image_bookmark,
-                        temp
-                    )
+                        val temp = File(bookmarkedList[position])
+
+                        zoomer.zoomImageFromThumb(
+                            ac,
+                            imageView,
+                            "",
+                            bookmark_container,
+                            expanded_image_bookmark,
+                            temp
+                        )
+                    }
+                }
+
+                gv_bookmark.apply {
+                    adapter = adapters
                 }
             }
-
-            gv_bookmark.apply {
-                adapter = adapters
-            }
         }
+
     }
 
 

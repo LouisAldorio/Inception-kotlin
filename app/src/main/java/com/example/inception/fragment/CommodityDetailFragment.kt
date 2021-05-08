@@ -1,14 +1,17 @@
 package com.example.inception.fragment
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
-import com.bumptech.glide.load.model.GlideUrl
-import com.bumptech.glide.load.model.LazyHeaders
 import com.example.inception.CustomLayoutManager.CustomAutoScrollCenterZoomLayoutManager
 import com.example.inception.R
 import com.example.inception.activity.DetailPage
@@ -16,10 +19,12 @@ import com.example.inception.adaptor.ImageCarouselAdaptor
 import com.example.inception.constant.DETAIL_EXTRA
 import com.example.inception.data.Commodity
 import com.example.inception.utils.Capitalizer
+import com.example.inception.utils.DownloadImageAndSaveToStorage
 import com.example.inception.utils.DownloadImageAndSaveToInternalStorage
 import com.example.inception.utils.ImageZoomer
 import kotlinx.android.synthetic.main.fragment_commodity_detail.*
 import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
+import java.lang.ref.WeakReference
 import java.util.*
 
 
@@ -83,7 +88,50 @@ class CommodityDetailFragment : Fragment() {
         download_commodity_image.setOnClickListener {
             val position = layoutManager.findFirstVisibleItemPosition()
 
-            DownloadImageAndSaveToInternalStorage(requireContext()).execute(Commodity!!.image[position]!!)
+            DownloadImageAndSaveToStorage(requireContext(), WeakReference(requireContext()).get()?.filesDir).execute(Commodity!!.image[position]!!)
+        }
+
+        save_to_external.setOnClickListener {
+            if(isExternalStorageReadable()){
+                val position = layoutManager.findFirstVisibleItemPosition()
+                DownloadImageAndSaveToStorage(requireContext(),requireContext().getExternalFilesDir("Inception")).execute(Commodity!!.image[position]!!)
+            }else{
+                Toast.makeText(requireContext(),"Permission Needed to Access External Storage",Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    fun isExternalStorageReadable(): Boolean{
+        if(ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.READ_EXTERNAL_STORAGE
+            ) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(
+                arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                777)
+        }
+        var state = Environment.getExternalStorageState()
+        if (Environment.MEDIA_MOUNTED.equals(state) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(state))
+        {
+            return true
+        }
+        return false
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        when (requestCode) {
+            777 -> {
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    Toast.makeText(requireContext(), "Access Granted, Try to save now!", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
