@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import com.example.inception.R
-import com.example.inception.utils.DownloadImageAndSaveToInternalStorage
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_schedule.view.*
 import java.io.File
@@ -28,7 +27,7 @@ class ScheduleFragment : Fragment() {
         var objectView = inflater.inflate(R.layout.fragment_schedule, container, false)
 
         objectView.download_button.setOnClickListener {
-            DownloadImageAndSaveToInternalStorage(requireContext()).execute(url)
+//            DownloadImageAndSaveToInternalStorage(requireContext()).execute(url)
         }
 
         objectView.view_button.setOnClickListener {

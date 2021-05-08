@@ -20,7 +20,6 @@ import com.example.inception.constant.DETAIL_EXTRA
 import com.example.inception.data.Commodity
 import com.example.inception.utils.Capitalizer
 import com.example.inception.utils.DownloadImageAndSaveToStorage
-import com.example.inception.utils.DownloadImageAndSaveToInternalStorage
 import com.example.inception.utils.ImageZoomer
 import kotlinx.android.synthetic.main.fragment_commodity_detail.*
 import kotlinx.android.synthetic.main.fragment_commodity_detail.view.*
