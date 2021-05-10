@@ -48,6 +48,7 @@ class LandingPage : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+        //ketika proses onCreate activity landing page kita akan melakukan toast dan menampilkan sisa space yang ada pada external storage
         Toast.makeText(this,"Space Left In Device is " + getAvailableExternalMemorySize(),Toast.LENGTH_LONG).show()
 
         //pada lifecycle onCreate, kita amakn membuat soundpool dan menyuruh soundpool untuk melalkukan load terhadap resource file .mp3 singkatnya
@@ -153,13 +154,18 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+
+            //ketika menu bookmark_internal dipilih, brarti user ingin menampilkan file gambar yang terismpan didalm storage internal
             R.id.bookmark_internal -> {
+                //buat intent dan kirimkan extra yang memuat penanda bahwa yang harus ditampilkan adalah file dari internal storage
                 val intent = Intent(this, Bookmarks::class.java)
                 intent.putExtra(INTERNAL_OR_EXTERNAL_MARKER,"Internal")
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+            //jika yang dipilih adalah menu bookmark_external, maka kita harus menampilkan file yang tersimpan pada storage external
             R.id.bookmark_external -> {
+                //buat intent dan kirim extra yang menandakan ingin mengambil file dari directory private di external storage
                 val intent = Intent(this, Bookmarks::class.java)
                 intent.putExtra(INTERNAL_OR_EXTERNAL_MARKER,"External")
                 startActivity(intent)
@@ -195,23 +201,37 @@ class LandingPage : AppCompatActivity() {
         sp = null
     }
 
+
+    //disini untuk membaca space yang tersisa pada external storage, kita harus check terlebih dahulu apakah penyimpana external tersedia/terpasang
     fun externalMemoryAvailable(): Boolean {
         return Environment.getExternalStorageState() ==
                 Environment.MEDIA_MOUNTED
     }
 
+    //function dibawa akan membantu kita untuk mendapatkan ukuran dari external memory
     fun getAvailableExternalMemorySize(): String? {
+        //panggil function yang mengecek apakah external memory terpasang
         return if (externalMemoryAvailable()) {
+            //tentukan path yaitu external storage
             val path: File = Environment.getExternalStorageDirectory()
+            //fungsi StatFs akan membantu kita menjabarkan statistik atau keadaan saat ini dari path external storage yang kita berikan
             val stat = StatFs(path.getPath())
+
+            //sebelum menentukan ukuran, kita harus telebih dahulu mencari tahu ukuran dari setiap block memory melalui stats yang telah didapat melalui fungsi StatFs
             val blockSize: Long = stat.getBlockSizeLong()
+            //kita juga perlu tahu berapa block yang masih tersedia
             val availableBlocks: Long = stat.getAvailableBlocksLong()
+
+            //untuk  mengetahui ukuran total , maka kita harus mengalikan jumlah block memory yang tersedia dengan ukuran setiap block
+            //dengan begitu kita akan mendapatkan ukuran total memory dalam satuan byte
+
             formatSize(availableBlocks * blockSize)
         } else {
             ""
         }
     }
 
+    //singkatnya function formatSize hanya membantu kita mengkonversi jumlah byte yang didapat menjadi KB atau MB , agar lebih mudah dibaca
     fun formatSize(size: Long): String? {
 
         var size = size
