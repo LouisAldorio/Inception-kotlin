@@ -102,6 +102,7 @@ dependencies {
     androidTestCompile 'com.21buttons:fragment-test-rule:1.0.0'
     implementation 'com.android.support.test.espresso:espresso-idling-resource:3.0.1'
 
+
 }
 
 apollo {

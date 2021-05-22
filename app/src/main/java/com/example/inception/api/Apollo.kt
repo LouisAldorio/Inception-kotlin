@@ -19,7 +19,7 @@ fun apolloClient(context: Context): ApolloClient {
     }
 
     instance =  ApolloClient.builder()
-        .serverUrl("https://floating-basin-72676.herokuapp.com/query")
+        .serverUrl("https://inception.louisaldorio.site/query")
         .okHttpClient(
             OkHttpClient.Builder().callTimeout(30,TimeUnit.SECONDS)
             .addInterceptor(AuthorizationInterceptor(context))

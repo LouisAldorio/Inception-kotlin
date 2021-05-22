@@ -22,7 +22,9 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.Bookmarks"></activity>
+        <activity android:name=".activity.NoteTodoActivity"></activity>
+        <activity android:name=".activity.NoteTodoActivity" />
+        <activity android:name=".activity.Bookmarks" />
 
         <service
             android:name=".service.AudioPlayerService"
