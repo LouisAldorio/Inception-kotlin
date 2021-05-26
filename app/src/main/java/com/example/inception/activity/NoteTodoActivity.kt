@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_note_todo.*
 
 class NoteTodoActivity : AppCompatActivity() {
 
+    //inisialisasi DBHelper
     var dbHelper : DBHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,18 +30,24 @@ class NoteTodoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_note_todo)
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+        //kirimkan this yg berarti DB akan dibentuk dri MainActivity
         dbHelper = DBHelper(this)
 
         add_todo.setOnClickListener {
+            //inisialisasi newTodo untuk menampung data baru
             var newTodo = Todo()
-
+            //lakukan pengeceekan apakah textview kosong atau tidak
             if(new_todo.text.toString().trim() != "") {
+                //jika tidak kosong, makan kita simpan datanya ke dalam newTodo
                 newTodo.content = new_todo.text.toString()
                 newTodo.status = 0
-
+                //setelah itu, kita panggil CreateNewTodo yang sudah dibuat sebelumnya untuk menginsert data ke DB
                 val result = dbHelper!!.CreateNewTodo(newTodo)
+                //lakukan pengecekan apakah data proses insert berhasil dilakukan atau tidak
+                //jika tidak berhasil, insert akan mengembalikan nilai -1
                 if(result !=- 1L){
                     Toast.makeText(this, "New Todo Added", Toast.LENGTH_SHORT).show()
+                    //tampilkan data
                     GetTodoList()
                     it.hideKeyboard()
                 } else{
@@ -54,16 +61,19 @@ class NoteTodoActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        //pada lifecycle onStart, kita panggil fun GetTodoList untuk menampilkan todoList
         GetTodoList()
     }
 
+    //menampilkan semua data dari table_todo
     fun GetTodoList(){
         lifecycleScope.launchWhenResumed {
+            //baca dan tampung data dari DB ke todoList
             val todoList = dbHelper!!.GetTodoList()
+            //buat instance untuk adapter dari recycleview, lalu kirimkan layout manager dan data todoList
             val todo_adapter = TodolistAdapter(this@NoteTodoActivity, todoList) {
                 GetTodoList()
             }
-
             todo_rv.apply {
                 layoutManager = LinearLayoutManager(this@NoteTodoActivity)
                 adapter = todo_adapter

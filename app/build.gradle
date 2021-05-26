@@ -89,7 +89,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.7'
 
-
+    //implementasikan library AsyncHttpCLient
     implementation 'com.loopj.android:android-async-http:1.4.11'
 
     testImplementation 'org.mockito:mockito-core:2.24.5'
