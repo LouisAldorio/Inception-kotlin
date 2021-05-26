@@ -8,13 +8,6 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.example.inception.data.Todo
 
-//implementasikan SQLiteOpenHelper yg memerlukan 4 data yaitu
-//       - context -> drmn contextnya (drmna dia dibntuk)
-//       - DATABASE_NAME -> nama database nya    --> 1.13
-//       - factory: SQLiteDatabase.CursorFactory, karena tdk menggunakan, maka buat null
-//       - DATABASE_VERSION -> versi dari database    --> 1.14
-
-// 1.15 implementasi 2 memberny utk menghilangkan error yaitu onCreate & onUpgrade
 //implementasikan SQLiteOpenHelper untuk membantu mengelola database
 class DBHelper(context: Context) : SQLiteOpenHelper(
     context, DATABASE_NAME,

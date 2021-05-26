@@ -16,13 +16,15 @@ import com.example.inception.sql.DBHelper
 
 //berikut recycleview adapter yang akan membantu kita dalam merender todolist
 //recycleview adapter akan menerima context dan MutableList yang akan di render
-class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,val callbackRefresh : () -> Unit) : RecyclerView.Adapter<TodoHolder>() {
+class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,
+                      val callbackRefresh : () -> Unit) : RecyclerView.Adapter<TodoHolder>() {
 
     //inisialisasi DBHelper
     var dbHelper : DBHelper = DBHelper(context)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoHolder {
-        return TodoHolder(LayoutInflater.from(parent.context).inflate(R.layout.todo_item_layout,parent,false))
+        return TodoHolder(LayoutInflater.from(parent.context)
+            .inflate(R.layout.todo_item_layout,parent,false))
     }
 
     override fun getItemCount(): Int {
