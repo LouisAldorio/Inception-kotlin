@@ -115,9 +115,30 @@ class NoteTodoActivity : AppCompatActivity() {
 
     //menampilkan semua data dari table_todo
     fun GetTodoList(){
+//        lifecycleScope.launchWhenResumed {
+//            //baca dan tampung data dari DB ke todoList
+//            val todoList = dbHelper!!.GetTodoList()
+//
+//            val todo_adapter = TodolistAdapter(this@NoteTodoActivity, todoList, { GetTodoList() },{ id, status ->
+//                UpdateTodoStatus(id,status)
+//            },{ id ->
+//                DeleteItemFromList(id)
+//            })
+//
+//            todo_rv.apply {
+//                layoutManager = LinearLayoutManager(this@NoteTodoActivity)
+//                adapter = todo_adapter
+//            }
+//        }
+
+        //with transaction optimation
         lifecycleScope.launchWhenResumed {
             //baca dan tampung data dari DB ke todoList
+            dbHelper!!.beginTransaction()
             val todoList = dbHelper!!.GetTodoList()
+            dbHelper!!.successTransaction()
+            dbHelper!!.endTransaction()
+
             val todo_adapter = TodolistAdapter(this@NoteTodoActivity, todoList, { GetTodoList() },{ id, status ->
                 UpdateTodoStatus(id,status)
             },{ id ->

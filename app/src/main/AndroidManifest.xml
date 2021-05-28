@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.inception">
 
+<!--    Content Provider Permission-->
+    <permission android:name="com.example.inception.provider.READ_URI_DB"
+        android:protectionLevel="normal"/>
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -23,7 +27,6 @@
         android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
         <activity android:name=".activity.NoteTodoROOMActivity"></activity>
-        <activity android:name=".activity.NoteTodoActivity" />
         <activity android:name=".activity.NoteTodoActivity" />
         <activity android:name=".activity.Bookmarks" />
 
@@ -122,6 +125,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:authorities="com.example.inception.provider.provider.TodoContentProvider"
+            android:name=".provider.TodoContentProvider"
+            android:exported="true"
+            android:enabled="true"
+            android:readPermission="com.example.inception.provider.READ_URI_DB"
+            android:grantUriPermissions="true"/>
     </application>
 
 </manifest>
