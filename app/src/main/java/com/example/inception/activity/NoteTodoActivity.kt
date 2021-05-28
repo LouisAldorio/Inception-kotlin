@@ -14,6 +14,8 @@ import com.example.inception.adaptor.TodolistAdapter
 import com.example.inception.data.Todo
 import com.example.inception.sql.DBHelper
 import kotlinx.android.synthetic.main.activity_note_todo.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class NoteTodoActivity : AppCompatActivity() {
 
@@ -41,20 +43,42 @@ class NoteTodoActivity : AppCompatActivity() {
                 //jika tidak kosong, makan kita simpan datanya ke dalam newTodo
                 newTodo.content = new_todo.text.toString()
                 newTodo.status = 0
+
                 //setelah itu, kita panggil CreateNewTodo yang sudah dibuat sebelumnya untuk menginsert data ke DB
-                val result = dbHelper!!.CreateNewTodo(newTodo)
+//                val result = dbHelper!!.CreateNewTodo(newTodo)
                 //lakukan pengecekan apakah data proses insert berhasil dilakukan atau tidak
                 //jika tidak berhasil, insert akan mengembalikan nilai -1
-                if(result !=- 1L){
-                    Toast.makeText(this, "New Todo Added", Toast.LENGTH_SHORT).show()
-                    //tampilkan data
-                    GetTodoList()
-                    it.hideKeyboard()
-                } else{
-                    Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
-                    it.hideKeyboard()
+//                if(result !=- 1L){
+//                    Toast.makeText(this, "New Todo Added", Toast.LENGTH_SHORT).show()
+//                    //tampilkan data
+//                    GetTodoList()
+//                    it.hideKeyboard()
+//                } else{
+//                    Toast.makeText(this, "Gagal", Toast.LENGTH_SHORT).show()
+//                    it.hideKeyboard()
+//                }
+//                new_todo.text!!.clear()
+
+                //with transaction optimzation
+                doAsync {
+                    dbHelper!!.beginTransaction()
+                    val success = dbHelper!!.TransactionCreateNewTodo(newTodo)
+                    dbHelper!!.successTransaction()
+                    dbHelper!!.endTransaction()
+
+                    uiThread {
+                        if(success !=- 1L){
+                            Toast.makeText(this@NoteTodoActivity, "New Todo Added", Toast.LENGTH_SHORT).show()
+                            //tampilkan data
+                            GetTodoList()
+                            add_todo.hideKeyboard()
+                        } else{
+                            Toast.makeText(this@NoteTodoActivity, "Fail To Add Todo", Toast.LENGTH_SHORT).show()
+                            add_todo.hideKeyboard()
+                        }
+                        new_todo.text!!.clear()
+                    }
                 }
-                new_todo.text!!.clear()
             }
         }
     }
@@ -66,11 +90,27 @@ class NoteTodoActivity : AppCompatActivity() {
     }
 
     fun DeleteItemFromList(id: Int){
-        dbHelper!!.deleteTodo(id)
+//        dbHelper!!.deleteTodo(id)
+
+        //with transaction optimization
+        doAsync {
+            dbHelper!!.beginTransaction()
+            dbHelper!!.TransactionDeleteTodo(id)
+            dbHelper!!.successTransaction()
+            dbHelper!!.endTransaction()
+        }
     }
 
     fun UpdateTodoStatus(id : Int, status: Int){
-        dbHelper!!.UpdateTodoStatus(id, status)
+//        dbHelper!!.UpdateTodoStatus(id, status)
+
+        //with transaction optimaztion
+        doAsync {
+            dbHelper!!.beginTransaction()
+            dbHelper!!.TransactionUpdateTodoStatus(id,status)
+            dbHelper!!.successTransaction()
+            dbHelper!!.endTransaction()
+        }
     }
 
     //menampilkan semua data dari table_todo

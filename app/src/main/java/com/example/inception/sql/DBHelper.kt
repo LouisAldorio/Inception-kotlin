@@ -112,4 +112,55 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
         //kembalikan todoList
         return todoList
     }
+
+
+    //transaction model
+    fun beginTransaction(){
+        this.writableDatabase.beginTransaction()
+    }
+    fun successTransaction(){
+        this.writableDatabase.setTransactionSuccessful()
+    }
+    fun endTransaction(){
+        this.writableDatabase.endTransaction()
+    }
+
+    fun TransactionCreateNewTodo(todo : Todo) : Long {
+        val sql = "INSERT INTO ${DB.Todo.TodoTable.TABLE_TODO} " +
+                "(${DB.Todo.TodoTable.COLUMN_CONTENT}" +
+                ",${DB.Todo.TodoTable.COLUMN_TODO_STATUS}) VALUES (?,?)"
+        val stmt = this.writableDatabase.compileStatement(sql)
+
+        stmt.bindString(1,todo.content)
+        stmt.bindString(2,todo.status.toString())
+
+        val result = stmt.executeInsert()
+        stmt.clearBindings()
+
+        return result
+    }
+
+    fun TransactionUpdateTodoStatus(id : Int, status: Int){
+        val sql = "UPDATE ${DB.Todo.TodoTable.TABLE_TODO} " +
+                "SET ${DB.Todo.TodoTable.COLUMN_TODO_STATUS} = ? "+
+                "WHERE ${DB.Todo.TodoTable.COLUMN_ID} = ?"
+
+        val stmt = this.writableDatabase.compileStatement(sql)
+        stmt.bindString(1,status.toString())
+        stmt.bindString(2,id.toString())
+
+        stmt.execute()
+        stmt.clearBindings()
+    }
+
+    fun TransactionDeleteTodo(id : Int){
+        val sql = "DELETE FROM ${DB.Todo.TodoTable.TABLE_TODO} " +
+                "WHERE ${DB.Todo.TodoTable.COLUMN_ID} = ?"
+
+        val stmt = this.writableDatabase.compileStatement(sql)
+        stmt.bindString(1,id.toString())
+
+        stmt.execute()
+        stmt.clearBindings()
+    }
 }

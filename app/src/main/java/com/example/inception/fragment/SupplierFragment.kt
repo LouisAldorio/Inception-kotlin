@@ -38,6 +38,8 @@ class SupplierFragment : Fragment()
 //        //panggil fungsi yang sebelumnya telah kita buat di presenter, dan jangan lupa memberikan Scope Coroutine, disini saya menggunakan lifecycleScope
 //        presenter.LoadSupplierList(lifecycleScope)
     }
+
+
     // disinilah kita akan mengoverride  fungsi yang telah ktia buat pada interface
 //    override fun RenderSupplierList(SupplierModel: MutableList<Supplier>) {
 //        //ketika menerima dari model, maka masukkan data kedalam adapter recycle view dan render seperti biasanya
