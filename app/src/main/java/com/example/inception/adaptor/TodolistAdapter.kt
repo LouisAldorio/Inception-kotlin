@@ -14,9 +14,10 @@ import com.example.inception.R
 import com.example.inception.data.Todo
 import com.example.inception.sql.DBHelper
 
-class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,val callbackRefresh : () -> Unit) : RecyclerView.Adapter<TodoHolder>() {
-
-    var dbHelper : DBHelper = DBHelper(context)
+class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,
+                      val callbackRefresh : () -> Unit,
+                      val callBackUpdate : (id: Int, status: Int) -> Unit,
+                      val callBackDelete: (id : Int) -> Unit) : RecyclerView.Adapter<TodoHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoHolder {
         return TodoHolder(LayoutInflater.from(parent.context).inflate(R.layout.todo_item_layout,parent,false))
@@ -38,10 +39,10 @@ class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,val cal
 
         holder.check_box.setOnClickListener {
             if(holder.check_box.isChecked == true) {
-                dbHelper.UpdateTodoStatus(todos[position].id, 1)
+                callBackUpdate(todos[position].id, 1)
                 holder.content.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
             }else {
-                dbHelper.UpdateTodoStatus(todos[position].id, 0)
+                callBackUpdate(todos[position].id, 0)
                 holder.content.paintFlags = 0
             }
         }
@@ -49,7 +50,7 @@ class TodolistAdapter(val context : Context,var todos: MutableList<Todo>,val cal
 
         holder.delete_button.setOnClickListener {
 
-            dbHelper.deleteTodo(todos[position].id)
+            callBackDelete(todos[position].id)
             callbackRefresh()
         }
     }

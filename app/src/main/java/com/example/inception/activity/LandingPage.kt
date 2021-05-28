@@ -266,6 +266,11 @@ class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+            R.id.todo_room -> {
+                val intent = Intent(this, NoteTodoROOMActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)

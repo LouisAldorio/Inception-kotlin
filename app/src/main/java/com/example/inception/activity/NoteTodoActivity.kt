@@ -57,12 +57,22 @@ class NoteTodoActivity : AppCompatActivity() {
         GetTodoList()
     }
 
+    fun DeleteItemFromList(id: Int){
+        dbHelper!!.deleteTodo(id)
+    }
+
+    fun UpdateTodoStatus(id : Int, status: Int){
+        dbHelper!!.UpdateTodoStatus(id, status)
+    }
+
     fun GetTodoList(){
         lifecycleScope.launchWhenResumed {
             val todoList = dbHelper!!.GetTodoList()
-            val todo_adapter = TodolistAdapter(this@NoteTodoActivity, todoList) {
-                GetTodoList()
-            }
+            val todo_adapter = TodolistAdapter(this@NoteTodoActivity, todoList, { GetTodoList() },{ id, status ->
+                UpdateTodoStatus(id,status)
+            },{ id ->
+                DeleteItemFromList(id)
+            })
 
             todo_rv.apply {
                 layoutManager = LinearLayoutManager(this@NoteTodoActivity)

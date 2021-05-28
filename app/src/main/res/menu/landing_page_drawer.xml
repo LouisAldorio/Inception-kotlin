@@ -5,4 +5,9 @@
         android:icon="@drawable/ic_virus"
         android:title="Todo Notes"/>
 
+    <item
+        android:id="@+id/todo_room"
+        android:icon="@drawable/ic_virus"
+        android:title="Todo Notes ROOM"/>
+
 </menu>
