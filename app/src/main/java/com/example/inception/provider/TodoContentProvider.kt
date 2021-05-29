@@ -1,5 +1,6 @@
 package com.example.inception.provider
 
+import DB.Todo
 import android.content.ContentProvider
 import android.content.ContentValues
 import android.content.UriMatcher
@@ -54,11 +55,29 @@ class TodoContentProvider : ContentProvider() {
         selection: String?,
         selectionArgs: Array<out String>?
     ): Int {
-        TODO("Not yet implemented")
+        var rowsUpdated : Int = 0
+        val sqlDB = dbHelper!!.writableDatabase
+        if(uri == CONTENT_URI){
+            rowsUpdated = sqlDB.update(Todo.TodoTable.TABLE_TODO,
+                values,
+                selection,
+                selectionArgs)
+        }
+        context!!.contentResolver.notifyChange(uri, null)
+        return rowsUpdated
     }
 
     override fun delete(uri: Uri, selection: String?, selectionArgs: Array<out String>?): Int {
-        TODO("Not yet implemented")
+        var rowsDeleted : Int = 0
+        val sqlDB = dbHelper!!.writableDatabase
+
+        if(uri == CONTENT_URI){
+            rowsDeleted = sqlDB.delete(Todo.TodoTable.TABLE_TODO,
+                selection,
+                selectionArgs)
+        }
+        context!!.contentResolver.notifyChange(uri, null)
+        return rowsDeleted
     }
 
     override fun getType(uri: Uri): String? {

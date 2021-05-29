@@ -2,6 +2,7 @@ package com.example.todoapp.ContentProviderTransaction
 
 import android.content.ContentValues
 import android.content.Context
+import android.text.BoringLayout
 import com.example.todoapp.DB.Todo.TodoTable.Companion.COLUMN_CONTENT
 import com.example.todoapp.DB.Todo.TodoTable.Companion.COLUMN_ID
 import com.example.todoapp.DB.Todo.TodoTable.Companion.COLUMN_TODO_STATUS
@@ -42,5 +43,37 @@ class TodoTransaction(context: Context) {
         values.put(COLUMN_TODO_STATUS,0)
 
         contentResolver.insert(TodoContentProviderURI().CONTENT_URI,values)
+    }
+
+    fun update(id : Int, status: Int) : Boolean{
+        var result = false
+
+        val values = ContentValues()
+        values.put(COLUMN_ID, id)
+        values.put(COLUMN_TODO_STATUS,status)
+
+        val selection = "_id = \"" + id.toString() + "\""
+
+        val rowsUpdated = contentResolver.update(TodoContentProviderURI().CONTENT_URI,
+            values,selection,null)
+
+        if (rowsUpdated > 0)
+            result = true
+
+        return result
+    }
+
+    fun delete(id : Int) : Boolean {
+        var result = false
+
+        val selection = "_id = \"" + id.toString() + "\""
+
+        val rowsDeleted = contentResolver.delete(TodoContentProviderURI().CONTENT_URI,
+            selection, null)
+
+        if (rowsDeleted > 0)
+            result = true
+
+        return result
     }
 }
