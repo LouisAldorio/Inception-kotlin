@@ -59,14 +59,21 @@ class NoteTodoActivity : AppCompatActivity() {
 //                }
 //                new_todo.text!!.clear()
 
-                //with transaction optimzation
+                //with transaction optimation
                 doAsync {
+                    //jalankan transaksi
                     dbHelper!!.beginTransaction()
+                    //tampung hasil return dari TransactionCreateNewTodo
+                    //hasil yg dikembalikan akan berupa ID dari baris yg diinsert
                     val success = dbHelper!!.TransactionCreateNewTodo(newTodo)
+                    //nyatakan bahwa proses transasksi berhasil dilakukan
                     dbHelper!!.successTransaction()
+                    //akhiri proses transaksi
                     dbHelper!!.endTransaction()
 
                     uiThread {
+                        //lakukan pengecekan apakah data proses insert berhasil dilakukan atau tidak
+                        //jika tidak berhasil, insert akan mengembalikan nilai -1
                         if(success !=- 1L){
                             Toast.makeText(this@NoteTodoActivity, "New Todo Added", Toast.LENGTH_SHORT).show()
                             //tampilkan data
@@ -89,24 +96,29 @@ class NoteTodoActivity : AppCompatActivity() {
         GetTodoList()
     }
 
+    //untuk menghapus data dari database
     fun DeleteItemFromList(id: Int){
 //        dbHelper!!.deleteTodo(id)
 
         //with transaction optimization
         doAsync {
             dbHelper!!.beginTransaction()
+            //jangan lupa kirimkan id nya juga
             dbHelper!!.TransactionDeleteTodo(id)
             dbHelper!!.successTransaction()
             dbHelper!!.endTransaction()
         }
     }
 
+    //melakukan update data status pada database
     fun UpdateTodoStatus(id : Int, status: Int){
 //        dbHelper!!.UpdateTodoStatus(id, status)
 
         //with transaction optimaztion
         doAsync {
             dbHelper!!.beginTransaction()
+            //kirimkan 2 parameter yaitu id dan status
+            //data status ini merupakan data yang akan diupdate pada database
             dbHelper!!.TransactionUpdateTodoStatus(id,status)
             dbHelper!!.successTransaction()
             dbHelper!!.endTransaction()

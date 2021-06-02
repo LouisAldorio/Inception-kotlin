@@ -114,53 +114,73 @@ class DBHelper(context: Context) : SQLiteOpenHelper(
     }
 
 
-    //transaction model
+    //transaction model ini akan memungkinkan kita untuk menjalankan banyak perintah dalam 1x proses.
+    //dengan ini, proses dapat berjalan lebih cepat karena kita akan mengumpulkan semua transaksi
+    // yg dilakukan lalu setelah itu baru diupdate ke database
+    //fungsi untuk mempersipakan penerimaan transaksi
     fun beginTransaction(){
         this.writableDatabase.beginTransaction()
     }
+    //fungsi untuk menandakan bahwa proses transasksi berhasil dilakukan
     fun successTransaction(){
         this.writableDatabase.setTransactionSuccessful()
     }
+    //fungsi untuk mengakhiri transaksi
     fun endTransaction(){
         this.writableDatabase.endTransaction()
     }
 
+    //function untuk menambahkan todoo baru
     fun TransactionCreateNewTodo(todo : Todo) : Long {
+        //berikut perintah insert ke database
         val sql = "INSERT INTO ${DB.Todo.TodoTable.TABLE_TODO} " +
                 "(${DB.Todo.TodoTable.COLUMN_CONTENT}" +
                 ",${DB.Todo.TodoTable.COLUMN_TODO_STATUS}) VALUES (?,?)"
+        //compile perintah sql menjadi objek pernyataan pra-kompilasi yg
+        // akan digunakan untuk menjalaankan perintah sql
         val stmt = this.writableDatabase.compileStatement(sql)
-
+        //kemudian kita bind data yang akan diinsert ke stmt
+        //parameter pertama yaitu content dan yg kedua adalah statusnya
         stmt.bindString(1,todo.content)
         stmt.bindString(2,todo.status.toString())
 
+        //karena kita akan melalukan proses insert, maka kita akan menggunakan executeInsert()
+        //yang akan mengembalikan ID dari baris yg diinsert
         val result = stmt.executeInsert()
+        //hapus data bind sebelumnya
         stmt.clearBindings()
 
         return result
     }
 
+    //function untuk melakukan update ke database
     fun TransactionUpdateTodoStatus(id : Int, status: Int){
+        //tampung query update ke variable
+        //kita akan melakukan update data pada kolom status berdasarkan ID nya
         val sql = "UPDATE ${DB.Todo.TodoTable.TABLE_TODO} " +
                 "SET ${DB.Todo.TodoTable.COLUMN_TODO_STATUS} = ? "+
                 "WHERE ${DB.Todo.TodoTable.COLUMN_ID} = ?"
-
         val stmt = this.writableDatabase.compileStatement(sql)
+        //isikan data status baru yang akan diupdate
         stmt.bindString(1,status.toString())
+        //isi juga id nya
         stmt.bindString(2,id.toString())
-
+        //jalankan proses update database
         stmt.execute()
+        //berishkan data bind sebelumnya
         stmt.clearBindings()
     }
 
+    //function untuk menghapus data
     fun TransactionDeleteTodo(id : Int){
+        //simpan query untuk menghapus baris data berdasarkan ID ke var sql
         val sql = "DELETE FROM ${DB.Todo.TodoTable.TABLE_TODO} " +
                 "WHERE ${DB.Todo.TodoTable.COLUMN_ID} = ?"
-
         val stmt = this.writableDatabase.compileStatement(sql)
         stmt.bindString(1,id.toString())
-
+        //jalankan proses delete nya
         stmt.execute()
+        //jgn lupa bersihkan data bind sebelumnya.
         stmt.clearBindings()
     }
 }
