@@ -27,6 +27,19 @@ query GetCommodity (
     }
 }
 
+query GetCommodityForWidgetPagination(
+    $page: Int!
+    $limit: Int!
+) {
+    comodities(page: $page,limit: $limit){
+        nodes{
+            id
+            name
+            image
+        }
+    }
+}
+
 query GetCommodityByCategory(
     $category_id: Int!
 ) {

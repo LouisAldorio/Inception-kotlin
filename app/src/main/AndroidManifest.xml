@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.inception">
 
-<!--    Content Provider Permission-->
-    <permission android:name="com.example.inception.provider.READ_URI_DB"
-        android:protectionLevel="normal"/>
+    <!-- Content Provider Permission -->
+    <permission
+        android:name="com.example.inception.provider.READ_URI_DB"
+        android:protectionLevel="normal" />
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -26,7 +27,17 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.NoteTodoROOMActivity"></activity>
+        <receiver android:name=".widget.CommodityWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/commodity_widget_info" />
+        </receiver>
+
+        <activity android:name=".activity.NoteTodoROOMActivity" />
         <activity android:name=".activity.NoteTodoActivity" />
         <activity android:name=".activity.Bookmarks" />
 
@@ -124,16 +135,14 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-
-<!--        daftarkan content provider-->
+        </activity> <!-- daftarkan content provider -->
         <provider
-            android:authorities="com.example.inception.provider.provider.TodoContentProvider"
             android:name=".provider.TodoContentProvider"
-            android:exported="true"
+            android:authorities="com.example.inception.provider.provider.TodoContentProvider"
             android:enabled="true"
-            android:readPermission="com.example.inception.provider.READ_URI_DB"
-            android:grantUriPermissions="true"/>
+            android:exported="true"
+            android:grantUriPermissions="true"
+            android:readPermission="com.example.inception.provider.READ_URI_DB" />
     </application>
 
 </manifest>
