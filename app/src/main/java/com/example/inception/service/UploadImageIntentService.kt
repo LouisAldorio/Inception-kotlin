@@ -11,9 +11,11 @@ import com.example.inception.utils.ImageUpload
 import java.lang.Exception
 
 class UploadImageIntentService : JobIntentService() {
+
     val ImageUploader = ImageUpload()
     var url : String = ""
     var uploadContext = ""
+
     override fun onHandleWork(intent: Intent) {
         showToast("Start Uploading Image")
         val params = intent.getParcelableExtra<UploadParams>(UPLOAD_PARAMS)
