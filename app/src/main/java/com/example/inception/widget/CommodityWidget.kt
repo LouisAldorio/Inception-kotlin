@@ -19,8 +19,11 @@ import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.load.model.LazyHeaders
 import com.example.inception.GetCommodityForWidgetPaginationQuery
 import com.example.inception.R
+import com.example.inception.activity.DetailPage
 import com.example.inception.activity.LandingPage
 import com.example.inception.api.apolloClient
+import com.example.inception.constant.CONTEXT_EXTRA
+import com.example.inception.constant.DETAIL_EXTRA
 import com.example.inception.data.Commodity
 import com.example.inception.data.CommodityUser
 import kotlinx.coroutines.Dispatchers
@@ -114,6 +117,13 @@ class CommodityWidget : AppWidgetProvider() {
                 .submit(150, 150)
                 .get()
             views.setImageViewBitmap(R.id.widget_commodity, bitmap)
+
+            var intentdetail = Intent(context,DetailPage::class.java)
+            intentdetail.putExtra(DETAIL_EXTRA,CommodityList[index - 1])
+            intentdetail.putExtra(CONTEXT_EXTRA,"Commodity")
+
+            views.setOnClickPendingIntent(R.id.widget_commodity_item,
+                PendingIntent.getActivity(context, 1891, intentdetail ,PendingIntent.FLAG_UPDATE_CURRENT))
 
             views.setViewVisibility(R.id.widget_commodity_item, View.VISIBLE)
             views.setViewVisibility(R.id.widget_progress_bar, View.GONE)
