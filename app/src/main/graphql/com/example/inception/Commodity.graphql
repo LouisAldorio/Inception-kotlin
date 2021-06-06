@@ -36,6 +36,7 @@ query GetCommodityForWidgetPagination(
             id
             name
             image
+            unit_price
         }
     }
 }

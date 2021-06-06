@@ -43,7 +43,7 @@ class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelected
 
     private val fragmentManager = supportFragmentManager
 
-    private var activeFragment: Fragment = profileFragment
+    private var activeFragment: Fragment = commodityFragment
 
     var drawerLayout: DrawerLayout? = null
     var actionBarDrawerToggle: ActionBarDrawerToggle? = null
@@ -101,12 +101,12 @@ class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         fragmentManager.beginTransaction().apply {
             add(R.id.fragmentContainer, supplierFragment).hide(supplierFragment)
             add(R.id.fragmentContainer, scheduleFragment).hide(scheduleFragment)
-            add(R.id.fragmentContainer, commodityFragment).hide(commodityFragment)
-            add(R.id.fragmentContainer, profileFragment)
+            add(R.id.fragmentContainer, commodityFragment)
+            add(R.id.fragmentContainer, profileFragment).hide(profileFragment)
             add(R.id.fragmentContainer, distributorFragment).hide(distributorFragment)
         }.commit()
 
-        bottomNavigation.show(4)
+        bottomNavigation.show(0)
         bottomNavigation.add(MeowBottomNavigation.Model(0,R.drawable.ic_commodity))
         bottomNavigation.add(MeowBottomNavigation.Model(1,R.drawable.ic_hotel_supplier))
         bottomNavigation.add(MeowBottomNavigation.Model(2,R.drawable.ic_calendar))
