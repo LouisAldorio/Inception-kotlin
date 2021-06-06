@@ -1,12 +1,14 @@
 package com.example.inception.activity
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Contacts.People
 import android.provider.ContactsContract
 import android.provider.ContactsContract.CommonDataKinds.Email
-import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBar
@@ -19,6 +21,7 @@ import com.example.inception.R
 import com.example.inception.adaptor.PhoneContactRecycleViewAdpater
 import com.example.inception.data.PhoneContact
 import kotlinx.android.synthetic.main.activity_contact_activtity.*
+
 
 // Pada RTM 6 , di instruksikan untuk menagmbil data lain dari contact selain nama dan nomor telepon
 //berikut implementasinya
@@ -87,7 +90,8 @@ class ContactActivtity : AppCompatActivity() , LoaderManager.LoaderCallbacks<Cur
                         data.getString(data.getColumnIndex(contactId)),
                         data.getString(data.getColumnIndex(displayName)),
                         "",
-                        getContactPhoto(data.getString(data.getColumnIndex(contactId)))!!,
+                        getContactPhoto(data.getString(data.getColumnIndex(contactId))) ?: BitmapFactory.decodeResource(this.getResources(),
+                        R.drawable.ic_supplies),
                         geContactEmail(data.getString(data.getColumnIndex(contactId)))!!,
                         data.getString(data.getColumnIndex(Number))
                     )
@@ -218,4 +222,5 @@ class ContactActivtity : AppCompatActivity() , LoaderManager.LoaderCallbacks<Cur
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

@@ -13,16 +13,21 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.example.inception.R
 import com.example.inception.constant.INTERNAL_OR_EXTERNAL_MARKER
 import com.example.inception.fragment.*
+import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_landing_page.*
 import java.io.File
 
-class LandingPage : AppCompatActivity() {
+
+class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     //kita akan menggunakan soundpool, untuk memasukkan musik singkat ketika user pertama kali membuka aplikasi
     //definisikan sebuat variable yang akan berisi intance souncpool nantinya
@@ -40,11 +45,27 @@ class LandingPage : AppCompatActivity() {
 
     private var activeFragment: Fragment = profileFragment
 
+    var drawerLayout: DrawerLayout? = null
+    var actionBarDrawerToggle: ActionBarDrawerToggle? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_landing_page)
+
+        // drawer layout instance to toggle the menu icon to open
+        // drawer and back button to close drawer
+        actionBarDrawerToggle = ActionBarDrawerToggle(this, drawer_layout, R.string.nav_open, R.string.nav_close)
+        // pass the Open and Close toggle for the drawer layout listener
+        // to toggle the button
+        drawerLayout?.addDrawerListener(actionBarDrawerToggle!!)
+        actionBarDrawerToggle!!.syncState()
+
+        // to make the Navigation drawer icon always appear on the action bar
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        nav_view.setNavigationItemSelectedListener(this)
+
+
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
@@ -137,7 +158,12 @@ class LandingPage : AppCompatActivity() {
         return true
     }
 
+
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (actionBarDrawerToggle!!.onOptionsItemSelected(item)) {
+            return true;
+        }
         when(item.itemId){
             R.id.covid_info -> {
                 val intent = Intent(this, CovidActivity::class.java)
@@ -154,6 +180,7 @@ class LandingPage : AppCompatActivity() {
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+
 
             //ketika menu bookmark_internal dipilih, brarti user ingin menampilkan file gambar yang terismpan didalm storage internal
             R.id.bookmark_internal -> {
@@ -225,45 +252,30 @@ class LandingPage : AppCompatActivity() {
             //untuk  mengetahui ukuran total , maka kita harus mengalikan jumlah block memory yang tersedia dengan ukuran setiap block
             //dengan begitu kita akan mendapatkan ukuran total memory dalam satuan byte
 
-            formatSize(availableBlocks * blockSize)
+            return (availableBlocks * blockSize).toString()
         } else {
             ""
         }
     }
 
-    //singkatnya function formatSize hanya membantu kita mengkonversi jumlah byte yang didapat menjadi KB atau MB , agar lebih mudah dibaca
-    fun formatSize(size: Long): String? {
 
-        var size = size
-        var suffix: String? = null
-        if (size >= 1024) {
-            suffix = " KB"
-            size /= 1024
-            if (size >= 1024) {
-                suffix = " MB"
-                size /= 1024
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId) {
+            R.id.todo -> {
+                val intent = Intent(this, NoteTodoActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
+            R.id.todo_room -> {
+                val intent = Intent(this, NoteTodoROOMActivity::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
         }
-        val resultBuffer =
-            StringBuilder(java.lang.Long.toString(size))
-        var commaOffset = resultBuffer.length - 3
-        while (commaOffset > 0) {
-            resultBuffer.insert(commaOffset, ',')
-            commaOffset -= 3
-        }
-        if (suffix != null) resultBuffer.append(suffix)
-        return resultBuffer.toString()
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true;
     }
-
-
-
-
-
-
-
-
-
-
 
 
 //    private fun replaceFragment(fragment:Fragment){
