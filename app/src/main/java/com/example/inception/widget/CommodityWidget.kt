@@ -26,6 +26,8 @@ import com.example.inception.constant.CONTEXT_EXTRA
 import com.example.inception.constant.DETAIL_EXTRA
 import com.example.inception.data.Commodity
 import com.example.inception.data.CommodityUser
+import com.squareup.picasso.Callback
+import com.squareup.picasso.Picasso
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -114,8 +116,7 @@ class CommodityWidget : AppWidgetProvider() {
             val bitmap: Bitmap = Glide.with(context)
                 .asBitmap()
                 .load(url)
-                .submit(150, 150)
-                .get()
+                .submit(150, 150).get()
             views.setImageViewBitmap(R.id.widget_commodity, bitmap)
 
             var intentdetail = Intent(context,DetailPage::class.java)
