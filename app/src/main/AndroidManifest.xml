@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.inception">
-
     <!-- Content Provider Permission -->
     <permission
         android:name="com.example.inception.provider.READ_URI_DB"
@@ -27,6 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".activity.SubscriberActivity"></activity>
+
         <receiver android:name=".widget.CommodityWidget">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
@@ -39,7 +40,7 @@
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-6008076107827387~7708681350"/>
+            android:value="ca-app-pub-6008076107827387~7708681350" />
 
         <activity android:name=".activity.NoteTodoROOMActivity" />
         <activity android:name=".activity.NoteTodoActivity" />

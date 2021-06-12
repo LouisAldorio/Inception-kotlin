@@ -99,20 +99,23 @@ class MusicRecommendation : AppCompatActivity() {
         }
 
         //video Ads
-        RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917",
-            AdRequest.Builder().build(), object  : RewardedAdLoadCallback(){
-                override fun onAdFailedToLoad(p0: LoadAdError) {
-                    super.onAdFailedToLoad(p0)
-                    Toast.makeText(this@MusicRecommendation, "Ads Load fail",
-                        Toast.LENGTH_SHORT).show()
-                    mRewardVid = null
-                }
+        if(User.getSubscription(this) == 0) {
+            RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917",
+                AdRequest.Builder().build(), object  : RewardedAdLoadCallback(){
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        super.onAdFailedToLoad(p0)
+                        Toast.makeText(this@MusicRecommendation, "Ads Load fail",
+                            Toast.LENGTH_SHORT).show()
+                        mRewardVid = null
+                    }
 
-                override fun onAdLoaded(p0: RewardedAd) {
-                    super.onAdLoaded(p0)
-                    mRewardVid = p0
-                }
-            })
+                    override fun onAdLoaded(p0: RewardedAd) {
+                        super.onAdLoaded(p0)
+                        mRewardVid = p0
+                    }
+                })
+        }
+
     }
 
     override fun onStart() {

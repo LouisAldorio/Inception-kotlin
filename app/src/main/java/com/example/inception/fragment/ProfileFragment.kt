@@ -112,7 +112,12 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onResume() {
         super.onResume()
 
-        point.text = "Points : " + User.getPoint(requireActivity()).toString()
+        if(User.getSubscription(requireActivity()) == 0) {
+            point.text = "Points : " + User.getPoint(requireActivity()).toString()
+        }else {
+            point.text = "Subscribed"
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

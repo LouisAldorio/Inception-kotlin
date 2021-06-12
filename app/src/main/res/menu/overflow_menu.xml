@@ -24,4 +24,9 @@
         android:id="@+id/bookmark_external"
         android:icon="@drawable/ic_virus"
         android:title="Bookmarked Images External"/>
+
+    <item
+        android:id="@+id/subscribe"
+        android:icon="@drawable/ic_virus"
+        android:title="Subscription"/>
 </menu>

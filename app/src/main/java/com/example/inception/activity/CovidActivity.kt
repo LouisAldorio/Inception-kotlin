@@ -14,6 +14,7 @@ import com.example.inception.constant.COVID_NEW_UPDATE
 import com.example.inception.constant.COVID_NEW_UPDATE_DATA
 import com.example.inception.data.CovidStatistic
 import com.example.inception.jobScheduler.CovidJobScheduler
+import com.example.inception.objectClass.User
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.interstitial.InterstitialAd
@@ -62,21 +63,24 @@ class CovidActivity : AppCompatActivity() {
         //mulai job untuk melakukan request,dan reschedulling untuk terus mengambil data terbaru
         startMyJob()
 
-        //Load interstitial adds
-        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712",
-            AdRequest.Builder().build(), object : InterstitialAdLoadCallback(){
+        if (User.getSubscription(this) == 0) {
+            //Load interstitial adds
+            InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712",
+                AdRequest.Builder().build(), object : InterstitialAdLoadCallback(){
 
-                override fun onAdFailedToLoad(p0: LoadAdError) {
-                    Toast.makeText(this@CovidActivity, "Ads Load Failed",
-                        Toast.LENGTH_SHORT).show()
-                    mInterAds = null
-                }
+                    override fun onAdFailedToLoad(p0: LoadAdError) {
+                        Toast.makeText(this@CovidActivity, "Ads Load Failed",
+                            Toast.LENGTH_SHORT).show()
+                        mInterAds = null
+                    }
 
-                override fun onAdLoaded(p0: InterstitialAd) {
-                    super.onAdLoaded(p0)
-                    mInterAds = p0
-                }
-            })
+                    override fun onAdLoaded(p0: InterstitialAd) {
+                        super.onAdLoaded(p0)
+                        mInterAds = p0
+                    }
+                })
+        }
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

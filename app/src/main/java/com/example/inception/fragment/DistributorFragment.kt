@@ -24,10 +24,12 @@ import com.example.inception.R
 import com.example.inception.adaptor.DistributorRecycleViewAdaptor
 import com.example.inception.api.apolloClient
 import com.example.inception.loader.DistributorAsyncTaskLoader
+import com.example.inception.objectClass.User
 import com.example.inception.utils.EspressoIdlingResource
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.MobileAds
+import kotlinx.android.synthetic.main.distributor_item_layout.*
 import kotlinx.android.synthetic.main.distributor_item_layout.view.*
 import kotlinx.android.synthetic.main.fragment_distributor.*
 import kotlinx.android.synthetic.main.fragment_distributor.view.*
@@ -55,13 +57,21 @@ class DistributorFragment : Fragment(),
         return inflater.inflate(R.layout.fragment_distributor, container, false)
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //load Banner Ads
-        MobileAds.initialize(requireActivity()) {}
-        adView.loadAd(AdRequest.Builder().build())
 
-        adView.adListener = object : AdListener() {}
+
+        //load Banner Ads
+        if(User.getSubscription(requireActivity()) == 0) {
+            MobileAds.initialize(requireActivity()) {}
+            adView.loadAd(AdRequest.Builder().build())
+
+            adView.adListener = object : AdListener() {}
+        }else {
+            adView.visibility = View.GONE
+        }
+
 
         //pada lifecycle onViewCreated assign adapter yang telah kita buat sebelumnya dengan isi yang kosong
         // pertama kali di create recycewl view akan merender recycle view yang kosong

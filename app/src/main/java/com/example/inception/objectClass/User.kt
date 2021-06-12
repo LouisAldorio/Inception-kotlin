@@ -7,6 +7,7 @@ import androidx.security.crypto.MasterKeys
 import com.example.inception.constant.CURRENT_POINT
 import com.example.inception.constant.PREVIOUS_PLAYED_SONG
 import com.example.inception.constant.PREVIOUS_SONG_INDEX
+import com.example.inception.constant.SUBSCRIPTION
 
 //Shared Preference
 // disini kita membuat sebuah objek class bernama user, yang dimana shared preference akan terisolasi proses nya didalam kelas ini
@@ -106,6 +107,20 @@ object User {
     fun setPoint(context: Context, points: Int) {
         preferences(context).edit().apply {
             putInt(CURRENT_POINT, points)
+
+            //apply agar token tersimpan
+            apply()
+        }
+    }
+
+    //subsciption reference
+    fun getSubscription(context: Context): Int {
+        return preferences(context).getInt(SUBSCRIPTION, 0)
+    }
+
+    fun setSubscription(context: Context, points: Int) {
+        preferences(context).edit().apply {
+            putInt(SUBSCRIPTION, points)
 
             //apply agar token tersimpan
             apply()
