@@ -37,6 +37,10 @@
                 android:resource="@xml/commodity_widget_info" />
         </receiver>
 
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-6008076107827387~7708681350"/>
+
         <activity android:name=".activity.NoteTodoROOMActivity" />
         <activity android:name=".activity.NoteTodoActivity" />
         <activity android:name=".activity.Bookmarks" />

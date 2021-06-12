@@ -22,8 +22,12 @@ import com.etebarian.meowbottomnavigation.MeowBottomNavigation
 import com.example.inception.R
 import com.example.inception.constant.INTERNAL_OR_EXTERNAL_MARKER
 import com.example.inception.fragment.*
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import com.google.android.material.navigation.NavigationView
 import kotlinx.android.synthetic.main.activity_landing_page.*
+import kotlinx.android.synthetic.main.fragment_distributor.*
 import java.io.File
 
 
@@ -64,8 +68,6 @@ class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelected
         // to make the Navigation drawer icon always appear on the action bar
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         nav_view.setNavigationItemSelectedListener(this)
-
-
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 

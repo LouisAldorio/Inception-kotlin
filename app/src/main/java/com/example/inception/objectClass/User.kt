@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import com.example.inception.constant.CURRENT_POINT
 import com.example.inception.constant.PREVIOUS_PLAYED_SONG
 import com.example.inception.constant.PREVIOUS_SONG_INDEX
 
@@ -97,6 +98,19 @@ object User {
     }
 
 
+    //Reward Preference
+    fun getPoint(context: Context): Int {
+        return preferences(context).getInt(CURRENT_POINT, 0)
+    }
+
+    fun setPoint(context: Context, points: Int) {
+        preferences(context).edit().apply {
+            putInt(CURRENT_POINT, points)
+
+            //apply agar token tersimpan
+            apply()
+        }
+    }
 
 
 

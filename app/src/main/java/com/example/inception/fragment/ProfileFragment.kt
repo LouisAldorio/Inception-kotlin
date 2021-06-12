@@ -109,6 +109,12 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        point.text = "Points : " + User.getPoint(requireActivity()).toString()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

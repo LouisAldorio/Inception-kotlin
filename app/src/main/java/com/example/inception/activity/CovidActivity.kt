@@ -7,18 +7,18 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.example.inception.R
 import com.example.inception.constant.COVID_NEW_UPDATE
 import com.example.inception.constant.COVID_NEW_UPDATE_DATA
-import com.example.inception.constant.UPLOADED_FILE_URL
-import com.example.inception.constant.UPLOAD_CONTEXT
 import com.example.inception.data.CovidStatistic
 import com.example.inception.jobScheduler.CovidJobScheduler
-import com.squareup.picasso.Picasso
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import kotlinx.android.synthetic.main.activity_covid.*
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -26,6 +26,8 @@ import java.util.*
 class CovidActivity : AppCompatActivity() {
     //definisikan job ID
     val JobId = 15000
+
+    private var mInterAds : InterstitialAd? = null
     //buat sebuah receiver yang akan menerima broadcast dari jobScheduler ketika respons editerima
     private val NewCovidUpdateReceiver = object : BroadcastReceiver(){
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -59,6 +61,22 @@ class CovidActivity : AppCompatActivity() {
         registerReceiver(NewCovidUpdateReceiver,intentFilter)
         //mulai job untuk melakukan request,dan reschedulling untuk terus mengambil data terbaru
         startMyJob()
+
+        //Load interstitial adds
+        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712",
+            AdRequest.Builder().build(), object : InterstitialAdLoadCallback(){
+
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    Toast.makeText(this@CovidActivity, "Ads Load Failed",
+                        Toast.LENGTH_SHORT).show()
+                    mInterAds = null
+                }
+
+                override fun onAdLoaded(p0: InterstitialAd) {
+                    super.onAdLoaded(p0)
+                    mInterAds = p0
+                }
+            })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -77,6 +95,14 @@ class CovidActivity : AppCompatActivity() {
         //cancel job saat onDestroy untuk menghemat resource
         cancelMyJob()
     }
+
+    override fun onResume() {
+        super.onResume()
+        if (mInterAds != null) {
+            mInterAds!!.show(this)
+        }
+    }
+
 
     //definisikan function untuk memulai jobScheduler
     private fun startMyJob() {

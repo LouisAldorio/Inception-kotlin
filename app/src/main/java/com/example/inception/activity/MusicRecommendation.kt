@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.inception.R
@@ -15,7 +16,13 @@ import com.example.inception.adaptor.AudioSongRecycleViewAdapter
 import com.example.inception.constant.*
 import com.example.inception.data.CovidStatistic
 import com.example.inception.data.Song
+import com.example.inception.objectClass.User
 import com.example.inception.service.AudioPlayerService
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 import kotlinx.android.synthetic.main.activity_covid.*
 import kotlinx.android.synthetic.main.activity_music_recommendation.*
 import java.text.SimpleDateFormat
@@ -24,6 +31,9 @@ import java.util.*
 //inisiasi variable yang akan menampung intent untuk menjalankan service, pada activity music
 var IntentService : Intent? = null
 class MusicRecommendation : AppCompatActivity() {
+
+    private var mRewardVid : RewardedAd? = null
+
     //karna kita akan menggunakan recycle view, maka kita buat variable yang akan menampung adapter nya
     var adapterAudio : AudioSongRecycleViewAdapter? = null
 
@@ -87,6 +97,22 @@ class MusicRecommendation : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@MusicRecommendation)
             adapter = adapterAudio
         }
+
+        //video Ads
+        RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917",
+            AdRequest.Builder().build(), object  : RewardedAdLoadCallback(){
+                override fun onAdFailedToLoad(p0: LoadAdError) {
+                    super.onAdFailedToLoad(p0)
+                    Toast.makeText(this@MusicRecommendation, "Ads Load fail",
+                        Toast.LENGTH_SHORT).show()
+                    mRewardVid = null
+                }
+
+                override fun onAdLoaded(p0: RewardedAd) {
+                    super.onAdLoaded(p0)
+                    mRewardVid = p0
+                }
+            })
     }
 
     override fun onStart() {
@@ -101,6 +127,17 @@ class MusicRecommendation : AppCompatActivity() {
             //start service
             startService(IntentService)
 
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(mRewardVid != null){
+            mRewardVid?.show(this, OnUserEarnedRewardListener() {
+                val currentPoint = User.getPoint(this)
+                User.setPoint(this, currentPoint + 100)
+            })
         }
     }
 
