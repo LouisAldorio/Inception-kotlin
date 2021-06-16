@@ -100,28 +100,32 @@ object User {
 
 
     //Reward Preference
+    //get point akan digunakan untuk mengambil point user.
+    //jika belum ada point, maka akan mengembalikan nilai 0, yang menandakan bahwa
+    // user belum pernah menonton rewarded Ads.
     fun getPoint(context: Context): Int {
         return preferences(context).getInt(CURRENT_POINT, 0)
     }
-
+    //set Point akan digunakan untuk menyimpan point saat user selesai menonton rewarded ads
     fun setPoint(context: Context, points: Int) {
         preferences(context).edit().apply {
             putInt(CURRENT_POINT, points)
-
             //apply agar token tersimpan
             apply()
         }
     }
 
     //subsciption reference
+    //get Subscription akan digunakna untuk mengambil data apakah user ada subcribe atau tidak
+    //jika belum ada datanya, maka akan mengembalikan nilai 0, yang menandakan bahwa user belum subcribe
     fun getSubscription(context: Context): Int {
         return preferences(context).getInt(SUBSCRIPTION, 0)
     }
-
+    //set subcription akan digunakan untuk menyimpan data subcription user
     fun setSubscription(context: Context, points: Int) {
+        //edit data di shared preference dengan key SUBSCRIPTION
         preferences(context).edit().apply {
             putInt(SUBSCRIPTION, points)
-
             //apply agar token tersimpan
             apply()
         }

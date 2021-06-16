@@ -27,7 +27,7 @@ import java.util.*
 class CovidActivity : AppCompatActivity() {
     //definisikan job ID
     val JobId = 15000
-
+    //Untuk Interstitial Ads, kita inisialisasi InterstitialAd terlebih dahulu
     private var mInterAds : InterstitialAd? = null
     //buat sebuah receiver yang akan menerima broadcast dari jobScheduler ketika respons editerima
     private val NewCovidUpdateReceiver = object : BroadcastReceiver(){
@@ -63,19 +63,26 @@ class CovidActivity : AppCompatActivity() {
         //mulai job untuk melakukan request,dan reschedulling untuk terus mengambil data terbaru
         startMyJob()
 
+        //Kemudian kita cek apakah user telah subcribe atau belum
+        //Jika user belum subcribe, maka iklan akan di load
         if (User.getSubscription(this) == 0) {
             //Load interstitial adds
+            //Untuk membuat iklan, kita panggil load dan pastikan unitId yang digunakna adalah unitID untuk testing.
+            //Sama seperti pada Banner Ads, kita juga memerlukan AdRequest untuk fetch iklan dari google ad manager
             InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712",
                 AdRequest.Builder().build(), object : InterstitialAdLoadCallback(){
-
+                    //function ini  akan dijalankan ketika iklan gagal di load
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         Toast.makeText(this@CovidActivity, "Ads Load Failed",
                             Toast.LENGTH_SHORT).show()
+                        //karena Intersitital Ads gagal diload, maka kita isikan dengan null
                         mInterAds = null
                     }
-
+                    //function ini  akan dijalankan ketika iklan berhasil di load
                     override fun onAdLoaded(p0: InterstitialAd) {
                         super.onAdLoaded(p0)
+                        //karena Interstitial Ads berhasil di load, maka kita isikan value param nya ke
+                        // dalam mInterAds untuk dilakukan pengecekan nntinya pada bagian onResume()
                         mInterAds = p0
                     }
                 })
@@ -102,7 +109,10 @@ class CovidActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        //ketika CovidActivity berstatus onResume, cek apakah mInterAds null atau tidak
         if (mInterAds != null) {
+            //jika tidak null / ada iklan yang berhasil di load,
+            // maka tampilkan Interstitial Ads nya
             mInterAds!!.show(this)
         }
     }

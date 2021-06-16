@@ -10,6 +10,7 @@ import com.example.inception.objectClass.User
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_subscriber.*
 
+//pada activity inilah user dapat melakukan subcription utk menghilangkan semua iklan yang ada
 class SubscriberActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,19 +24,26 @@ class SubscriberActivity : AppCompatActivity() {
 
         Picasso.get().load("https://s3-eu-west-1.amazonaws.com/bigmayor/wp-content/uploads/2020/07/15214625/membership-and-Subscription-website.png").into(subscription_image)
 
+        //ambil data apakah user telah subcribe atau blm
         var currentSubscriptionStatus = User.getSubscription(this)
         if(currentSubscriptionStatus == 0) {
+            //jika user telah subcribe
             subscribe_button.text = "Subscribe Now"
         }else {
+            //jika user belum subcribe
             subscribe_button.text = "Cancel Subscription"
         }
 
         subscribe_button.setOnClickListener {
+            //ambil data apakah user telah subcribe atau blm dari Shared Preferences dengan
+            // function getSubcription yang telah dibuat
             currentSubscriptionStatus = User.getSubscription(this)
             if(currentSubscriptionStatus == 1) {
+                //ubah data user menjadi unsubcribe dengan function setScubcription
                 User.setSubscription(this, 0)
                 subscribe_button.text = "Subscribe Now"
             }else {
+                //ubah data user menjadi subcribed
                 User.setSubscription(this, 1)
                 subscribe_button.text = "Cancel Subscription"
             }

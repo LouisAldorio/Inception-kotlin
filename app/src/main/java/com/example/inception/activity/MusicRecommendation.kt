@@ -32,6 +32,9 @@ import java.util.*
 var IntentService : Intent? = null
 class MusicRecommendation : AppCompatActivity() {
 
+    //Intersitital Ads dan Rewarded Ads memiliki konsep yang sama
+    //Tetapi dengan menonton Rewarded Ads, user dapat mendapatkan hadiah berupa coin
+    //pertama-tama kita insialisasi objek RewardedAd terlebih dahulu
     private var mRewardVid : RewardedAd? = null
 
     //karna kita akan menggunakan recycle view, maka kita buat variable yang akan menampung adapter nya
@@ -99,18 +102,25 @@ class MusicRecommendation : AppCompatActivity() {
         }
 
         //video Ads
+        //lakukan pengecekan apakah user telah subcribe atau belum
+        //Jika belum Reward Ads akan di Load
         if(User.getSubscription(this) == 0) {
+            //sama seperti pada Interstitial Ads, kita akan memanggil load() pada RewardedAd untuk memuat iklan kita
             RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917",
                 AdRequest.Builder().build(), object  : RewardedAdLoadCallback(){
+                    //jika Rewarded Ad gagal diload, maka function ini akan dijalan
                     override fun onAdFailedToLoad(p0: LoadAdError) {
                         super.onAdFailedToLoad(p0)
                         Toast.makeText(this@MusicRecommendation, "Ads Load fail",
                             Toast.LENGTH_SHORT).show()
+                        //karena gagal diload, maka isikan mRewardVid dengan null untuk
+                        // menandakan bahwa iklan gagal di load
                         mRewardVid = null
                     }
-
+                    //jika Rewarded Ad berhasil diload, maka function ini akan dijalan
                     override fun onAdLoaded(p0: RewardedAd) {
                         super.onAdLoaded(p0)
+                        //karena berhasil diload, maka kita isikan valueny ke dalam mRewardVid
                         mRewardVid = p0
                     }
                 })
@@ -135,10 +145,15 @@ class MusicRecommendation : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        //Setelah acitivty kembali ke status onResume dari onPause, cek apakah Rewarded Ads berhasil
+        // diload atau tidak (pastikan iklan berhasil dimuat sebelum kita menampilkan iklannya)
         if(mRewardVid != null){
+            //jika mRewardVid tidak null, maka kita akan menampilkan iklannya ke user
             mRewardVid?.show(this, OnUserEarnedRewardListener() {
+                //setelah itu, kita akan mengambil point yang telah dikumpulkan oleh user
+                // dari sharedPreferences
                 val currentPoint = User.getPoint(this)
+                //kemudian kita tambahkan point nya dan simpan ke dalam Shared Preferences
                 User.setPoint(this, currentPoint + 100)
             })
         }

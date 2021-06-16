@@ -111,10 +111,13 @@ class ProfileFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     override fun onResume() {
         super.onResume()
-
+        //Pada profileFragment lakukan pengecekan apakah user telah subcribe atau blm
         if(User.getSubscription(requireActivity()) == 0) {
+            //jika blm subcribe, maka ambil data point user dari shared preferences
+            // dan tampilkan pada textview
             point.text = "Points : " + User.getPoint(requireActivity()).toString()
         }else {
+            //jika user sudah subcribe, maka tampilkan "SUbscribed"
             point.text = "Subscribed"
         }
 

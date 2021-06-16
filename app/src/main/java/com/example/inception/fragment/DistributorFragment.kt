@@ -63,12 +63,17 @@ class DistributorFragment : Fragment(),
 
 
         //load Banner Ads
+        //lakukan pengecekan apakah user sudah berlanggan / subcribe atau belum
+        //jika user belum subcribe, maka semua Ads tetap akan muncul termasuk banner ads
         if(User.getSubscription(requireActivity()) == 0) {
+            //untuk memunculkan Banner Ads, pertama-tama kita inisialisasi objek Mobile Ads SDK telebih dahulu
             MobileAds.initialize(requireActivity()) {}
+            //kemudian kita panggil loadAd untuk memuat iklan pada adVie w dengna mengirimkan
+            // AdRequest yang berisi informasi untuk fetch iklan dari google ad manager
             adView.loadAd(AdRequest.Builder().build())
-
             adView.adListener = object : AdListener() {}
         }else {
+            //jika user telah subcribe, maka Banner Ads tidak akan ditampilakn lagi.
             adView.visibility = View.GONE
         }
 
