@@ -26,7 +26,8 @@
         android:supportsRtl="true"
         android:theme="@style/MainTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".activity.SubscriberActivity"></activity>
+        <activity android:name=".activity.GlobalChat"></activity>
+        <activity android:name=".activity.SubscriberActivity" />
 
         <receiver android:name=".widget.CommodityWidget">
             <intent-filter>

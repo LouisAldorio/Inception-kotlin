@@ -48,8 +48,8 @@ android {
 }
 
 dependencies {
-
-
+    implementation platform('com.google.firebase:firebase-bom:28.2.0')
+    implementation 'com.google.firebase:firebase-database-ktx'
     def room_version = "2.3.0"
 
     implementation fileTree(dir: "libs", include: ["*.jar"])

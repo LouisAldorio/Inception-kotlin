@@ -187,6 +187,11 @@ class LandingPage : AppCompatActivity(), NavigationView.OnNavigationItemSelected
                 startActivity(intent)
                 overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
             }
+            R.id.chat -> {
+                val intent = Intent(this, GlobalChat::class.java)
+                startActivity(intent)
+                overridePendingTransition(R.anim.slide_right_in, R.anim.slide_left_out);
+            }
 
 
             //ketika menu bookmark_internal dipilih, brarti user ingin menampilkan file gambar yang terismpan didalm storage internal

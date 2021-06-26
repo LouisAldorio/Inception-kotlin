@@ -29,4 +29,8 @@
         android:id="@+id/subscribe"
         android:icon="@drawable/ic_virus"
         android:title="Subscription"/>
+    <item
+        android:id="@+id/chat"
+        android:icon="@drawable/ic_virus"
+        android:title="Global Room Chat"/>
 </menu>
