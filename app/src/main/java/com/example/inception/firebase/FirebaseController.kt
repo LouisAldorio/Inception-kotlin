@@ -29,7 +29,7 @@ class FirebaseController(context: Context) {
         }
     }
 
-    fun ReadChat() : MutableMap<String,Chat> {
+    fun ReadChat(callbackUpdateAdapter : (chats : MutableMap<String,Chat>) -> Unit) {
         var allChats = mutableMapOf<String,Chat>()
         ref.addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
@@ -42,16 +42,12 @@ class FirebaseController(context: Context) {
                         var chat = data.getValue(Chat::class.java)
                         var key = data.key.toString()
 
-                        Log.i("chats", chat.toString())
-                        Log.i("chats", key)
                         allChats[key] = chat!!
-                        Log.i("chats", allChats.toString())
+                        callbackUpdateAdapter(allChats)
                     }
                 }
             }
         })
-        Log.i("chats",allChats.toString())
-        return allChats
     }
 
     fun deleteChat(key : Set<String>) {

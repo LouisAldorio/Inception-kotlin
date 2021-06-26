@@ -36,23 +36,25 @@ class GlobalChat : AppCompatActivity() {
     }
 
     fun ListenToChat() {
-        var chats = controller.ReadChat()
-        var arrayChats = mutableListOf<Chat>()
+         controller.ReadChat { chats ->
+             var arrayChats = mutableListOf<Chat>()
 
-        for(item in chats) {
-            arrayChats.add(
-                Chat(
-                item.value.username,
-                item.value.content
-            ))
-        }
-        Log.i("chats",arrayChats.toString())
+             for(item in chats) {
+                 arrayChats.add(
+                     Chat(
+                         item.value.username,
+                         item.value.content
+                     ))
+             }
 
-        var ChatAdapter = ChatRoomRecycleViewAdapter(this, arrayChats)
-        rv_main.apply {
-            adapter = ChatAdapter
-            layoutManager = LinearLayoutManager(this@GlobalChat)
-        }
+             var ChatAdapter = ChatRoomRecycleViewAdapter(this, arrayChats)
+             rv_main.apply {
+                 adapter = ChatAdapter
+                 layoutManager = LinearLayoutManager(this@GlobalChat)
+                 scrollToPosition(arrayChats.size - 1)
+             }
+             et_main.text.clear()
+         }
     }
 
     fun SendChat() {
