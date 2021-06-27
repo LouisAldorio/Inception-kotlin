@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.inception.R
@@ -36,9 +37,11 @@ class GlobalChat : AppCompatActivity() {
     }
 
     fun ListenToChat() {
+        pb_loading.visibility = View.VISIBLE
          controller.ReadChat { chats ->
              var arrayChats = mutableListOf<Chat>()
 
+             pb_loading.visibility = View.GONE
              for(item in chats) {
                  arrayChats.add(
                      Chat(

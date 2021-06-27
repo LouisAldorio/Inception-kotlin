@@ -44,6 +44,7 @@ class FirebaseController(context: Context) {
 
                         allChats[key] = chat!!
                         callbackUpdateAdapter(allChats)
+
                     }
                 }
             }
